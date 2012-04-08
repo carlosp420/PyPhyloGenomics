@@ -1,0 +1,27 @@
+Metadata-Version: 1.0
+Name: PyGenomics
+Version: 0.1.0
+Summary: Tools to work in phylogenomics, from NSG group http://nymphalidae.utu.fi
+Home-page: http://nymphalidae.utu.fi
+Author: Carlos Pena, Pavel Matos, Chris Wheat
+Author-email: mycalesis@gmail.com
+License: GPL v2
+Description: ===========
+        PyGenomics
+        ===========
+        
+        A package to work on Phylogenomics.
+        
+        
+        Contributors
+        ===========
+        * Carlos Pena
+        * Pavel Matos
+        * Chris Wheat
+        
+Keywords: DNA,genomics,genomes,phylogenetics,genes
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Intended Audience :: Science/Research
+Classifier: Environment :: Console
