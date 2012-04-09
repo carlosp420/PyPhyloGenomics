@@ -13,7 +13,7 @@ Collection of modules for dealing with genomic data in Python.
 __docformat__ ="epytext en" #Don't just use plain text in epydoc API pages!
 
 
-def save_seq(geneCode, geneName, code, sequence, table, conn):
+def save_seqs(geneCode, geneName, code, sequence, table, conn):
 	# table needs to be specified by user
 	"""
 		input: geneCode,
