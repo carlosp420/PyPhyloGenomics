@@ -9,10 +9,14 @@ Interact with MySQL database
 """
 
 import MySQLdb;
+import os;
+from BLAST import makeblastdb;
 
 
 """
+------------------------------------------------------------------------------
 creates database "pygenomics" if does not exist
+------------------------------------------------------------------------------
 """
 def create_database(host, user, passwd, db):
 	try:
@@ -41,3 +45,45 @@ def create_database(host, user, passwd, db):
 	mysql.query(table);
 
 	return mysql;
+
+
+"""
+------------------------------------------------------------------------------
+create a BLAST database from MySQL sequences in goodGenes table
+------------------------------------------------------------------------------
+"""
+def make_blastdb(conn):
+	# remove db.fas
+	try:
+		os.remove("db.fas");
+		print "file db.fas was removed";
+	except:
+		print "";
+
+	""" -------------------------- """
+	query = "SELECT geneName, geneCode, code, sequence FROM goodGenes";
+	conn.query(query);
+	result = conn.store_result();
+
+	output = "";
+	for i in result.fetch_row(maxrows=0,how=1):
+		output += ">" + i['geneName'];
+		output += "_" + i['geneCode'];
+		output += "_" + i['code'] + "\n";
+
+		sequence = i['sequence'];
+		sequence = sequence.replace("-", "?");
+
+		output += sequence + "\n";
+
+	f = open("db.fas", "w");
+	f.write(output);
+	f.close();
+
+	print "File db.fas was created. Contains all sequences in table goodGenes.";
+
+
+	""" -------------------------- """
+	""" This function is in BLAST.py """
+	makeblastdb();
+
