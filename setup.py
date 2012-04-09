@@ -19,4 +19,4 @@ setup(name='PyGenomics', version='0.1.0',
 					("Environment :: Console"),
 					],
 
-		install_requires=['biopython']);
+		install_requires=['biopython','MySQLdb']);
