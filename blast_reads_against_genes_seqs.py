@@ -128,3 +128,4 @@ for seq_record in SeqIO.parse(filename, "fastq"):
 				"""
 
 fileoutput.close()
+print "\nFinished processing\n";

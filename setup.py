@@ -1,9 +1,9 @@
 from distutils.core import setup
 
-setup(name='PyGenomics', version='0.1.0',
-		author="Carlos Pena, Pavel Matos, Chris Wheat",
+setup(name='PyPhyloGenomics', version='0.1.0',
+		author="Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat",
 		author_email="mycalesis@gmail.com",
-		maintainer="Carlos Pena, Pavel Matos, Chris Wheat",
+		maintainer="Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat",
 		maintainer_email="mycalesis@gmail.com",
 		contact="Carlos Pena",
 		contact_email="mycalesis@gmail.com",
