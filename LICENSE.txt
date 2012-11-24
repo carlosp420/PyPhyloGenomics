@@ -1,6 +1,6 @@
-PyGenomics: Tools to work in phylogenomics, from NSG group http://nymphalidae.utu.fi
+PyPhyloGenomics: Tools to work in phylogenomics, from NSG group http://nymphalidae.utu.fi
 
-Copyright (C) 2012  Carlos Pena, Pavel Matos, Chris Wheat
+Copyright (C) 2012  Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat
 
 email: mycalesis@gmail.com
 
