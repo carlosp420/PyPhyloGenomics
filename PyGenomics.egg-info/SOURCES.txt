@@ -1,7 +1,0 @@
-README
-setup.py
-PyGenomics.egg-info/PKG-INFO
-PyGenomics.egg-info/SOURCES.txt
-PyGenomics.egg-info/dependency_links.txt
-PyGenomics.egg-info/requires.txt
-PyGenomics.egg-info/top_level.txt
