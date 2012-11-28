@@ -1,6 +1,6 @@
 safe: true
 auto: true
 destination: _site
-source: .
+source: https://github.com/carlosp420/PyPhyloGenomics/tree/gh-pages
 pygments: true
 lsi: false
