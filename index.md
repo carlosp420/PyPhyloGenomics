@@ -1,10 +1,13 @@
-#PyPhyloGenomics
-A package to work on Phylogenomics.
+---
+layout: default
+category: pages
+---
+
 
 In development.
 
 ###Developers
-* Carlos Pena
+* Carlos Peña
 * Victor Solis
 * Pavel Matos
 * Chris Wheat
