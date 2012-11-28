@@ -1,7 +1,7 @@
 #PyPhyloGenomics
 A package to work on Phylogenomics.
 
-Early stage of development, not working yet.
+In development.
 
 ###Developers
 * Carlos Pena
