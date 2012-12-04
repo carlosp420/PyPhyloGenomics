@@ -1,5 +1,5 @@
 ''' This module works on the table OrthoDB6_Arthropoda_tabtext.csv
-    downloaded from OrthoDB (the database oforthologous groups) to
+    downloaded from OrthoDB (the database of orthologous groups) to
     extract certain features and objects described below.
 '''
 
@@ -76,7 +76,7 @@ def single_copy_in_species(in_file, gene_name):
 
 
 def copies_per_gene_table(in_file, out_file):
-    ''' This script store the number of copies a gene has per species in a file.
+    ''' This script stores the number of copies a gene has per species in a file.
 
         The output file is a table, where each row is a gene, and each columm
         is a specie. The values in the table are the number of gene copies.
