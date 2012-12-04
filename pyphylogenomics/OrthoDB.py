@@ -1,7 +1,28 @@
-''' This module works on the table OrthoDB6_Arthropoda_tabtext.csv
-    downloaded from OrthoDB (the database of orthologous groups) to
-    extract certain features and objects described below.
-'''
+#!/usr/bin/env python
+
+import argparse;
+import sys;
+
+
+
+# -----------------------------------------------------------------------------
+description = '''This module uses the table OrthoDB6_Arthropoda_tabtext.csv
+downloaded from OrthoDB (the database of orthologous groups) to
+extract certain features and objects described below.  '''
+
+parser = argparse.ArgumentParser(description=description);
+parser.add_argument('-i', '--input', action='store', 
+		metavar='OrthoDB_xyz.csv',
+		required=True, dest='in_file',
+		help='OrthoDb table as input file');
+parser.add_argument('-o', '--output', action='store', 
+		metavar='output_table.csv',
+		required=True, dest='out_file',
+		help='parsed data as csv file');
+args = parser.parse_args();
+
+
+
 
 def copies_per_gene(in_file):
     '''Creates a dictionary with the number of copies per gene and per specie.
@@ -76,13 +97,14 @@ def single_copy_in_species(in_file, gene_name):
 
 
 def copies_per_gene_table(in_file, out_file):
-    ''' This script stores the number of copies a gene has per species in a file.
+    ''' 
+	This script stores the number of copies a gene has per species in a file.
 
-        The output file is a table, where each row is a gene, and each columm
-        is a specie. The values in the table are the number of gene copies.
-        Note: the first row in the otput table is the number of single-copy
-        genes in a given species.
-        '''
+    The output file is a table, where each row is a gene, and each columm
+    is a specie. The values in the table are the number of gene copies.
+    Note: the first row in the otput table is the number of single-copy
+    genes in a given species.
+    '''
     
     print "running..."
 
@@ -130,3 +152,7 @@ def copies_per_gene_table(in_file, out_file):
 # in_file = open(raw_input("Input file path and name: "),'rb')
 # out_file = open(raw_input("Output file path and desired name: "),'w')
 # copies_per_gene_table(in_file,out_file)
+
+in_file = open(args.in_file, 'rb');
+out_file = open(args.out_file, 'w');
+copies_per_gene_table(in_file, out_file);
