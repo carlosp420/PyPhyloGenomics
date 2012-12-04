@@ -65,20 +65,20 @@ def single_copy_in_species(in_file, gene_name):
     ''' For a gene_name given by the user, returns the species where it is
     in a single copy.
 
-    The species name should be in the same format as stated in the input file
+    The gene name should be in the same format as stated in the input file
     of the function 'copies_per_gene'.
     '''
 
-    print "running..."
+    print "\nLooking for species with single-copy gene: " + str(gene_name);
     
     dictio = copies_per_gene(in_file)
     for key in dictio:
         if gene_name in key and dictio[key] == 1:
-            print key[0]
+            print "Found species: " + str(key[0]);
         else:
             pass
 
-    in_file.close()
+	#in_file.close()
 
 
 def copies_per_gene_table(in_file, out_file):
@@ -147,12 +147,17 @@ def main():
 	parser.add_argument('-o', '--output', action='store', 
 			metavar='output_table.csv',
 			required=True, dest='out_file',
-			help='parsed data as csv file');
+			help='Parsed data as csv file');
 	parser.add_argument('-s', '--species', action='store', 
 			metavar='Bombyx_mori',
 			dest='species_name',
-			help='return single-copy genes for given species name (use \
+			help='Return single-copy genes for given species name (use \
 				underscore to join genus and species name)');
+	parser.add_argument('-g', '--gene', action='store', 
+			metavar='BGIBMGA006721',
+			dest='gene_name',
+			help='Return species where given gene name is single-copy');
+
 	
 	args = parser.parse_args();
 	
@@ -160,6 +165,7 @@ def main():
 	in_file = args.in_file.strip();
 	out_file = open(args.out_file, 'w');
 	species_name = args.species_name;
+	gene_name = args.gene_name;
 
 	## do default processing
 	print "Finding number of copies per gene..."
@@ -169,9 +175,14 @@ def main():
 	if species_name != None:
 		species_name = species_name.strip();
 
-		# species will be "Bombyx mori"
+		# i.e. species will be "Bombyx mori"
 		species_name = species_name.replace("_", " ");
 		single_copy_genes(in_file, species_name);
+
+	## if --gene argument given
+	if gene_name != None:
+		gene_name = gene_name.strip();
+		single_copy_in_species(in_file, gene_name);
 
 
 if __name__ == "__main__":
