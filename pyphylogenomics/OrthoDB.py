@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+'''
+@author: mezarino
+'''
+
 import argparse;
 
 
@@ -57,7 +61,6 @@ def single_copy_genes(in_file, species_name):
         else:
             pass
 
-	#in_file.close()
    
 
 def single_copy_in_species(in_file, gene_name):
@@ -77,7 +80,6 @@ def single_copy_in_species(in_file, gene_name):
         else:
             pass
 
-	#in_file.close()
 
 
 def copies_per_gene_table(in_file, out_file):
@@ -126,7 +128,6 @@ def copies_per_gene_table(in_file, out_file):
         out_file.write("\t".join(row) + '\n')
 
 
-	#in_file.close()
     out_file.close()
 
     print "\nOUTPUT FILE WAS GENERATED!"        
