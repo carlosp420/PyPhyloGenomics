@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import argparse;
-import sys;
 
 
 
@@ -145,9 +144,9 @@ def main():
 			required=True, dest='in_file',
 			help='OrthoDb table as input file');
 	parser.add_argument('-o', '--output', action='store', 
-			metavar='output_table.csv',
+			metavar='output_table.txt',
 			required=True, dest='out_file',
-			help='Parsed data as csv file');
+			help='Parsed data as tab-delimited txt file');
 	parser.add_argument('-s', '--species', action='store', 
 			metavar='Bombyx_mori',
 			dest='species_name',
