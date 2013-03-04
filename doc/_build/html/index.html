@@ -1,0 +1,196 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to PyPhyloGenomics’s documentation! &mdash; PyPhyloGenomics 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyPhyloGenomics 0.1.0 documentation" href="#" />
+    <link rel="next" title="1. Getting started with PyPhyloGenomics-python" href="getting-started.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="getting-started.html" title="1. Getting started with PyPhyloGenomics-python"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">PyPhyloGenomics 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-pyphylogenomics-s-documentation">
+<h1>Welcome to PyPhyloGenomics&#8217;s documentation!<a class="headerlink" href="#welcome-to-pyphylogenomics-s-documentation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p><tt class="docutils literal"><span class="pre">pyphylogenomics</span></tt> is a Python toolkit for developing phylogenomic markers in novel species for  Next Generation sequence data.</p>
+<p>It includes tools for:</p>
+<ul class="simple">
+<li>discovery of homologous genes from species genomes.</li>
+<li>primer design.</li>
+<li>analysis of Next Generation Sequencing data, and</li>
+<li>gene sequences assembly.</li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">1. Getting started with PyPhyloGenomics-python</a></li>
+</ul>
+</div>
+<span class="target" id="module-OrthoDB"></span><div class="section" id="orthodb">
+<h2>OrthoDB<a class="headerlink" href="#orthodb" title="Permalink to this headline">¶</a></h2>
+<p><strong>Author: Mezarino</strong></p>
+<p>This module uses the table <tt class="docutils literal"><span class="pre">OrthoDB6_Arthropoda_tabtext.csv</span></tt>
+downloaded from OrthoDB (the database of orthologous groups) 
+<a class="reference external" href="ftp://cegg.unige.ch/OrthoDB6">ftp://cegg.unige.ch/OrthoDB6</a> to extract certain features and objects
+described below.</p>
+<div class="section" id="parse-file-from-orthodb">
+<h3>Parse file from <strong>OrthoDB</strong>:<a class="headerlink" href="#parse-file-from-orthodb" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="OrthoDB.copies_per_gene">
+<tt class="descclassname">OrthoDB.</tt><tt class="descname">copies_per_gene</tt><big>(</big><em>in_file</em><big>)</big><a class="headerlink" href="#OrthoDB.copies_per_gene" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+<p>Creates a dictionary with the number of copies per gene and per species.</p>
+<p>The dictionary has as keys tuples=(species_name, gene_name) and
+values=integer that represent the number of copies of that gene
+in the species.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="OrthoDB.copies_per_gene_table">
+<tt class="descclassname">OrthoDB.</tt><tt class="descname">copies_per_gene_table</tt><big>(</big><em>in_file</em>, <em>out_file</em><big>)</big><a class="headerlink" href="#OrthoDB.copies_per_gene_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the number of copies a gene has per species in a file.</p>
+<p>The output file is a table, where each row is a gene, and each columm
+is a species. The values in the table are the number of gene copies.
+Note: the first row in the otput table is the number of single-copy
+genes in a given species.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="OrthoDB.single_copy_genes">
+<tt class="descclassname">OrthoDB.</tt><tt class="descname">single_copy_genes</tt><big>(</big><em>in_file</em>, <em>species_name</em><big>)</big><a class="headerlink" href="#OrthoDB.single_copy_genes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of single-copy genes for a species given by user.</p>
+<p>The species name should be in the same format as stated in the input 
+file <em>in_file</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="OrthoDB.single_copy_in_species">
+<tt class="descclassname">OrthoDB.</tt><tt class="descname">single_copy_in_species</tt><big>(</big><em>in_file</em>, <em>gene_name</em><big>)</big><a class="headerlink" href="#OrthoDB.single_copy_in_species" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the species where the gene_name given by user is a single-copy gene.</p>
+<p>The gene name should be in the same format as stated in the input file
+<em>in_file</em>.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to PyPhyloGenomics&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a><ul>
+<li><a class="reference internal" href="#orthodb">OrthoDB</a><ul>
+<li><a class="reference internal" href="#parse-file-from-orthodb">Parse file from <strong>OrthoDB</strong>:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="getting-started.html"
+                        title="next chapter">1. Getting started with PyPhyloGenomics-python</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="getting-started.html" title="1. Getting started with PyPhyloGenomics-python"
+             >next</a> |</li>
+        <li><a href="#">PyPhyloGenomics 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Carlos Peña, Victor Solis, Pavel Matos, Chris Wheat.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
