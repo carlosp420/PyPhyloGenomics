@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
 		name='PyPhyloGenomics', 
-		version='0.1.0',
+		version='0.2.0',
 		packages = ['pyphylogenomics'],
 		author="Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat",
 		author_email="mycalesis@gmail.com",
@@ -20,8 +20,8 @@ setup(
 					"Programming Language :: Python",
 					("Topic :: Scientific/Engineering :: Bio-Informatics"),
 					("Intended Audience :: Science/Research"),
-					("License :: GPL"),
-					("Operative System :: OS Independent"),
+					("License :: OSI Approved :: GNU General Public License v2 (GPLv2)"),
+					("Operating System :: OS Independent"),
 					("Environment :: Console"),
 					],
 
