@@ -2,6 +2,11 @@
 
 '''
 @author: mezarino
+
+This module uses the table OrthoDB6_Arthropoda_tabtext.csv
+downloaded from OrthoDB (the database of orthologous groups) 
+ftp://cegg.unige.ch/OrthoDB6 to extract certain features and objects
+described below.
 '''
 
 import argparse;
@@ -45,7 +50,8 @@ def copies_per_gene(in_file):
 
 
 def single_copy_genes(in_file, species_name):
-    ''' For a species_name given by the user, returns its single-copy genes.
+    '''
+	For a species_name given by the user, returns its single-copy genes.
 
     The species name should be in the same format as stated in the input file
     of the function 'copies_per_gene'.
@@ -64,7 +70,8 @@ def single_copy_genes(in_file, species_name):
    
 
 def single_copy_in_species(in_file, gene_name):
-    ''' For a gene_name given by the user, returns the species where it is
+    '''
+	For a gene_name given by the user, returns the species where it is
     in a single copy.
 
     The gene name should be in the same format as stated in the input file
@@ -136,8 +143,9 @@ def copies_per_gene_table(in_file, out_file):
 # -----------------------------------------------------------------------------
 def main():
 	description = '''This module uses the table OrthoDB6_Arthropoda_tabtext.csv
-		downloaded from OrthoDB (the database of orthologous groups) to
-		extract certain features and objects described below.  '''
+		downloaded from OrthoDB (the database of orthologous groups) 
+		ftp://cegg.unige.ch/OrthoDB6 to extract certain features and objects
+		described below.'''
 
 	parser = argparse.ArgumentParser(description=description);
 	parser.add_argument('-i', '--input', action='store', 
