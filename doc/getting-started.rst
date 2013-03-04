@@ -1,13 +1,13 @@
 Getting started with PyPhyloGenomics-python
 ===========================================
 
-Some snippets of code to get you started with writing code against PyPhylogenomics.
+Some snippets of code to get you started with writing code using PyPhylogenomics.
 
 We need to obtain candidate genes to be used in phylogenetic inference that have to fulfill the following requirements:
 
 * Our genes should be orthologs.
 * Our genes should be single-copy genes.
-* Their sequence need to be around DNA 251 base pairs in length.
+* Their sequence need to be around 251 DNA base pairs in length.
 
 We will assume that our Next Generation Sequencer available is the IonTorrent_.
 
@@ -19,7 +19,7 @@ Primer                Length (bp)
 Adapter A             30
 5' Index              8
 5' Degenerate Primer  25
-Exon                  ???
+Exon                  **???**
 3' Degenerate Primer  25
 3' Index              8
 Adapter P             23
@@ -33,7 +33,7 @@ The OrthoDB_ database has a catalog of orthologous protein-coding genes for vert
 
 .. _IonTorrent: http://www.iontorrent.com/
 .. _OrthoDB: http://cegg.unige.ch/orthodb6
-.. _OrthoDB6_Arthropoda_tabtex.gz: ftp://cegg.unige.ch/OrthoDB6/OrthoDB6_Arthropoda_tabtext.gz
+.. _OrthoDB6_Arthropoda_tabtex.gz: ftp://cegg.unige.ch/OrthoDB6/
 
 For this guick getting-started guide, we will download the table of orthologous genes for Arthropoda from OrthoDB's ftp server OrthoDB6_Arthropoda_tabtex.gz_.
 
