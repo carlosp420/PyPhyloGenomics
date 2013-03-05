@@ -76,6 +76,10 @@ We will download the **Consensus gene set by merging all the gene sets using GLE
 
 .. _silkdb.org: http://www.silkdb.org/silkdb/doc/download.html
 
+Pull all sequences for our gene IDs from the CDS file and write them to a file ``pulled_seqs.fas``:
 
     >>> from pyphylogenomics import BLAST
+    >>> cds_file = "silkcds.fa"
+    >>> BLAST.get_cds(genes, cds_file)
+    12167  sequences were written to file pulled_seqs.fas
 
