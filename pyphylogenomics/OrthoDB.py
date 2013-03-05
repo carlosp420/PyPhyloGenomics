@@ -5,8 +5,6 @@
 OrthoDB
 =======
 
-**Author: Mezarino**
-
 This module uses the table ``OrthoDB6_Arthropoda_tabtext.csv``
 downloaded from OrthoDB (the database of orthologous groups) 
 ftp://cegg.unige.ch/OrthoDB6 to extract certain features and objects
@@ -164,7 +162,6 @@ def copies_per_gene_table(in_file, out_file):
 	print "\nOUTPUT FILE WAS GENERATED!"		
 
 
-# -----------------------------------------------------------------------------
 def main():
 	description = '''This module uses the table OrthoDB6_Arthropoda_tabtext.csv
 		downloaded from OrthoDB (the database of orthologous groups) 
