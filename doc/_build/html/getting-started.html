@@ -100,17 +100,22 @@
 <p>The <a class="reference external" href="http://cegg.unige.ch/orthodb6">OrthoDB</a> database has a catalog of orthologous protein-coding genes for vertebrates, arthropods and other living groups.</p>
 <p>For this guick getting-started guide, we will download the table of orthologous genes for Arthropoda from OrthoDB&#8217;s ftp server <a class="reference external" href="ftp://cegg.unige.ch/OrthoDB6/">OrthoDB6_Arthropoda_tabtex.gz</a>.</p>
 <p>Starting off:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyphylogenomics</span> <span class="kn">as</span> <span class="nn">phylo</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyphylogenomics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">OrthoDB</span>
 </pre></div>
 </div>
 <p>To see the full documentation you can use:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">phylo</span><span class="p">)</span> <span class="c"># shows list of modules</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">phylo</span><span class="o">.</span><span class="n">OrthoDB</span><span class="p">)</span> <span class="c"># shows help for a specific module and its functions</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">pyphylogenomics</span><span class="p">)</span> <span class="c"># shows list of modules</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">pyphylogenomics</span><span class="o">.</span><span class="n">OrthoDB</span><span class="p">)</span> <span class="c"># shows help for a specific module and its functions</span>
+</pre></div>
+</div>
+<p>This also works:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">OrthoDB</span><span class="p">)</span> <span class="c"># shows help for a specific module and its functions</span>
 </pre></div>
 </div>
 <p>We will find all single-copy genes for the silk moth <em>Bombyx mori</em> using the table from <a class="reference external" href="http://cegg.unige.ch/orthodb6">OrthoDB</a> as input file:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">in_file</span> <span class="o">=</span> <span class="s">&#39;OrthoDB6_Arthropoda_tabtext.csv&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span> <span class="o">=</span> <span class="n">phylo</span><span class="o">.</span><span class="n">OrthoDB</span><span class="o">.</span><span class="n">single_copy_genes</span><span class="p">(</span><span class="n">in_file</span><span class="p">,</span> <span class="s">&#39;Bombyx mori&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span> <span class="o">=</span> <span class="n">OrthoDB</span><span class="o">.</span><span class="n">single_copy_genes</span><span class="p">(</span><span class="n">in_file</span><span class="p">,</span> <span class="s">&#39;Bombyx mori&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">Found gene: BGIBMGA011628</span>
 <span class="go">Found gene: BGIBMGA002142</span>
@@ -118,7 +123,7 @@
 <span class="go">Found 12167 genes.</span>
 </pre></div>
 </div>
-<p>The variable <tt class="docutils literal"><span class="pre">genes</span></tt> is a list of ids for single-copy genes extracted from the OrthoDB table:</p>
+<p>The variable <tt class="docutils literal"><span class="pre">genes</span></tt> is a list of IDs for single-copy genes extracted from the OrthoDB table:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span><span class="p">;</span>
 <span class="gp">...</span>
 <span class="go">&#39;BGIBMGA012533&#39;, &#39;BGIBMGA014144&#39;, &#39;BGIBMGA011628&#39;, &#39;BGIBMGA002142&#39;, &#39;BGIBMGA014116&#39;,</span>
@@ -128,8 +133,11 @@
 <span class="go">12167</span>
 </pre></div>
 </div>
-<p>We will use these gene ids to obtain the gene sequences from the <em>Bombyx mori</em> genome. The genome can be downloaded from <a class="reference external" href="http://www.silkdb.org/silkdb/doc/download.html">silkdb.org</a>.
-We will download the <strong>Consensus gene set by merging all the gene sets using GLEAN: Fasta</strong> file <tt class="docutils literal"><span class="pre">silkworm_glean_cds.fa.tar.gz</span></tt>. Untar the gzipped file and you will get the FASTA formatted file <tt class="docutils literal"><span class="pre">silkcds.fa</span></tt> containing gene ids and sequences for <em>Bombyx mori</em>.</p>
+<p>We will use these gene IDs to obtain the gene sequences from the <em>Bombyx mori</em> genome. The genome can be downloaded from <a class="reference external" href="http://www.silkdb.org/silkdb/doc/download.html">silkdb.org</a>.
+We will download the <strong>Consensus gene set by merging all the gene sets using GLEAN: Fasta</strong> file <tt class="docutils literal"><span class="pre">silkworm_glean_cds.fa.tar.gz</span></tt>. Untar the gzipped file and you will get the FASTA formatted file <tt class="docutils literal"><span class="pre">silkcds.fa</span></tt> containing gene IDs and sequences for <em>Bombyx mori</em>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">BLAST</span>
+</pre></div>
+</div>
 </div>
 
 

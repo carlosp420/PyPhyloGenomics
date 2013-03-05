@@ -1,15 +1,41 @@
-"""
-MODULE
-------------------------------------------------------------------------------
-execute BLAST commands to create BLAST database
-------------------------------------------------------------------------------
+'''
+=====
+BLAST
+=====
+
+Prepares data and executes BLAST commands to create BLAST database
+
 @input:  FASTA file containing genomic sequences in working directory
 @param:  FASTA filename 
 @output: BLAST database in working directory
-"""
+'''
 
-# Python recommends to use now subprocess.Popen() instead of os.popen()
-import subprocess
+import re;
+import subprocess;
+from Bio import SeqIO;
+
+
+
+def get_cds(genes, cds_file):
+	'''
+	Writes a FASTA file containing CDS sequences: ``pulled_seqs.fas``
+	
+	``genes`` argument is a list of gene IDs.
+	``cds_file`` is the file name of predicted CDS for a species in FASTA format.
+
+	'''
+	outfile = open("pulled_seqs.fas", "w");
+
+	i = 0;
+	for seq_record in SeqIO.parse(cds_file, "fasta"):
+		this_id = re.sub("-TA$", "", seq_record.id);
+		if this_id in genes:
+			outfile.write(">" + this_id + "\n");
+			outfile.write(str(seq_record.seq) + "\n");
+			i = i + 1;
+	outfile.close();
+
+	print i, " sequences were written to file pulled_seqs.fas";
 
 
 def makeblastdb(FASTA_file):
