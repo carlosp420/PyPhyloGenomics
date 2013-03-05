@@ -13,4 +13,5 @@
 
 *list
 list
-
+build/*
+dist/*
