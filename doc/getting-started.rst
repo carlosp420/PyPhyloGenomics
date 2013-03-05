@@ -39,24 +39,29 @@ For this guick getting-started guide, we will download the table of orthologous 
 
 Starting off:
 
-    >>> import pyphylogenomics as phylo
+    >>> import pyphylogenomics
+    >>> from pyphylogenomics import OrthoDB
 
 To see the full documentation you can use:
 
-    >>> help(phylo) # shows list of modules
-    >>> help(phylo.OrthoDB) # shows help for a specific module and its functions
+    >>> help(pyphylogenomics) # shows list of modules
+    >>> help(pyphylogenomics.OrthoDB) # shows help for a specific module and its functions
+
+This also works:
+
+    >>> help(OrthoDB) # shows help for a specific module and its functions
 
 We will find all single-copy genes for the silk moth *Bombyx mori* using the table from OrthoDB_ as input file:
 
     >>> in_file = 'OrthoDB6_Arthropoda_tabtext.csv'
-    >>> genes = phylo.OrthoDB.single_copy_genes(in_file, 'Bombyx mori')
+    >>> genes = OrthoDB.single_copy_genes(in_file, 'Bombyx mori')
     ...
     Found gene: BGIBMGA011628
     Found gene: BGIBMGA002142
     Found gene: BGIBMGA014116
     Found 12167 genes.
 
-The variable ``genes`` is a list of ids for single-copy genes extracted from the OrthoDB table:
+The variable ``genes`` is a list of IDs for single-copy genes extracted from the OrthoDB table:
 
     >>> genes;
     ...
@@ -66,10 +71,11 @@ The variable ``genes`` is a list of ids for single-copy genes extracted from the
     >>> len(genes);
     12167
 
-We will use these gene ids to obtain the gene sequences from the *Bombyx mori* genome. The genome can be downloaded from silkdb.org_.
-We will download the **Consensus gene set by merging all the gene sets using GLEAN: Fasta** file ``silkworm_glean_cds.fa.tar.gz``. Untar the gzipped file and you will get the FASTA formatted file ``silkcds.fa`` containing gene ids and sequences for *Bombyx mori*.
+We will use these gene IDs to obtain the gene sequences from the *Bombyx mori* genome. The genome can be downloaded from silkdb.org_.
+We will download the **Consensus gene set by merging all the gene sets using GLEAN: Fasta** file ``silkworm_glean_cds.fa.tar.gz``. Untar the gzipped file and you will get the FASTA formatted file ``silkcds.fa`` containing gene IDs and sequences for *Bombyx mori*.
 
 .. _silkdb.org: http://www.silkdb.org/silkdb/doc/download.html
 
 
+    >>> from pyphylogenomics import BLAST
 
