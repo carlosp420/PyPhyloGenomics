@@ -72,14 +72,25 @@ The variable ``genes`` is a list of IDs for single-copy genes extracted from the
     12167
 
 We will use these gene IDs to obtain the gene sequences from the *Bombyx mori* genome. The genome can be downloaded from silkdb.org_.
-We will download the **Consensus gene set by merging all the gene sets using GLEAN: Fasta** file ``silkworm_glean_cds.fa.tar.gz``. Untar the gzipped file and you will get the FASTA formatted file ``silkcds.fa`` containing gene IDs and sequences for *Bombyx mori*.
+We will download the **Consensus gene set by merging all the gene sets using GLEAN: Fasta** file ``silkworm_glean_cds.fa.tar.gz``.  
+
+Untar the gzipped file and you will get the FASTA formatted file ``silkcds.fa`` containing gene IDs and sequences for *Bombyx mori*.
 
 .. _silkdb.org: http://www.silkdb.org/silkdb/doc/download.html
 
-Pull all sequences for our gene IDs from the CDS file and write them to a file ``pulled_seqs.fas``:
+We will need to BLASTn these single-copy genes against the *Bombyx mori* genome
+in order to get exon sizes:
+
+1. Pull all sequences for our gene IDs from the CDS file and write them to a file ``pulled_seqs.fa``:
 
     >>> from pyphylogenomics import BLAST
     >>> cds_file = "silkcds.fa"
     >>> BLAST.get_cds(genes, cds_file)
-    12167  sequences were written to file pulled_seqs.fas
+    12167  sequences were written to file pulled_seqs.fa
+
+2. Download the *Bombyx mori* genome from silkdb.org_ (download the file ``silkworm_genome_v2.0.fa.tar.gz``). Unzip and untar the file to your working directory and you will get the file ``silkgenome.fa``
+ 
+3. Do a BLASTn of the sequences against the *Bombyx mori* genome. The input arguments are your file containing the sequences for single-copy genes (``pulled_seqs.fa``) and your file with the genome of *Bombyx mori* which is in FASTA format (``silkgenome.fa``).
+
+    >>> BLAST.blastn('pulled_seqs.fa', 'silkgenome.fa')
 
