@@ -39,6 +39,10 @@ def get_cds(genes, cds_file):
 
 
 def makeblastdb(FASTA_file):
+	'''
+	Creates a BLAST database from a genome in FASTA format.
+	'''
+
 	command  = 'makeblastdb -in ' + FASTA_file;
 	command += ' -dbtype nucl -parse_seqids -input_type fasta'; 
 	p = subprocess.check_output(command, shell=True) 
@@ -67,5 +71,19 @@ def blastn(seqs, genome):
 	# do a BLAST database first
 	makeblastdb(genome);
 
+	# ok, now do the BLAST
+	# @ input is the BLAST database created by the command ``makeblastdb(genome)``
+	# @ output is the output file as a table in a csv file.
+	# TODO:
+		# This was written by Chris, but it should be corrected/changed.
+		# Make sure that the BLAST works and that the table is in the right format
+		# Make sure that it works ok, and returns useful messages to the user (prints to screen)
+
+    print "blasting: ", blast_query
+    print "against db = ",blast_db
+    cline1 = NcbiblastxCommandline(cmd=blast_exe, query=blast_query, db=blast_db, evalue=0.00001, outfmt=6, out=blast_out, num_threads=2)
+    return_code1 = subprocess.call(str(cline1), shell=(sys.platform!="linux")) # this is calling the blast
+    print return_code1
+    print "blast finished"
 
 
