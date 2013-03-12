@@ -3,11 +3,8 @@
 BLAST
 =====
 
-Prepares data and executes BLAST commands to create BLAST database
-
-@input:  FASTA file containing genomic sequences in working directory
-@param:  FASTA filename 
-@output: BLAST database in working directory
+Prepares data and executes BLAST commands to create BLAST database.
+Performs blastn of user sequences against genomic sequences.
 '''
 
 import re;
@@ -79,14 +76,6 @@ def blastn(query_seqs, genome):
 	# do a BLAST database first
 	makeblastdb(genome, mask=True);
 	blast_out = query_seqs.split(".")[0]+"_blastn_out.csv" # Name of the output file.
-
-	# ok, now do the BLAST
-	# @ input is the BLAST database created by the command ``makeblastdb(genome)``
-	# @ output is the output file as a table in a csv file.
-	# TODO:
-	        # This was written by Chris, but it should be corrected/changed.
-	        # Make sure that the BLAST works and that the table is in the right format
-	        # Make sure that it works ok, and returns useful messages to the user (prints to screen)
 
 	output  = "blasting: " + query_seqs.split("\\")[-1] + " "
 	output += "against db = " + genome.split("\\")[-1]
