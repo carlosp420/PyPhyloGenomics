@@ -13,77 +13,86 @@ Prepares data and executes BLAST commands to create BLAST database
 import re;
 import subprocess;
 from Bio import SeqIO;
+from Bio.SeqRecord import SeqRecord;
+from Bio.Blast.Applications import NcbiblastnCommandline;
 
 
 
 def get_cds(genes, cds_file):
-	'''
-	Writes a FASTA file containing CDS sequences: ``pulled_seqs.fa``
-	
-	``genes`` argument is a list of gene IDs.
-	``cds_file`` is the file name of predicted CDS for a species in FASTA format.
+    '''
+    Writes a FASTA file containing CDS sequences: ``pulled_seqs.fa``
+    
+    ``genes`` argument is a list of gene IDs.
+    ``cds_file`` is the file name of predicted CDS for a species in FASTA format.
 
-	'''
-	outfile = open("pulled_seqs.fa", "w");
+    '''
 
-	i = 0;
-	for seq_record in SeqIO.parse(cds_file, "fasta"):
-		this_id = re.sub("-TA$", "", seq_record.id);
-		if this_id in genes:
-			outfile.write(">" + this_id + "\n");
-			outfile.write(str(seq_record.seq) + "\n");
-			i = i + 1;
-	outfile.close();
+    records = []; # To store the sequences that matched.
+    for seq_record in SeqIO.parse(cds_file, "fasta"):
+        this_id = re.sub("-TA$", "", seq_record.id);
+        if this_id in genes:
+            records.append(SeqRecord(seq_record.seq, id=this_id));
 
-	print i, " sequences were written to file pulled_seqs.fa";
+    SeqIO.write(records, open("pulled_seqs.fa", "w"), "fasta") 
+    print len(records), " sequences were written to file pulled_seqs.fa";
 
 
-def makeblastdb(FASTA_file):
-	'''
-	Creates a BLAST database from a genome in FASTA format.
-	'''
 
-	command  = 'makeblastdb -in ' + FASTA_file;
-	command += ' -dbtype nucl -parse_seqids -input_type fasta'; 
-	p = subprocess.check_output(command, shell=True) 
-	print p
-	
-	command  = 'blastdb_aliastool -dblist "' + FASTA_file + '" ';
-	command += '-dbtype nucl -out ' +  FASTA_file + ' -title "' + FASTA_file + '"';
-	p = subprocess.check_output(command, shell=True)
-	print p
+def makeblastdb(genome, mask=False):
+    '''
+    Creates a BLAST database from a genome in FASTA format and
+    optionally eliminates low-complexity regions from the sequences.
+    '''
 
-	command  = 'makembindex -input ' + FASTA_file;
-	command += ' -iformat fasta -output ' + FASTA_file;
-	p = subprocess.check_output(command, shell=True)
-	print p
+    if mask == True:
+        command = 'dustmasker -in '+ genome + ' -infmt fasta -parse_seqids '
+        command += '-outfmt maskinfo_asn1_bin -out ' + genome + '_dust.asnb'
+        print "masking low_complexity regions..."
+        p = subprocess.check_output(command, shell=True) # identifying low-complexity regions.
+        print p
+        
+        command = 'makeblastdb -in ' + genome + ' –input_type fasta -dbtype nucl '
+        command += '-parse_seqids -mask_data ' + genome + '_dust.asnb '
+        command += '-out ' + genome + ' -title "Whole Genome without low-complexity regions"'
+        print "creating database..."
+        p = subprocess.check_output(command, shell=True) # Overwriting the genome file.
+        print p
+
+    else:
+        command  = 'makeblastdb -in ' + genome + '-input_type fasta -dbtype nucl '
+        command += '-parse_seqids -out ' + genome + ' -title "Whole Genome unmasked"'
+        print "creating database..."
+        p = subprocess.check_output(command, shell=True) 
+        print p
 
 
-def blastn(seqs, genome):
-	'''
-	Performs a BLASTn of user's sequences against a genome. It will create a
-	BLAST database from the genome file first.
 
-	``seqs`` argument is a FASTA file of users sequences.
-	``genome`` argument is a FASTA file of a species genome.
-	'''
+def blastn(query_seqs, genome):
+    '''
+    Performs a BLASTn of user's sequences against a genome. It will create a
+    BLAST database from the genome file first.
 
-	# do a BLAST database first
-	makeblastdb(genome);
+    ``seqs`` argument is a FASTA file of users sequences.
+    ``genome`` argument is a FASTA file of a species genome.
+    '''
 
-	# ok, now do the BLAST
-	# @ input is the BLAST database created by the command ``makeblastdb(genome)``
-	# @ output is the output file as a table in a csv file.
-	# TODO:
-		# This was written by Chris, but it should be corrected/changed.
-		# Make sure that the BLAST works and that the table is in the right format
-		# Make sure that it works ok, and returns useful messages to the user (prints to screen)
+    # do a BLAST database first
+    makeblastdb(genome, mask=True);
+    blast_out = query_seqs.split(".")[0]+"_blastn_out.csv" # Name of the output file.
 
-    print "blasting: ", blast_query
-    print "against db = ",blast_db
-    cline1 = NcbiblastxCommandline(cmd=blast_exe, query=blast_query, db=blast_db, evalue=0.00001, outfmt=6, out=blast_out, num_threads=2)
-    return_code1 = subprocess.call(str(cline1), shell=(sys.platform!="linux")) # this is calling the blast
-    print return_code1
-    print "blast finished"
+    # ok, now do the BLAST
+    # @ input is the BLAST database created by the command ``makeblastdb(genome)``
+    # @ output is the output file as a table in a csv file.
+    # TODO:
+            # This was written by Chris, but it should be corrected/changed.
+            # Make sure that the BLAST works and that the table is in the right format
+            # Make sure that it works ok, and returns useful messages to the user (prints to screen)
 
+    print "blasting: " + query_seqs.split("\\")[-1]
+    print "against db = " + genome.split("\\")[-1]
+    cline1 = NcbiblastnCommandline(query=query_seqs, db=genome, evalue=0.00001, strand="both",
+                                   db_soft_mask=11, out=blast_out, num_threads=2, outfmt=10)
+    print cline1
+    stdout, stderr = cline1()
+    print "BLASTn finished!"
 
