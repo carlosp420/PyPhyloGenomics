@@ -93,4 +93,9 @@ in order to get exon sizes:
 3. Do a BLASTn of the sequences against the *Bombyx mori* genome. The input arguments are your file containing the sequences for single-copy genes (``pulled_seqs.fa``) and your file with the genome of *Bombyx mori* which is in FASTA format (``silkgenome.fa``).
 
     >>> BLAST.blastn('pulled_seqs.fa', 'silkgenome.fa')
+    ...
+    BLASTn finished!
+    The BLAST results were written in to the file  pulled_seqs_blastn_out.csv
+    >>> 
+
 
