@@ -30,6 +30,8 @@ Documentation
 
 .. automodule:: OrthoDB
    :members:
+.. automodule:: BLAST
+   :members:
 
 
 
