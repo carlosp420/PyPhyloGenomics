@@ -56,7 +56,7 @@ def makeblastdb(genome, mask=False):
 	    print p
 
 	else:
-	    command  = 'makeblastdb -in ' + genome + '-input_type fasta -dbtype nucl '
+	    command  = 'makeblastdb -in ' + genome + ' -input_type fasta -dbtype nucl '
 	    command += '-parse_seqids -out ' + genome + ' -title "Whole Genome unmasked"'
 	    print "creating database..."
 	    p = subprocess.check_output(command, shell=True) 
@@ -74,7 +74,7 @@ def blastn(query_seqs, genome):
 	'''
 
 	# do a BLAST database first
-	makeblastdb(genome, mask=True);
+	makeblastdb(genome, mask=False);
 	blast_out = query_seqs.split(".")[0]+"_blastn_out.csv" # Name of the output file.
 
 	output  = "blasting: " + query_seqs.split("\\")[-1] + " "
@@ -82,7 +82,8 @@ def blastn(query_seqs, genome):
 	print output;
 
 	cline1 = NcbiblastnCommandline(query=query_seqs, db=genome, evalue=0.00001, strand="both",
-	                               db_soft_mask=11, out=blast_out, num_threads=2, outfmt=10)
+	                                out=blast_out, num_threads=2, outfmt=10)
+									#db_soft_mask=11, out=blast_out, num_threads=2, outfmt=10)
 	print cline1
 	stdout, stderr = cline1()
 	print "\nBLASTn finished!"
