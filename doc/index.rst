@@ -9,7 +9,7 @@ Welcome to PyPhyloGenomics's documentation!
 Introduction
 ============
 
-``pyphylogenomics`` is a Python toolkit for developing phylogenomic markers in novel species for  Next Generation sequence data.
+**PyPhyloGenomics** is a Python toolkit for developing phylogenomic markers in novel species for  Next Generation sequence data.
 
 It includes tools for:
 

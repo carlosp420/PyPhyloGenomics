@@ -174,7 +174,9 @@ htmlhelp_basename = 'PyPhyloGenomicsdoc'
 
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+'papersize': 'a4paper',
+'classoptions': ',openany,oneside',
+'babel': '\\usepackage[english]{babel}',
 
 # The font size ('10pt', '11pt' or '12pt').
 #'pointsize': '10pt',

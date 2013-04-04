@@ -1,5 +1,5 @@
-Getting started with PyPhyloGenomics-python
-===========================================
+Getting started with PyPhyloGenomics
+====================================
 
 Some snippets of code to get you started with writing code using PyPhylogenomics.
 
@@ -95,7 +95,8 @@ in order to get exon sizes:
     >>> BLAST.blastn('pulled_seqs.fa', 'silkgenome.fa')
     ...
     BLASTn finished!
-    The BLAST results were written in to the file  pulled_seqs_blastn_out.csv
-    >>> 
+    The BLAST results were written in to the file  pulled_seqs_blastn_out.csv  
+
+
 
 
