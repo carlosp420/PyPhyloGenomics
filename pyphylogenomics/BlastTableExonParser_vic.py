@@ -36,6 +36,7 @@ def getLargestExon(blast_table, E_value = 0.001, ident = 98, exon_len = 300):
     for key in bad:
         del(exons[key])
          
+    print "There are %s exons" % len(exons);
     return exons
 
 
@@ -61,6 +62,8 @@ def eraseFalsePosi(exons_dict):
                 new_exons_dict.update({key:exons_dict[key]})
                 break
         continue
+
+    print "There are %s exons" % len(new_exons_dict);
     return new_exons_dict
 
 
@@ -94,7 +97,7 @@ def wellSeparatedExons(exons_dict, MinDist=810000):
     query-sbj matches shared the same sbj, wellSeparatedExons keeps the query-sbj
     match whose distance to the following query-sbj match is greater than MinDist.
     """
-    print "Identifying exons separated by %d ..." % MinDist
+    print "Identifying exons separated by %d bases ..." % MinDist
     scaffolds = list(set([i[1] for i in exons_dict.keys()]))
     for scaff in scaffolds:
         genes_in_scaff = []
@@ -105,6 +108,7 @@ def wellSeparatedExons(exons_dict, MinDist=810000):
         for gene in filterByMinDist(genes_in_scaff, MinDist):
             del(exons_dict[(gene,scaff)])
    
+    print "There are %s exons" % len(exons_dict);
     return exons_dict
 
 
@@ -128,16 +132,18 @@ def storeExonsInFrame(exons_dict, queries_db, out_file):
             end = exon[7] - exon[7]%3
             seq = queries_dict[exon[0]].seq[start:end]
             exons_in_frame.append(
-                SeqRecord(seq,id= queries_dict[exon[0]].id))
+                SeqRecord(seq, id=queries_dict[exon[0]].id))
 
         else:
             start = exon[6] + (3 - exon[6]%3)%3
             end = exon[7] - exon[7]%3
             seq = queries_dict[exon[0]].seq[start:end]
             exons_in_frame.append(
-                SeqRecord(seq,id= queries_dict[exon[0]].id))
+                SeqRecord(seq, id=queries_dict[exon[0]].id))
 
-    print "Exons has been store in:\n" + out_file
+    SeqIO.write(exons_in_frame, open(out_file, "w"), "fasta");
+    print "A total of %s exons are kept" % len(exons_in_frame);
+    print "These exons have been stored in the file: " + out_file;
 
 
 
