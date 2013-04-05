@@ -95,11 +95,11 @@ def blastn(query_seqs, genome):
 
 def getLargestExon(blast_table, E_value = 0.001, ident = 98, exon_len = 300):
 	"""
-	Returns the largest alignment for each query-sbj match from a blast table. 
+	Returns the highest alignment number for each query-sbj match from a blast table. 
 	"""
 	table = open(blast_table, "r") 
 	exons = {} # A dictionary, where the key is the (query,sbj) tuple
-				# and the value is the largest alignment of all the possible
+				# and the value is the longest alignment of all the possible
 				# alignments between query and sbj. 
 
 	print "Parsing BLAST table ..."  
@@ -133,21 +133,28 @@ def getLargestExon(blast_table, E_value = 0.001, ident = 98, exon_len = 300):
 
 def eraseFalsePosi(exons_dict):
 	"""
-	Keeps the query-sbj match with the greatest number of alignments.
+	Keeps the query-sbj match with the longest alignment number.
 	
 	From a dictionary generated with the getLargestExon function, where 2 or more
 	query-sbj matches shared the same query, eraseFalsePosi keeps the query-sbj
-	match with the greatest number of alignments.
+	match with the longest alignment.
 	"""
 
 	print "Erasing False Positives ..."
 	new_exons_dict = {}
+
+    # First sorts alphabetically by query_name and then by the total number of
+    # alignments of each query-sbj match.
 	keys = sorted([j + (exons_dict[j][-1],) for j in exons_dict.keys()],
-				  key=itemgetter(0,2), reverse=True) # First sorts alphabetically by query_name and then by the total number of alignments of each query-sbj match.
-	keys = [j[:2] for j in keys] # Once sorted, throws the number of alignments of each query-sbj match.
+				  key=itemgetter(0,2), reverse=True) 
+
+    # Once sorted, throws the number of alignments of each query-sbj match.
+	keys = [j[:2] for j in keys] 
 	unique = list(set([i[0] for i in keys]))
 	for i in unique:
-		for key in keys: # Since in 'keys', the query-sbj with the highest number of alignments always appear on the most-left side, only it is kept.
+        # Since in 'keys', the query-sbj with the highest alignment number
+        # always appear on the most-left side, only this one is kept.
+		for key in keys: 
 			if key[0] == i:
 				new_exons_dict.update({key:exons_dict[key]})
 				break # That's why we use inmediately break.
