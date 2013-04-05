@@ -1,7 +1,7 @@
 Getting started with PyPhyloGenomics
 ====================================
 
-Some snippets of code to get you started with writing code using PyPhylogenomics.
+Some snippets of code to get you started with writing code using PyPhyloGenomics.
 
 We need to obtain candidate genes to be used in phylogenetic inference that have to fulfill the following requirements:
 
@@ -97,6 +97,35 @@ in order to get exon sizes:
     BLASTn finished!
     The BLAST results were written in to the file  pulled_seqs_blastn_out.csv  
 
+The file ``pulled_seqs_blastn_out.csv`` contains a BLAST output table with the blast results. PyPhyloGenomics has functions to filter out the table and get information about to answer the following:
 
+    * What are the longest gene-sequence to genome matches?
+    * What are the genes that are "distantly enough" from each other? So that, they can used as independent evolutionary entities?
 
+4. As stated before, we prefer long exons for each of the candidate genes ( > 300 nucleotides):
+
+    >>> exons = BLAST.getLargestExon("pulled_seqs_blastn_out.csv", 
+                        E_value=0.001, ident=98, exon_len=300)
+    Parsing BLAST table ...
+    Deleting exons below 300 nucleotides ...
+    There are 7554 exons
+
+5. Some small segments of sequences might be similar to non-homologous regions of the genome. We will use the function ``eraseFalsePosi`` to keep those matches of longest length:
+
+    >>> exons = BLAST.eraseFalsePosi(exons) # Drop presumable false positives.
+    Erasing False Positives ...
+    There are 6363 exons
+
+6. Ideally we want exons that are not too close to each other in the genome to avoid gene linkage. So we will keep only those exons that are apart by 810 kilobases:
+
+    >>> exons = BLAST.wellSeparatedExons(exons) # Keep exons separated by > 810KB
+    Identifying exons separated by 810000 bases ...
+    There are 564 exons
+
+7. Finally we can use a function to save the obtained exons while making sure they are in frame. We need to use as additional arguments the genome file and output filename:
+
+    >>> BLAST.storeExonsInFrame(exons, "pulled_seqs.fa", "LongExons_out.fas") 
+    Storing exons ...
+    A total of 564 exons are kept
+    These exons have been stored in the file: LongExons_out.fas
 
