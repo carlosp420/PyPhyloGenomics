@@ -71,7 +71,7 @@ def blastn(query_seqs, genome):
 	Performs a BLASTn of user's sequences against a genome. It will create a
 	BLAST database from the genome file first.
 
-	``seqs`` argument is a FASTA file of users sequences.
+	``query_seqs`` argument is a FASTA file of users sequences.
 	``genome`` argument is a FASTA file of a species genome.
 	'''
 
