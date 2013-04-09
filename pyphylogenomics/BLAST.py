@@ -16,6 +16,8 @@ from Bio.SeqRecord import SeqRecord;
 from operator import itemgetter;
 import pp;
 
+import time;
+
 
 def get_cds(genes, cds_file):
     '''
@@ -91,35 +93,52 @@ def blastn(query_seqs, genome, e_value=0.00001):
     # ppservers list to auto-discovery
     ppservers = ("*",);
     job_server = pp.Server(ppservers=ppservers, secret="123");
-    ncpus = job_server.get_ncpus();
     jobs = [];
+
+    divisor = 1;
+    while nseqs/divisor > 200:
+        print divisor
+        divisor += 1;
+
+    # split fasta file for parallel blast
     record_iter = SeqIO.parse(open(query_seqs), "fasta");
 
     files = [];
-    for i, batch in enumerate(batch_iterator(record_iter, nseqs/ncpus)):
+    for i, batch in enumerate(batch_iterator(record_iter, nseqs/divisor)):
         filename = "group_%i.fas" % (i+1);
         files.append(filename);
         handle = open(filename, "w");
         count = SeqIO.write(batch, handle, "fasta");
         handle.close();
-        print "Wrote %i records to %s" % (count, filename);
 
     for f in files:
         command = 'blastn -query ' + f + ' -db ' + genome + ' -task blastn '
         command += '-evalue ' + str(e_value) + ' -out ' + f + "_out" + ' -num_threads 1 -outfmt 10'
         jobs.append(job_server.submit(do_blast, (command,), modules=('subprocess',)))
 
+    print "\nBlasting sequences. This might take several minutes ...";
+
+    # progressbar
+    progressbar_width = int(divisor) + 2;
+    sys.stdout.write("Progress: [%s]" % (" " * progressbar_width))
+    sys.stdout.flush();
+    sys.stdout.write("\b" * (progressbar_width + 1))
+
     # execute parallel jobs
     for job in jobs:
-        print "\nBlasting sequences. This might take several minutes ...";
         job();
+        # update the bar
+        sys.stdout.write("#")
+        sys.stdout.flush()
+
+    sys.stdout.write("\n");
     
     job_server.print_stats();
     print "\nBLASTn finished!"
     print "The BLAST results were written in to the file ", blast_out
 
+
 def do_blast(command):
-    print command;
     subprocess.check_output(command, shell=True);
 
 
