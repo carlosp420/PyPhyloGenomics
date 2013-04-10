@@ -137,7 +137,6 @@ def blastn(query_seqs, genome, e_value=0.00001):
     print "\nBLASTn finished!"
 
     # merging blast tables generated above
-    print "\nMerging output files ..."
     destination = open(blast_out,'wb')
     for f in files:
         shutil.copyfileobj(open(f + "_out.csv",'rb'), destination)

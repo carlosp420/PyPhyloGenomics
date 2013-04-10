@@ -3,6 +3,10 @@ Getting started with PyPhyloGenomics
 
 Some snippets of code to get you started with writing code using PyPhyloGenomics.
 
+------------------------------------------
+Finding candidate genes from *Bombyx mori*
+------------------------------------------
+
 We need to obtain candidate genes to be used in phylogenetic inference that have to fulfill the following requirements:
 
 * Our genes should be orthologs.
@@ -99,8 +103,8 @@ in order to get exon sizes:
 
 The file ``pulled_seqs_blastn_out.csv`` contains a BLAST output table with the blast results. PyPhyloGenomics has functions to filter out the table and get information about to answer the following:
 
-    * What are the longest gene-sequence to genome matches?
-    * What are the genes that are "distantly enough" from each other? So that, they can used as independent evolutionary entities?
+    * Which are the longest gene-sequence to genome matches?
+    * Which are the genes that are "distantly enough" from each other? So that, they can used as independent evolutionary entities?
 
 4. As stated before, we prefer long exons for each of the candidate genes ( > 300 nucleotides):
 
@@ -108,24 +112,51 @@ The file ``pulled_seqs_blastn_out.csv`` contains a BLAST output table with the b
                         E_value=0.001, ident=98, exon_len=300)
     Parsing BLAST table ...
     Deleting exons below 300 nucleotides ...
-    There are 7554 exons
+    There are 7411 exons
 
 5. Some small segments of sequences might be similar to non-homologous regions of the genome. We will use the function ``eraseFalsePosi`` to keep those matches of longest length:
 
     >>> exons = BLAST.eraseFalsePosi(exons) # Drop presumable false positives.
     Erasing False Positives ...
-    There are 6363 exons
+    There are 6346 exons
 
 6. Ideally we want exons that are not too close to each other in the genome to avoid gene linkage. So we will keep only those exons that are apart by 810 kilobases:
 
     >>> exons = BLAST.wellSeparatedExons(exons) # Keep exons separated by > 810KB
     Identifying exons separated by 810000 bases ...
-    There are 564 exons
+    There are 575 exons
 
 7. Finally we can use a function to save the obtained exons while making sure they are in frame. We need to use as additional arguments the genome file and output filename:
 
     >>> BLAST.storeExonsInFrame(exons, "pulled_seqs.fa", "LongExons_out.fas") 
     Storing exons ...
-    A total of 564 exons are kept
+    A total of 575 exons are kept
     These exons have been stored in the file: LongExons_out.fas
 
+
+----------------------------
+Validation of exon structure
+----------------------------
+
+We have now 575 single copy exons extracted from the *Bombyx mori* genome. Let's find
+out whether these exons are conserved in other Arthropoda species.
+
+For example we can compare these 575 exons with the genome of the monarch butterfly
+*Danaus plexippus*.
+
+^^^^^^^^^^^^^^^^^^
+*Danaus plexippus*
+^^^^^^^^^^^^^^^^^^
+
+1. Download the version two of the monarch butterfly genome from here: http://danaus.genomeprojectsolutions-databases.com/Genome_seq_stats.html
+2. Extract the genome as FASTA file using ``gunzip``:
+
+   * ``gunzip Dp_genome_v2.fasta.gz``
+
+3. Do a blastn of our Long Exons against the *Danaus* genome:
+
+    >>> BLAST.blastn("LongExons_out.fas", "Dp_genome_v2.fasta");
+    ...
+    BLASTn finished!
+    The BLAST results were written in to the file LongExons_out_blastn_out.csv
+    
