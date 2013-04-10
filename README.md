@@ -12,15 +12,15 @@ A package to work on Phylogenomics.
 ###Install dependencies:
 
 ####Parallel Python (pp):
-* If you are using Ubuntu Linux or related:
+If you are using Ubuntu Linux or related:
 
-	sudo apt-get install python-pp
+    sudo apt-get install python-pp
 
-* Otherwise, install the distribution of `pp` included in this package:
+Otherwise, install the distribution of `pp` included in this package:
 
-	unzip pp-1.6.4.zip
-	cd pp-1.6.4
-	python setup.py install
+    unzip pp-1.6.4.zip
+    cd pp-1.6.4
+    python setup.py install
 
 
 ###Installing PyPhyloGenomics
