@@ -1,4 +1,8 @@
-from distutils.core import setup
+#from distutils.core import setup
+from distribute_setup import use_setuptools
+use_setuptools()
+from setuptools import setup, find_packages
+
 
 setup(
 		name='PyPhyloGenomics', 
@@ -12,7 +16,7 @@ setup(
 		contact_email="mycalesis@gmail.com",
 		license="GPL v2",
 		description="Tools to work in phylogenomics, from NSG group http://nymphalidae.utu.fi",
-		long_description=open('README.txt').read(),
+		long_description=open('README.md').read(),
 		keywords="DNA, genomics, genomes, phylogenetics, genes",
 		url="http://nymphalidae.utu.fi",
 		download_url = "https://github.com/carlosp420/PyPhyloGenomics/",
@@ -25,5 +29,5 @@ setup(
 					("Environment :: Console"),
 					],
 
-		requires=['biopython','MySQLdb']
+		install_requires=['biopython','pp']
 		);
