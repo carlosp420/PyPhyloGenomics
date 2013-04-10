@@ -15,7 +15,8 @@ from Bio import SeqIO;
 from Bio.SeqRecord import SeqRecord;
 from operator import itemgetter;
 import pp;
-
+import shutil;
+import os;
 import time;
 
 
@@ -113,7 +114,7 @@ def blastn(query_seqs, genome, e_value=0.00001):
 
     for f in files:
         command = 'blastn -query ' + f + ' -db ' + genome + ' -task blastn '
-        command += '-evalue ' + str(e_value) + ' -out ' + f + "_out" + ' -num_threads 1 -outfmt 10'
+        command += '-evalue ' + str(e_value) + ' -out ' + f + "_out.csv" + ' -num_threads 1 -outfmt 10'
         jobs.append(job_server.submit(do_blast, (command,), modules=('subprocess',)))
 
     print "\nBlasting sequences. This might take several minutes ...";
@@ -135,11 +136,23 @@ def blastn(query_seqs, genome, e_value=0.00001):
     
     job_server.print_stats();
     print "\nBLASTn finished!"
+
+    # merging blast tables generated above
+    print "\nMerging output files ..."
+    destination = open(blast_out,'wb')
+    for f in files:
+        shutil.copyfileobj(open(f + "_out.csv",'rb'), destination)
+        os.remove(f + "_out.csv")
+        os.remove(f)
+
+    destination.close()
     print "The BLAST results were written in to the file ", blast_out
+     
 
 
 def do_blast(command):
     subprocess.check_output(command, shell=True);
+
 
 
 def getLargestExon(blast_table, E_value = 0.001, ident = 98, exon_len = 300):
