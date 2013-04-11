@@ -160,3 +160,12 @@ For example we can compare these 575 exons with the genome of the monarch butter
     BLASTn finished!
     The BLAST results were written in to the file LongExons_out_blastn_out.csv
     
+4. We need to parse the output blast table and extract the exons from *Danaus* that are longer than 300bp and are homologous to the exons of *Bombyx mori*.
+
+    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fas")
+    Reading files ...
+    Parsing BLAST table ...
+    A total of 158 sequences passed the thresholds.
+    They have been stored in the file: Danaus_exons.fas
+
+

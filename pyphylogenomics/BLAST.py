@@ -345,10 +345,11 @@ def blastParser(blast_table, sbj_db, out_file, E_value = 0.01, ident = 75, exon_
     print "They have been stored in the file: " + out_file
 
 
-# taken from http://biopython.org/wiki/Split_large_file
 def batch_iterator(iterator, batch_size) :
     """Returns lists of length batch_size.
  
+    # Taken from http://biopython.org/wiki/Split_large_file
+
     This can be used on any iterator, for example to batch up
     SeqRecord objects from Bio.SeqIO.parse(...), or to batch
     Alignment objects from Bio.AlignIO.parse(...), or simply
