@@ -169,3 +169,29 @@ For example we can compare these 575 exons with the genome of the monarch butter
     They have been stored in the file: Danaus_exons.fas
 
 
+^^^^^^^^^^^^^^^^^^^^^^
+*Heliconius melpomene*
+^^^^^^^^^^^^^^^^^^^^^^
+
+1. We can continue finding homologous exons in other related butterflies. For example *Heliconius melpomene*.
+2. Download the genome from here: http://metazoa.ensembl.org/Heliconius_melpomene/Info/Index
+3. Extract the genome as FASTA file:
+
+    * ``gunzip Heliconius_melpomene.Hmel1.17.dna_rm.toplevel.fa.gz``
+    * ``mv Heliconius_melpomene.Hmel1.17.dna_rm.toplevel.fa Heliconius_genome.fas``
+
+4. BLASTn the *Bombyx mori* exons against the *Heliconius* genome:
+
+    >>> BLAST.blastn("LongExons_out.fas", "Heliconius_genome.fas");
+    ...
+    BLASTn finished!
+    The BLAST results were written in to the file  LongExons_out_blastn_out.csv
+
+5. Parse the blast table, extract the exon sequences and save them to a file:
+
+    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Heliconius_genome.fa", "Heliconius_exons.fas")
+    Reading files ...
+    Parsing BLAST table ...
+    A total of 145 sequences passed the thresholds.
+    They have been stored in the file: Heliconius_exons.fas
+    
