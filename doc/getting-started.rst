@@ -195,3 +195,28 @@ For example we can compare these 575 exons with the genome of the monarch butter
     A total of 145 sequences passed the thresholds.
     They have been stored in the file: Heliconius_exons.fas
     
+^^^^^^^^^^^^^^^
+*Manduca sexta*
+^^^^^^^^^^^^^^^
+
+1. Repeating the procedure for the *tobacco hornworm*.
+2. Download the genome from ftp://ftp.bioinformatics.ksu.edu/pub/Manduca/
+3. We downloaded the file ``Msex05162011.genome.fa``.
+4. Blasted the *Bombyx mori* exons against the *Manduca* genome:
+
+    >>> BLAST.blastn("LongExons_out.fas", "Msex05162011.genome.fa")
+    ...
+    BLASTn finished!
+    The BLAST results were written in to the file  LongExons_out_blastn_out.csv
+5. Parsing the output blast table:
+
+    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Msex05162011.genome.fa", "Manduca_exons.fas")
+    Reading files ...
+    Parsing BLAST table ...
+    A total of 219 sequences passed the thresholds.
+    They have been stored in the file: Manduca_exons.fas
+    
+
+--------------
+Exon Alignment
+--------------
