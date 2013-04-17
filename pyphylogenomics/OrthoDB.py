@@ -9,9 +9,6 @@ This module uses the table ``OrthoDB6_Arthropoda_tabtext.csv``
 downloaded from OrthoDB (the database of orthologous groups) 
 ftp://cegg.unige.ch/OrthoDB6 to extract certain features and objects
 described below.
-
-Parse file from **OrthoDB**:
-""""""""""""""""""""""""""""
 '''
 
 import argparse;

@@ -1,3 +1,10 @@
+'''
+======
+MUSCLE
+======
+Reads in sequences from files, group homologous sequences based on gene IDs and aligns them.
+'''
+
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Applications import MuscleCommandline

@@ -32,7 +32,8 @@ Documentation
    :members:
 .. automodule:: BLAST
    :members:
-
+.. automodule:: MUSCLE
+   :members:
 
 
 Indices and tables
