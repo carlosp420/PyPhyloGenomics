@@ -101,7 +101,7 @@ in order to get exon sizes:
     BLASTn finished!
     The BLAST results were written in to the file  pulled_seqs_blastn_out.csv  
 
-The file ``pulled_seqs_blastn_out.csv`` contains a BLAST output table with the blast results. PyPhyloGenomics has functions to filter out the table and get information about to answer the following:
+The file ``pulled_seqs_blastn_out.csv`` contains a BLAST output table with the blast results. **PyPhyloGenomics** has functions to filter out the table and get information to answer the following:
 
     * Which are the longest gene-sequence to genome matches?
     * Which are the genes that are "distantly enough" from each other? So that, they can used as independent evolutionary entities?
