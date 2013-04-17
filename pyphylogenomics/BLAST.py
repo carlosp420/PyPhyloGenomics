@@ -304,9 +304,9 @@ def storeExonsInFrame(exons_dict, queries_db, out_file):
 
 
 
-def blastParser(blast_table, sbj_db, out_file, E_value = 0.01, ident = 75, exon_len = 300):
+def blastParser(blast_table, sbj_db, out_file, sp_name = 'homologous', E_value = 0.01, ident = 75, exon_len = 300):
     """
-    Returns the subjects' sequences aligned with the queries aslong as they pass
+    Returns the subjects' sequences aligned with the queries as long as they pass
     the thresholds given on the parameters. 
     """
 
@@ -329,15 +329,17 @@ def blastParser(blast_table, sbj_db, out_file, E_value = 0.01, ident = 75, exon_
                 start = align_vars[8] - 1
                 end = align_vars[9]
                 seq = sbj_dict[align_vars[1]].seq[start:end]
-                ID = align_vars[0] + '-homologous_' + align_vars[1] +'-'+ str(start)+':'+str(end) + '_plus-strand'
-                seqs.append(SeqRecord(seq, id=ID))
+                ID = align_vars[0] + '_' + '_'.joint(sp_name.split())
+                DE = 'Homologous to ' + align_vars[0] + '; Locus: ' + align_vars[1] +'-'+ str(start)+':'+str(end) + '_plus-strand'
+                seqs.append(SeqRecord(seq, id=ID, description=DE))
                   
             else: # The alignment is with the sbj negative strand.
                 start = align_vars[9] - 1
                 end = align_vars[8]
                 seq = sbj_dict[align_vars[1]].seq[start:end].reverse_complement() # Reverse and complement the plus strand!
-                ID = align_vars[0] + '-homologous_' + align_vars[1] +'-'+ str(start)+':'+str(end) + '_minus-strand'
-                seqs.append(SeqRecord(seq, id=ID))
+                ID = align_vars[0] + '_' + '_'.joint(sp_name.split())
+                DE = 'Homologous to ' + align_vars[0] + '; Locus: ' + align_vars[1] +'-'+ str(start)+':'+str(end) + '_minus-strand'
+                seqs.append(SeqRecord(seq, id=ID, description=DE))
 
 
     SeqIO.write(seqs, open(out_file, "w"), "fasta")
