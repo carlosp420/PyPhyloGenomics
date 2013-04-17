@@ -162,12 +162,14 @@ For example we can compare these 575 exons with the genome of the monarch butter
     
 4. We need to parse the output blast table and extract the exons from *Danaus* that are longer than 300bp and are homologous to the exons of *Bombyx mori*.
 
-    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fas")
+    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fas", sp_name="Danaus")
     Reading files ...
     Parsing BLAST table ...
     A total of 158 sequences passed the thresholds.
     They have been stored in the file: Danaus_exons.fas
 
+The parameter ``sp_name`` is important as it will be used as part of the exons IDs.
+ 
 
 ^^^^^^^^^^^^^^^^^^^^^^
 *Heliconius melpomene*
@@ -189,7 +191,7 @@ For example we can compare these 575 exons with the genome of the monarch butter
 
 5. Parse the blast table, extract the exon sequences and save them to a file:
 
-    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Heliconius_genome.fa", "Heliconius_exons.fas")
+    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Heliconius_genome.fa", "Heliconius_exons.fas", sp_name="Heliconius")
     Reading files ...
     Parsing BLAST table ...
     A total of 145 sequences passed the thresholds.
@@ -211,7 +213,7 @@ For example we can compare these 575 exons with the genome of the monarch butter
     The BLAST results were written in to the file  LongExons_out_blastn_out.csv
 5. Parsing the output blast table:
 
-    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Msex05162011.genome.fa", "Manduca_exons.fas")
+    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Msex05162011.genome.fa", "Manduca_exons.fas", sp_name="Manduca")
     Reading files ...
     Parsing BLAST table ...
     A total of 219 sequences passed the thresholds.
