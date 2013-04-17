@@ -178,11 +178,11 @@ For example we can compare these 575 exons with the genome of the monarch butter
 3. Extract the genome as FASTA file:
 
     * ``gunzip Heliconius_melpomene.Hmel1.17.dna_rm.toplevel.fa.gz``
-    * ``mv Heliconius_melpomene.Hmel1.17.dna_rm.toplevel.fa Heliconius_genome.fas``
+    * ``mv Heliconius_melpomene.Hmel1.17.dna_rm.toplevel.fa Heliconius_genome.fa``
 
 4. BLASTn the *Bombyx mori* exons against the *Heliconius* genome:
 
-    >>> BLAST.blastn("LongExons_out.fas", "Heliconius_genome.fas");
+    >>> BLAST.blastn("LongExons_out.fas", "Heliconius_genome.fa");
     ...
     BLASTn finished!
     The BLAST results were written in to the file  LongExons_out_blastn_out.csv
