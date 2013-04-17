@@ -308,6 +308,16 @@ def blastParser(blast_table, sbj_db, out_file, sp_name = 'homologous', E_value =
     """
     Returns the subjects' sequences aligned with the queries as long as they pass
     the thresholds given on the parameters. 
+
+    Example:
+
+    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fas", sp_name="Danaus");
+    Reading files ...
+    Parsing BLAST table ...
+    A total of 158 sequences passed the thresholds.
+    They have been stored in the file: Danaus_exons.fas
+
+    The parameter ``sp_name`` is important as it will be used as part of the exons IDs.
     """
 
     print "Reading files ..."
@@ -329,7 +339,7 @@ def blastParser(blast_table, sbj_db, out_file, sp_name = 'homologous', E_value =
                 start = align_vars[8] - 1
                 end = align_vars[9]
                 seq = sbj_dict[align_vars[1]].seq[start:end]
-                ID = align_vars[0] + '_' + '_'.joint(sp_name.split())
+                ID = align_vars[0] + '_' + '_'.join(sp_name.split())
                 DE = 'Homologous to ' + align_vars[0] + '; Locus: ' + align_vars[1] +'-'+ str(start)+':'+str(end) + '_plus-strand'
                 seqs.append(SeqRecord(seq, id=ID, description=DE))
                   
@@ -337,7 +347,7 @@ def blastParser(blast_table, sbj_db, out_file, sp_name = 'homologous', E_value =
                 start = align_vars[9] - 1
                 end = align_vars[8]
                 seq = sbj_dict[align_vars[1]].seq[start:end].reverse_complement() # Reverse and complement the plus strand!
-                ID = align_vars[0] + '_' + '_'.joint(sp_name.split())
+                ID = align_vars[0] + '_' + '_'.join(sp_name.split())
                 DE = 'Homologous to ' + align_vars[0] + '; Locus: ' + align_vars[1] +'-'+ str(start)+':'+str(end) + '_minus-strand'
                 seqs.append(SeqRecord(seq, id=ID, description=DE))
 
