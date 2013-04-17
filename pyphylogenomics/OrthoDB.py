@@ -15,8 +15,6 @@ import argparse;
 
 
 
-
-
 def copies_per_gene(in_file):
 	'''
 	\* *Internal function* \*
@@ -71,7 +69,7 @@ def single_copy_genes(in_file, species_name):
 		if species_name in key and dictio[key] == 1:
 			gene = str(key[1]);
 			genes.append(gene);
-			print "Found gene: " + gene;
+		
 		else:
 			pass
 
