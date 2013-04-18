@@ -35,6 +35,10 @@ Otherwise, [download](http://www.parallelpython.com/content/view/15/30/) the sou
 ####BioPython:
 Download and install from [here](http://biopython.org/wiki/Download).
 
+####MUSCLE
+It is necessary that you install MUSCLE so that PyPhyloGenomics can use it to align sequences. 
+Download and install from [here](http://www.drive5.com/muscle/downloads.htm).
+
 ###Reading PyPhyloGenomics' documentation:
 After installling:
 
