@@ -288,15 +288,17 @@ def storeExonsInFrame(exons_dict, queries_db, out_file):
             start = exon[6]-1
             end = exon[7] - exon[7]%3
             seq = queries_dict[exon[0]].seq[start:end]
+            ID = queries_dict[exon[0]].id + ':' + str(start+1)+'-'+str(end) 
             exons_in_frame.append(
-                SeqRecord(seq, id=queries_dict[exon[0]].id))
+                SeqRecord(seq, id=ID))
 
         else:
             start = exon[6] + (3 - exon[6]%3)%3
             end = exon[7] - exon[7]%3
             seq = queries_dict[exon[0]].seq[start:end]
+            ID = queries_dict[exon[0]].id + ':' + str(start+1)+'-'+str(end) 
             exons_in_frame.append(
-                SeqRecord(seq, id=queries_dict[exon[0]].id))
+                SeqRecord(seq, id=ID))
 
     SeqIO.write(exons_in_frame, open(out_file, "w"), "fasta")
     print "A total of %s exons are kept" % len(exons_in_frame)
@@ -339,16 +341,16 @@ def blastParser(blast_table, sbj_db, out_file, sp_name = 'homologous', E_value =
                 start = align_vars[8] - 1
                 end = align_vars[9]
                 seq = sbj_dict[align_vars[1]].seq[start:end]
-                ID = align_vars[0] + '_' + '_'.join(sp_name.split())
-                DE = 'Homologous to ' + align_vars[0] + '; Locus: ' + align_vars[1] +'-'+ str(start)+':'+str(end) + '_plus-strand'
+                ID = align_vars[0] + '-' + '_'.join(sp_name.split()) + '_' + align_vars[1] + ':' + str(start+1)+'-'+str(end)
+                DE = sp_name + ' sequence homologous to ' + align_vars[0] + ':' + str(align_vars[6])+'-'+str(align_vars[7])
                 seqs.append(SeqRecord(seq, id=ID, description=DE))
                   
             else: # The alignment is with the sbj negative strand.
                 start = align_vars[9] - 1
                 end = align_vars[8]
                 seq = sbj_dict[align_vars[1]].seq[start:end].reverse_complement() # Reverse and complement the plus strand!
-                ID = align_vars[0] + '_' + '_'.join(sp_name.split())
-                DE = 'Homologous to ' + align_vars[0] + '; Locus: ' + align_vars[1] +'-'+ str(start)+':'+str(end) + '_minus-strand'
+                ID = align_vars[0] + '-' + '_'.join(sp_name.split()) + '_' + align_vars[1] + ':c' + str(end)+'-'+str(start+1)
+                DE = sp_name + ' sequence homologous to ' + align_vars[0] + ':' + str(align_vars[6])+'-'+str(align_vars[7])
                 seqs.append(SeqRecord(seq, id=ID, description=DE))
 
 
