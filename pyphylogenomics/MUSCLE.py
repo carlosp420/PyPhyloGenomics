@@ -64,7 +64,7 @@ def batchAlignment(files):
         if len(seqs_list) > 2: # Now perfom the MSA.
             count += 1
 
-            path = os.path.join(folder, ID1 + ".fas");
+            path = os.path.join(folder, ID1.split(':')[0] + ".fas");
             muscle_cline = MuscleCommandline(out=path, fasta=True)
         
             child = subprocess.Popen(str(muscle_cline),
