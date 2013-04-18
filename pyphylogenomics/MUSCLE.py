@@ -12,6 +12,8 @@ import subprocess
 import sys
 import time
 import os
+import string
+import re
 
 def batchAlignment(files):
     '''
@@ -53,7 +55,7 @@ def batchAlignment(files):
         idx = len(files)
         while idx > 1: # Parsing the other files.
             script = '''for ID2 in handle%d:
-    if ID1.split(':')[0] == ID2.split('-')[0]:
+    if ID1.split(':')[0] == re.sub(":.+$", "", ID2.split('-')[0]):
         seqs_list.append(SeqRecord(handle%d[ID2].seq, id = ID2))'''
             exec(script % (idx, idx))
             idx -= 1
