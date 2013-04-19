@@ -14,6 +14,9 @@ import time
 import os
 import string
 import re
+import requests
+import glob
+
 
 def batchAlignment(files):
     '''
@@ -81,4 +84,100 @@ def batchAlignment(files):
 
     print "%d alignments have been saved in the folder \"%s\"" % (count, folder)
 
+
+
+def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gencode="universal", mode="primers", clustype="dna", amptype="dna_GTRG", email=""):
+    '''
+    It will send a FASTA alignment to `primers4clades`_ in order to design degenerate primers. Input data needed:
+
+    * Alignment in FASTA format containing at least 4 sequences.
+    * Several parameters: 
+
+        * temperature
+        * minimium amplicon length
+        * maximum amplicon length
+        * genetic code
+        * cluster type
+        * substitution model
+        * email address
+        
+   Example:
+   The values shown are the default. Change them if needed.
+
+    >>> from PyPhyloGenomics import MUSCLE
+
+    >>> folder = "alignments"   # folder containing the FASTA file alignments
+    >>> tm = "55"               # annealing temperature
+    >>> min_amplength = "100"   # minimium amplicon length
+    >>> max_amplength = "500"   # maximum amplicon length
+    >>> gencode = "universal"   # see below for all available genetic codes
+    >>> mode  = "primers"
+    >>> clustype = "dna"
+    >>> amptype = "dna_GTRG"    # substitution model used to estimate phylogenetic information
+    >>> email = "youremail@email.com"   # primer4clades will send you an email with very detailed results
+
+    >>> MUSCLE.designPrimers(folder, tm, min_amplength, max_amplength, gencode, mode, clustype, amptype, email)
+
+    The best primer pairs will be printed to your screen. But it will be best if
+    you analyze the results that will be sent to your email.
+
+    The genetic code table (variable ``gencode``) can be any of the following:
+
+    * ``universal`` for standard
+    * ``2`` for vertebrate mitochondrial
+    * ``3`` for yeast mitochondrial
+    * ``4`` for mold and protozoa mitochondrial
+    * ``5`` for invertebrate mitochondrial
+    * ``6`` for ciliate
+    * ``9`` for echinoderm and flatworm
+    * ``10`` for  euplotid nuclear
+    * ``11`` for  bacterial and plastid
+    * ``12`` for  alternative yeast nuclear
+    * ``13`` for  ascidian mitochondrial
+    * ``14`` for  flatworm mitochondrial
+    * ``15`` for  Blepharisma nuclear
+    * ``16`` for  Chlorophycean mitochondrial
+    * ``21`` for  Trematode mitochondrial
+    * ``22`` for  Scenedesmus obliquus mitochondrial
+    * ``23`` for  Thraustochytrium mitochondrial
+
+    The evolutionary substitution model can be any of the following (variable
+    ``amptype``):
+
+    * ``protein_WAGG``  for protein WAG+G
+    * ``protein_JTTG``  for protein JTT+G
+    * ``protein_Blosum62G``  for protein Blosum62+G
+    * ``protein_VTG``  for protein VT+G
+    * ``protein_DayhoffG``  for protein Dayhoff+G
+    * ``protein_MtREVG``  for protein MtREV+G
+    * ``dna_HKYG``  for dna HKY+G
+    * ``dna_GTRG``  for dna GTR+G
+    * ``dna_K80G``  for dna K80+G
+    * ``dna_TrNG``  for dna TrN+G
+    * ``dna_JC69G``  for dna JC69+G
+
+    .. _primers4clades: http://floresta.eead.csic.es/primers4clades/#0
+    '''
+
+    if os.path.exists(folder):
+        # are there alignments/files in that folder?
+        all_files = os.path.join(folder, "*")
+        alns = glob.glob(all_files)
+
+        if len(alns) > 0:
+            url = "http://floresta.eead.csic.es/primers4clades/primers4clades.cgi"
+            params = { 'tm': tm,  'min_amplength': min_amplength,
+                    'max_amplength': max_amplength, 'mode': mode, 'gencode':
+                    gencode, 'clustype': clustype, 'email': email}
+
+            for aln in alns:
+                print "Processing file \"%s\"\n" % aln
+                files = {'sequencefile': open(aln, 'rb')}
+                r = requests.post(url, files=files, data=params);
+                print r.text;sys.exit();
+        else:
+            print "\nError! the folder \"%s\" is empty.\n" % folder;
+
+    else:
+        print "\nError! the folder \"%s\" does not exists.\n" % folder;
 
