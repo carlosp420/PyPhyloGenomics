@@ -265,4 +265,6 @@ Now that we have our exons/genes from several species (*Bombyx*, *Manduca*, *Dan
 
 Since we have 132 candidate genes to design primers for, we can automate the primer design using a nice tool available in **PyPhyloGenomics**.
 
+The function ``designPrimers`` will send an alignment to primers4clades_ along (with some parameters) and do a request for primer design. This function will return the degenerate primers as estimated by primers4clades_.
 
+.. _primers4clades: http://floresta.eead.csic.es/primers4clades/#0

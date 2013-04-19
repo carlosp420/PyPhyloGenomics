@@ -22,6 +22,9 @@ If it fails you can install the dependencies manually:
 ###Install dependencies:
 
 ####Parallel Python (pp):
+The package ``requests`` from [here](http://docs.python-requests.org/en/latest/user/install/)
+
+####Parallel Python (pp):
 If you are using Ubuntu Linux or related:
 
     sudo apt-get install python-pp

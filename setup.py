@@ -29,5 +29,5 @@ setup(
 					("Environment :: Console"),
 					],
 
-		install_requires=['biopython','pp']
+		install_requires=['biopython','pp', 'requests']
 		);
