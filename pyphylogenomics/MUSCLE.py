@@ -1,7 +1,9 @@
+
 '''
 ======
 MUSCLE
 ======
+
 Reads in sequences from files, group homologous sequences based on gene IDs and aligns them.
 '''
 
@@ -171,10 +173,18 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
                     gencode, 'clustype': clustype, 'email': email}
 
             for aln in alns:
-                print "Processing file \"%s\"\n" % aln
+                print "Processing file \"%s\"" % aln
                 files = {'sequencefile': open(aln, 'rb')}
                 r = requests.post(url, files=files, data=params);
-                print r.text;sys.exit();
+                # Save result to file
+                to_print  = "Writing detailed results as file \"";
+                to_print += str(aln) + ".html\"";
+                print to_print;
+
+                f = open(str(aln) + ".html", "w");
+                f.write(r.text);
+                f.close()
+                sys.exit();
         else:
             print "\nError! the folder \"%s\" is empty.\n" % folder;
 

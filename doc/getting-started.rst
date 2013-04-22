@@ -246,7 +246,7 @@ All aligned sequences will be written into a folder called ``alignments`` as FAS
 
 Example:
 
-    >>> from PyPhyloGenomics import MUSCLE
+    >>> from pyphylogenomics import MUSCLE
     >>> files = ['Bombyx_exons.fas', 'Danaus_exons.fas','Heliconius_exons.fas','Manduca_exons.fas']
     >>> MUSCLE.batchAlignment(files)
     ...
@@ -266,5 +266,39 @@ Now that we have our exons/genes from several species (*Bombyx*, *Manduca*, *Dan
 Since we have 132 candidate genes to design primers for, we can automate the primer design using a nice tool available in **PyPhyloGenomics**.
 
 The function ``designPrimers`` will send an alignment to primers4clades_ along (with some parameters) and do a request for primer design. This function will return the degenerate primers as estimated by primers4clades_.
+
+It is recommended that you enter your email as one of the parameters so that primers4clades_ can send you an email with very detailed results for you to insect. 
+
+.. warning:: Please keep in mind that the ``designPrimers`` function will return very little data, i.e. only the forward and reverse primers for an alignment. But it might be necessary that you inspect the detailed information on results that primers4clades_ can send to your email.
+
+Autoamted primer design via primers4clades_:
+
+    * Alignment in FASTA format containing at least 4 sequences.
+    * Several parameters: 
+
+        * temperature
+        * minimium amplicon length
+        * maximum amplicon length
+        * genetic code
+        * cluster type
+        * substitution model
+        * email address
+        
+   Example:
+   The values shown are the default. Change them if needed.
+
+    >>> from PyPhyloGenomics import MUSCLE
+
+    >>> folder = "alignments"   # folder containing the FASTA file alignments
+    >>> tm = "55"               # annealing temperature
+    >>> min_amplength = "100"   # minimium amplicon length
+    >>> max_amplength = "500"   # maximum amplicon length
+    >>> gencode = "universal"   # see below for all available genetic codes
+    >>> mode  = "primers"
+    >>> clustype = "dna"
+    >>> amptype = "dna_GTRG"    # substitution model used to estimate phylogenetic information
+    >>> email = "youremail@email.com"   # primer4clades will send you an email with very detailed results
+
+    >>> MUSCLE.designPrimers(folder, tm, min_amplength, max_amplength, gencode, mode, clustype, amptype, email)
 
 .. _primers4clades: http://floresta.eead.csic.es/primers4clades/#0
