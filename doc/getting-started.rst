@@ -261,17 +261,17 @@ Example:
 -------------
 Primer design
 -------------
-Now that we have our exons/genes from several species (*Bombyx*, *Manduca*, *Danaus* and *Heliconius* in this example), we can design primers in order to sequence theses genes across a wide range of butterflies and/or moths.
+Now that we have our exons/genes from several species (*Bombyx*, *Manduca*, *Danaus* and *Heliconius* in this example), we can design primers in order to sequence these genes across a wide range of butterflies and/or moths.
 
 Since we have 132 candidate genes to design primers for, we can automate the primer design using a nice tool available in **PyPhyloGenomics**.
 
 The function ``designPrimers`` will send an alignment to primers4clades_ along (with some parameters) and do a request for primer design. This function will return the degenerate primers as estimated by primers4clades_.
 
-It is recommended that you enter your email as one of the parameters so that primers4clades_ can send you an email with very detailed results for you to insect. 
+It is recommended that you enter your email as one of the parameters so that primers4clades_ can send you an email with very detailed results for you to insect. Just in case you don't provide your email, the very detailed results will be saved in the same folder of your alignments as HTML files.
 
-.. warning:: Please keep in mind that the ``designPrimers`` function will return very little data, i.e. only the forward and reverse primers for an alignment. But it might be necessary that you inspect the detailed information on results that primers4clades_ can send to your email.
+.. warning:: Please keep in mind that the ``designPrimers`` function will return very little data, i.e. only the forward and reverse primers for an alignment. But it might be necessary that you inspect the detailed information saved as HTML files or the emails sent to you by primers4clades_. You will receive one email for each alignment.
 
-Autoamted primer design via primers4clades_:
+Automated primer design via primers4clades_:
 
     * Alignment in FASTA format containing at least 4 sequences.
     * Several parameters: 
@@ -287,11 +287,11 @@ Autoamted primer design via primers4clades_:
    Example:
    The values shown are the default. Change them if needed.
 
-    >>> from PyPhyloGenomics import MUSCLE
+    >>> from pyphylogenomics import MUSCLE
 
     >>> folder = "alignments"   # folder containing the FASTA file alignments
     >>> tm = "55"               # annealing temperature
-    >>> min_amplength = "100"   # minimium amplicon length
+    >>> min_amplength = "250"   # minimium amplicon length
     >>> max_amplength = "500"   # maximum amplicon length
     >>> gencode = "universal"   # see below for all available genetic codes
     >>> mode  = "primers"
@@ -300,5 +300,11 @@ Autoamted primer design via primers4clades_:
     >>> email = "youremail@email.com"   # primer4clades will send you an email with very detailed results
 
     >>> MUSCLE.designPrimers(folder, tm, min_amplength, max_amplength, gencode, mode, clustype, amptype, email)
+    ...
+    Done.
+    All primers have been saved in the file "primers.fas"
+    
+All primers will be saved to a file (``primers.fas``). However, it is recommended that you study the very detailed
+output saved into your ``alignments`` folder as HTML files so that you can decide to use these primers or not.
 
 .. _primers4clades: http://floresta.eead.csic.es/primers4clades/#0

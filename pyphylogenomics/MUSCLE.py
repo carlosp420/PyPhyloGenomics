@@ -1,4 +1,3 @@
-
 '''
 ======
 MUSCLE
@@ -8,6 +7,8 @@ Reads in sequences from files, group homologous sequences based on gene IDs and 
 '''
 
 from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.Alphabet import generic_dna
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Applications import MuscleCommandline
 import subprocess
@@ -110,7 +111,7 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
 
     >>> folder = "alignments"   # folder containing the FASTA file alignments
     >>> tm = "55"               # annealing temperature
-    >>> min_amplength = "100"   # minimium amplicon length
+    >>> min_amplength = "250"   # minimium amplicon length
     >>> max_amplength = "500"   # maximum amplicon length
     >>> gencode = "universal"   # see below for all available genetic codes
     >>> mode  = "primers"
@@ -120,8 +121,10 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
 
     >>> MUSCLE.designPrimers(folder, tm, min_amplength, max_amplength, gencode, mode, clustype, amptype, email)
 
-    The best primer pairs will be printed to your screen. But it will be best if
-    you analyze the results that will be sent to your email.
+    The best primer pairs will be printed to your screen. Detailed results will
+    be saved as HTML files in your alignments folder. But it is recommended if
+    you also get the results by email. primers4clades_ will send you one email
+    for each alignment.
 
     The genetic code table (variable ``gencode``) can be any of the following:
 
@@ -172,10 +175,15 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
                     'max_amplength': max_amplength, 'mode': mode, 'gencode':
                     gencode, 'clustype': clustype, 'email': email}
 
+            primers = [];
             for aln in alns:
-                print "Processing file \"%s\"" % aln
+                print "\nProcessing file \"%s\"" % aln
                 files = {'sequencefile': open(aln, 'rb')}
                 r = requests.post(url, files=files, data=params);
+
+                this_file = os.path.split(aln)[1];
+                this_file = re.sub(".fas.*", "", this_file);
+
                 # Save result to file
                 to_print  = "Writing detailed results as file \"";
                 to_print += str(aln) + ".html\"";
@@ -184,7 +192,36 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
                 f = open(str(aln) + ".html", "w");
                 f.write(r.text);
                 f.close()
-                sys.exit();
+
+                # Show primer pair to user
+                html_file = string.split(r.text, "\n");
+                i = 1;
+                for line in html_file:
+                    if "degen_corr" in line:
+                        seq = "";
+                        seq = line.split(" ")[0].strip();
+
+                        description = line.split(" ")[2].strip();
+
+                        this_id  = this_file + "_" + line.split(" ")[1].strip();
+                        this_id += "_" + str(i);
+
+                        seq = Seq(seq, generic_dna);
+                        seq_record = SeqRecord(seq);
+                        seq_record.id = this_id;
+                        seq_record.description = description;
+                        primers.append(seq_record);
+                        i = int(i);
+                        i = i + 1;
+
+                    if i == 3:
+                        break;
+
+
+            # Write primers to alignment file
+            SeqIO.write(primers, "primers.fas", "fasta");
+            print "\nDone.\nAll primers have been saved in the file \"primers.fas\"";
+
         else:
             print "\nError! the folder \"%s\" is empty.\n" % folder;
 
