@@ -42,6 +42,8 @@ Download and install from [here](http://biopython.org/wiki/Download).
 It is necessary that you install MUSCLE so that PyPhyloGenomics can use it to align sequences. 
 Download and install from [here](http://www.drive5.com/muscle/downloads.htm).
 
+###fastx-toolkit
+
 ##Reading PyPhyloGenomics' documentation:
 After installling:
 
