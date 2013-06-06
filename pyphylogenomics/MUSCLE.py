@@ -30,7 +30,7 @@ def batchAlignment(files):
 
     Example:
     
-    >>> from PyPhyloGenomics import MUSCLE
+    >>> from pyphylogenomics import MUSCLE
     >>> files = ['Bmori_exons.fas', 'Danaus_exons.fas','Heliconius_exons.fas','Manduca_exons.fas']
     >>> MUSCLE.batchAlignment(files)
 
@@ -107,7 +107,7 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
    Example:
    The values shown are the default. Change them if needed.
 
-    >>> from PyPhyloGenomics import MUSCLE
+    >>> from pyphylogenomics import MUSCLE
 
     >>> folder = "alignments"   # folder containing the FASTA file alignments
     >>> tm = "55"               # annealing temperature
