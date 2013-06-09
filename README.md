@@ -22,7 +22,9 @@ If it fails you can install the dependencies manually:
 ##Install dependencies:
 
 ###requests:
-The package ``requests`` from [here](http://docs.python-requests.org/en/latest/user/install/)
+The package ``requests`` from [here](http://docs.python-requests.org/en/latest/user/install/). Or try:
+
+    sudo apt-get install python-requests
 
 ###Parallel Python (pp):
 If you are using Ubuntu Linux or related:
@@ -36,11 +38,19 @@ Otherwise, [download](http://www.parallelpython.com/content/view/15/30/) the sou
     python setup.py install
 
 ###BioPython:
-Download and install from [here](http://biopython.org/wiki/Download).
+Download and install from [here](http://biopython.org/wiki/Download). Or:
+
+    sudo apt-get install python-biopython
+
+### BeatutifulSoup
+Download and install from [here](http://www.crummy.com/software/BeautifulSoup/). Or:
+
+    sudo apt-get install python-bs4
 
 ###MUSCLE
 It is necessary that you install MUSCLE so that PyPhyloGenomics can use it to align sequences. 
 Download and install from [here](http://www.drive5.com/muscle/downloads.htm).
+
 
 ###fastx-toolkit
 
