@@ -57,7 +57,7 @@ Download and install from [here](http://hannonlab.cshl.edu/fastx_toolkit/). Or:
 
     sudo apt-get install fastx-toolkit
 
-##Reading PyPhyloGenomics' documentation:
+## Reading PyPhyloGenomics' documentation:
 After installling:
 
     cd doc  
@@ -65,4 +65,6 @@ After installling:
 
 Then open the file `_build/html/index.html` in your web-browser.
 
-
+## Reproduce our analysis:
+You can reproduce all the steps detailed in our [Getting started with PyPhylogenomics] guide. 
+Just use the command line in the same folder as the ``Makefile`` and type make ???
