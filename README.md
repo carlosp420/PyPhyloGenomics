@@ -52,7 +52,10 @@ It is necessary that you install MUSCLE so that PyPhyloGenomics can use it to al
 Download and install from [here](http://www.drive5.com/muscle/downloads.htm).
 
 
-###fastx-toolkit
+### fastx-toolkit
+Download and install from [here](http://hannonlab.cshl.edu/fastx_toolkit/). Or:
+
+    sudo apt-get install fastx-toolkit
 
 ##Reading PyPhyloGenomics' documentation:
 After installling:
