@@ -3,6 +3,7 @@
 import os;
 from pyphylogenomics import OrthoDB
 from pyphylogenomics import BLAST
+from pyphylogenomics import MUSCLE
 
 
 """
@@ -81,3 +82,30 @@ BLAST.blastParser("data/Bombyx_exons_blastn_out.csv", "data/Dp_genome_v2.fasta",
 BLASTn the Bombyx mori exons against the Heliconius genome:
 """
 BLAST.blastn("data/Bombyx_exons.fas", "data/Heliconius_genome.fa");
+
+
+"""
+Parse the blast table, extract the exon sequences and save them to a file:
+"""
+BLAST.blastParser("data/Bombyx_exons_blastn_out.csv", "data/Heliconius_genome.fa",
+                "data/Heliconius_exons.fas", sp_name="Heliconius")
+
+
+"""
+Blasted the Bombyx mori exons against the Manduca genome
+"""
+BLAST.blastn("data/Bombyx_exons.fas", "data/Msex05162011.genome.fa")
+
+
+"""
+Parsing the output blast table:
+"""
+BLAST.blastParser("data/Bombyx_exons_blastn_out.csv", "data/Msex05162011.genome.fa", 
+                "data/Manduca_exons.fas", sp_name="Manduca")
+
+"""
+Do alignment of homologous exons across several taxa
+"""
+files = ["data/Bombyx_exons.fas", "data/Danaus_exons.fas", "data/Heliconius_exons.fas",
+                "data/Manduca_exons.fas"];
+MUSCLE.batchAlignment(files);

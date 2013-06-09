@@ -35,11 +35,20 @@ data/Dp_genome_v2.fasta:
 	curl -0 http://nymphalidae.utu.fi/cpena/etc/Dp_genome_v2.fasta.gz > data/Dp_genome_v2.fasta.gz
 	gunzip data/Dp_genome_v2.fasta.gz
 
+
 # Heliconius genome
 data/Heliconius_genome.fa:
 	curl -0 ftp://ftp.ensemblgenomes.org/pub/metazoa/release-18/fasta/heliconius_melpomene/dna/Heliconius_melpomene.Hmel1.18.dna.toplevel.fa.gz > data/Heliconius_genome.fa.gz
 	gunzip data/Heliconius_genome.fa.gz
 
-gene_search: data/OrthoDB6_Arthropoda_tabtext.csv data/silkcds.fa data/silkgenome.fa data/Dp_genome_v2.fasta data/Heliconius_genome.fa
+
+# Manduca genome
+data/Msex05162011.genome.fa:
+	curl -0 ftp://ftp.bioinformatics.ksu.edu/pub/Manduca/Msex05162011.genome.fa > data/Msex05162011.genome.fa
+	touch data/Msex05162011.genome.fa
+
+
+gene_search: data/OrthoDB6_Arthropoda_tabtext.csv data/silkcds.fa data/silkgenome.fa data/Dp_genome_v2.fasta data/Heliconius_genome.fa data/Msex05162011.genome.fa
 	echo "Done"
+
 
