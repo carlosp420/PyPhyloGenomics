@@ -20,9 +20,11 @@ data/silkcds.fa:
 # Bombyx mori genome 
 data/silkworm_genome_v2.0.fa.tar.gz: 
 	curl -0 ftp://silkdb.org/pub/current/Genome/silkworm_genome_v2.0.fa.tar.gz > data/silkworm_genome_v2.0.fa.tar.gz
+	touch data/silkworm_genome_v2.0.fa.tar.gz
 
 data/silkgenome.fa: data/silkworm_genome_v2.0.fa.tar.gz
 	tar -zxvf data/silkworm_genome_v2.0.fa.tar.gz -C data/
+	touch data/silkgenome.fa
 
 
 # Danaus genome
