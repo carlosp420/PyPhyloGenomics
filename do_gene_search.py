@@ -31,7 +31,7 @@ Do a BLASTn of the sequences against the Bombyx mori genome. The input arguments
 are your file containing the sequences for single-copy genes (pulled_seqs.fa) 
 and your file with the genome of Bombyx mori which is in FASTA format (silkgenome.fa).
 """
-if os.path.exists("data/silkgenome.fa.nhr") != True:
+if os.path.exists("data/pulled_seqs_blastn_out.csv") != True:
     BLAST.blastn('data/pulled_seqs.fa', 'data/silkgenome.fa')
 
 
