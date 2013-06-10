@@ -48,16 +48,16 @@ data/Msex05162011.genome.fa:
 	touch data/Msex05162011.genome.fa
 
 
-# Do gene search using PyPhylogenomics
 alignments/BGIBMGA000172.fas: do_gene_search.py data/Msex05162011.genome.fa data/Heliconius_genome.fa data/Dp_genome_v2.fasta data/silkgenome.fa
 	python do_gene_search.py
 
 
 
+## Do gene search using PyPhylogenomics
 gene_search: data/OrthoDB6_Arthropoda_tabtext.csv data/silkcds.fa data/silkgenome.fa data/Dp_genome_v2.fasta data/Heliconius_genome.fa data/Msex05162011.genome.fa alignments/BGIBMGA000172.fas 
 	echo "Gene Search Done"
 
-# Do primer design using primer4clades http://floresta.eead.csic.es/primers4clades/
-primer_design: alignments/BGIBMGA000848.fas do_primer_design.py
+## Do primer design using primer4clades http://floresta.eead.csic.es/primers4clades/
+primer_design: do_primer_design.py
 	python do_primer_design.py
 
