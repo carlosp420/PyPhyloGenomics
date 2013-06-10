@@ -61,3 +61,5 @@ gene_search: data/OrthoDB6_Arthropoda_tabtext.csv data/silkcds.fa data/silkgenom
 primer_design: do_primer_design.py
 	python do_primer_design.py
 
+## Do analysis of IonTorrent NGS data
+
