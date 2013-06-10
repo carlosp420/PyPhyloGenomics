@@ -36,7 +36,7 @@ def get_cds(genes, cds_file):
             records.append(SeqRecord(seq_record.seq, id=this_id));
 
     SeqIO.write(records, open("pulled_seqs.fa", "w"), "fasta") 
-    print len(records), " sequences were written to file pulled_seqs.fa";
+    print len(records), " sequences were written to file pulled_seqs.fa in the current working directory.";
 
 
 
