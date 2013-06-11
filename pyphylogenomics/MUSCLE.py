@@ -7,6 +7,7 @@ Reads in sequences from files, group homologous sequences based on gene IDs and 
 '''
 
 from Bio import SeqIO
+from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_dna
 from Bio.SeqRecord import SeqRecord
@@ -86,6 +87,50 @@ def batchAlignment(files):
             time.sleep(3) # Wait 3 seconds to not fill off the screen with CMDs.
 
     print "%d alignments have been saved in the folder \"%s\"" % (count, folder)
+
+
+
+
+def bluntSplicer (window=20): # Other arguments could be in_path and out_path.
+    '''
+    Splices Multiple Sequence Alignments objects, so that the first-/last-twenty-nucleotide
+    flanks of the spliced MSA have no gaps.
+
+    Flanks' sizes could be different to twenty nucleotides, depending on the value of window.
+    bluntSplicer reads the MSA files from the 'alignments' folder of the current working
+    directory, and store the spliced MSAs in the same folder.
+    '''
+    
+    for path in glob.glob("./alignments/*.fas"): # MUSCLE.batchAlignment.py created a alignments folder.
+        alignment = AlignIO.read(path,"fasta")
+        print "\nSplicing %s file" % path.split("\\")[-1]
+        for i in range(0,alignment.get_alignment_length()): # For checking gaps on the left flank.
+            gap = False
+            for record in alignment[:,i:i+window]:
+                if "-" in record.seq:
+                    gap = True
+                    break
+                else:
+                    continue
+            if gap == False:
+                start = i
+                break
+
+        for i in range(alignment.get_alignment_length(),0,-1): # For checking gaps on the right flank.
+            gap = False
+            for record in alignment[:,i-window:i]:
+                if "-" in record.seq:
+                    gap = True
+                    break
+                else:
+                    continue
+            if gap == False:
+                end = i
+                break
+
+        out = path.split(".fas")[0] + "_bluntlySpliced.fasta" # Saving edited MSAs in same folder.
+        AlignIO.write (alignment[:,start:end], out, "fasta")
+
 
 
 
