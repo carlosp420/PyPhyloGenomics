@@ -3,8 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to PyPhyloGenomics's documentation!
-===========================================
+=============================================
+ Welcome to PyPhyloGenomics's documentation!
+=============================================
 
 Introduction
 ============
@@ -25,7 +26,8 @@ Documentation
    :maxdepth: 2
    :numbered:
 
-   getting-started.rst
+   getting-started
+   iontorrent_analysis
 
 
 .. automodule:: OrthoDB

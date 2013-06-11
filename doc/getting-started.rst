@@ -1,5 +1,6 @@
-Getting started with PyPhyloGenomics
-====================================
+===================================================
+ Getting started with PyPhyloGenomics: Gene Search
+===================================================
 
 Some snippets of code to get you started with writing code using PyPhyloGenomics.
 
