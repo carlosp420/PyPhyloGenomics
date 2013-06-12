@@ -27,3 +27,19 @@ FASTQ format) into a new file and do the following:
     Your file has been saved using Solexa quality format as data/modified/wrk_ionfile.fastq
     Your sequence IDs have been changed to numbers.
     The FASTA format file data/modified/wrk_ionfile.fasta has been created.
+
+Find reads matching target genes
+--------------------------------
+We can separate the sequenced reads that match the expected genes by using BLAST. For this,
+we need as input a FASTA format file to create a BLAST database.
+We will blast the file ``wrk_ionfile.fasta`` and then will parse the results to divide our
+IonTorrent data in several bins (one bin per gene).
+
+    >>> from pyphylogenomics import BLAST;
+    >>> query_seqs = "data/modified/wrk_ionfile.fasta";
+    >>> genome = "target_genes.fasta";
+    >>> BLAST.blastn(query_seqs, genome); 
+    BLASTn finished!
+    The BLAST results were written in to the file  data/modified/wrk_ionfile_blastn_out.csv
+    
+    

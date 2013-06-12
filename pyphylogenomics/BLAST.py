@@ -99,6 +99,8 @@ def blastn(query_seqs, genome, e_value=0.00001):
     divisor = 1;
     while nseqs/divisor > 200:
         divisor += 1;
+        if divisor > 400:
+            break;
 
     # split fasta file for parallel blast
     record_iter = SeqIO.parse(open(query_seqs), "fasta");

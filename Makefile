@@ -62,4 +62,9 @@ primer_design: do_primer_design.py
 	python do_primer_design.py
 
 ## Do analysis of IonTorrent NGS data
-
+ngs_analysis: do_ngs_analysis.py
+	## get our data
+	# curl -0 http://path to our data.fastq > ionrun.fastq
+	@echo "Our Next Gen Seq data is a FASTQ format file: ionrun.fastq"
+	@echo "Our target genes or reference sequences are contained in a FASTA format file: target_genes.fasta"
+	python do_ngs_analysis.py
