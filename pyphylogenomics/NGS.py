@@ -92,7 +92,7 @@ def parse_blast_results(blast_table, sbj_db):
         os.rename(file, os.path.join("output", file));
 
     # split fastq file into chunks
-    for file in glob.iglob(os.path.join("output", "_re*"):
+    for file in glob.iglob(os.path.join("output", "_re*")):
         split_ionfile_by_results(sbj_db, file);
 
 
@@ -119,7 +119,7 @@ def split_ionfile_by_results(ion_file, blast_chunk):
     # get first id from result chunk
     with open(blast_chunk) as myfile:
         head = myfile.readline();
-        head = head.split("\t");
+        head = head.split(",");
         first_id = "@" + head[0];
     
     # get last id from result chunk
@@ -127,7 +127,7 @@ def split_ionfile_by_results(ion_file, blast_chunk):
     fp = open(blast_chunk)
     for i, line in enumerate(fp):
         if i == number_of_lines_in_chunk - 1:
-            last_id = "@" + line.split("\t")[0]
+            last_id = "@" + line.split(",")[0]
     fp.close();
     
     # get line with first and last ids in ionfile
