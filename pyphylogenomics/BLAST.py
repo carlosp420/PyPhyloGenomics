@@ -146,7 +146,7 @@ def blastn(query_seqs, genome, e_value=0.00001):
         os.remove(f)
 
     destination.close()
-    print "The BLAST results were written in to the file ", blast_out
+    print "The BLAST results were written into the file ", blast_out
      
 
 
