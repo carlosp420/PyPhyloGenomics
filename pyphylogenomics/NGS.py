@@ -81,6 +81,7 @@ def parse_blast_results(blast_table, sbj_db):
     if not os.path.exists(folder):
         os.makedirs(folder);
 
+    # split results file into chunks
     p = split_results_file(blast_table);
     if p != 0:
         print "\nError, couldn't execute parse_blast_results";
@@ -90,6 +91,9 @@ def parse_blast_results(blast_table, sbj_db):
     for file in glob.iglob("_re*"):
         os.rename(file, os.path.join("output", file));
 
+    # split fastq file into chunks
+    for file in glob.iglob(os.path.join("output", "_re*"):
+        split_ionfile_by_results(sbj_db, file);
 
 
 def split_results_file(blast_table):
