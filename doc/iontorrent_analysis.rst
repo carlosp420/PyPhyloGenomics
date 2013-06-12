@@ -14,14 +14,16 @@ we will show how we analyzed our IonTorrent sequence data using PyPhyloGenomics.
 
 Prepare raw NGS data
 --------------------
-The function xyz will make a copy of your NGS data (which should be in FASTQ format) into 
-a new file and do the following:
+The function ``prepare_data()`` in the module ``NGS`` will make a copy of your NGS data (which should be in
+FASTQ format) into a new file and do the following:
 
 * Change the quality format from Phred to Solexa (which is required by the fastx-toolkit). 
 * Change the sequences id to incremental numbers.
 * Create a FASTA file for temporal use.
 
-
-
-
-
+    >>> from pyphylogenomics import NGS
+    >>> ionfile = "ionrun.fastq";
+    >>> NGS.prepare_data(ionfile);
+    Your file has been saved using Solexa quality format as data/modified/wrk_ionfile.fastq
+    Your sequence IDs have been changed to numbers.
+    The FASTA format file data/modified/wrk_ionfile.fasta has been created.
