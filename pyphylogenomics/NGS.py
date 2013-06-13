@@ -102,7 +102,8 @@ def parse_blast_results(blast_table, sbj_db):
         # now we need to iterate over each chunk of blast result and fastq file
         # and separate the reads into bins according to matching gene
         # filter_reads(ion_chunk, blast_chunk):
-        filter_reads(ion_chunk, file);
+        # folder is the "output" folder that we are using to keep our result data
+        filter_reads(ion_chunk, file, folder);
         print "Filtering reads in file " + ion_chunk
 
 
@@ -172,7 +173,7 @@ def split_ionfile_by_results(ion_file, blast_chunk):
     
 
 
-def filter_reads(ion_chunk, blast_chunk):
+def filter_reads(ion_chunk, blast_chunk, folder):
     # get dict of ion_id : gene_id
     # to blast_data
     blast_file = open(blast_chunk, "r");
@@ -194,7 +195,7 @@ def filter_reads(ion_chunk, blast_chunk):
             if str(seq_record.id) == ion_id:
                 blast_data.remove(orig_line);
                 
-                filename = gene_id + ".fastq";
+                filename = os.path.join(folder, "gene_" + gene_id + ".fastq");
                 exon_out = open(filename, "a");
                 SeqIO.write(seq_record, exon_out, "fastq");
                 exon_out.close();
