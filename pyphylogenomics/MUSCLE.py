@@ -91,17 +91,26 @@ def batchAlignment(files):
 
 
 
-def bluntSplicer (window=20): # Other arguments could be in_path and out_path.
+def bluntSplicer(folder, window=20): 
     '''
-    Splices Multiple Sequence Alignments objects, so that the first-/last-twenty-nucleotide
-    flanks of the spliced MSA have no gaps.
+    Splices Multiple Sequence Alignments objects found in *folder*.
+    Objects should be in FASTA format. Gaps from both flanks of the alignments
+    will be trimmed.
 
-    Flanks' sizes could be different to twenty nucleotides, depending on the value of window.
-    bluntSplicer reads the MSA files from the 'alignments' folder of the current working
-    directory, and store the spliced MSAs in the same folder.
+    Window size is used to find gaps in flanks (default 20 nucleotides).
+    **bluntSplicer** reads the MSA files from *folder*, and stores the spliced MSAs
+    in the same folder.
+
+    Example:
+    >>> from pyphylogenomics import MUSCLE
+    >>> MUSCLE.bluntSplicer("alignments") # folder containing the FASTA file alignments
     '''
     
-    for path in glob.glob("./alignments/*.fas"): # MUSCLE.batchAlignment.py created a alignments folder.
+    folder = folder.strip();
+    folder = re.sub("/$", "", folder);
+
+    # MUSCLE.batchAlignment.py created a alignments folder.
+    for path in glob.glob(os.path.join(folder, "*.fas")): 
         alignment = AlignIO.read(path,"fasta")
         print "\nSplicing %s file" % path.split("\\")[-1]
         for i in range(0,alignment.get_alignment_length()): # For checking gaps on the left flank.
@@ -128,7 +137,7 @@ def bluntSplicer (window=20): # Other arguments could be in_path and out_path.
                 end = i
                 break
 
-        out = path.split(".fas")[0] + "_bluntlySpliced.fasta" # Saving edited MSAs in same folder.
+        out = path.split(".fas")[0] + "_bluntlySpliced.fas" # Saving edited MSAs in same folder.
         AlignIO.write (alignment[:,start:end], out, "fasta")
 
 
