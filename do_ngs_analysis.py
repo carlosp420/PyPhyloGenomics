@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import glob;
 
 # prepare raw NGS data for analysis
 from pyphylogenomics import NGS;
@@ -19,3 +20,8 @@ blast_table = "data/modified/wrk_ionfile_blastn_out.csv";
 sbj_db      = "data/modified/wrk_ionfile.fastq";
 NGS.parse_blast_results(blast_table, sbj_db);
 
+# we will take a list of indexes corresponding to individuals 
+# and use it to separate the gene bins 
+index_list = "";
+for gene_file in glob.glob(os.path.join("output", "gene*fastq")):
+    NGS.separate_by_index(gene_file, index_list);

@@ -76,6 +76,9 @@ def parse_blast_results(blast_table, sbj_db):
         * Split CSV file into several chunks.
         * Split ionfile.fastq into complementary chunks so that the reads in the CSV chunks
           will be found in our fastq chunks. 
+    Reads will be written into separate FASTQ files, one per matching target
+    gene.
+    These files will be written in the folder ``output``.
     '''
     # create folder to keep output data
     folder = "output";
