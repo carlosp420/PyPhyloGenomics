@@ -15,6 +15,7 @@ Prepares output data from sequencing round in IonTorrent (FASTQ format file).
 import glob;
 import sys;
 import os;
+import re;
 import shutil;
 from Bio import SeqIO;
 import subprocess;
@@ -89,11 +90,21 @@ def parse_blast_results(blast_table, sbj_db):
 
     # move splitted blast results to output/
     for file in glob.iglob("_re*"):
-        os.rename(file, os.path.join("output", file));
+        src = file;
+        file += ".csv";
+        dest = os.path.join("output", file); 
+        os.rename(src, dest);
 
     # split fastq file into chunks
-    for file in glob.iglob(os.path.join("output", "_re*")):
-        split_ionfile_by_results(sbj_db, file);
+    for file in glob.iglob(os.path.join("output", "_re*.csv")):
+        ion_chunk = split_ionfile_by_results(sbj_db, file);
+
+        # now we need to iterate over each chunk of blast result and fastq file
+        # and separate the reads into bins according to matching gene
+        # filter_reads(ion_chunk, blast_chunk):
+        filter_reads(ion_chunk, file);
+        print "Filtering reads in file " + ion_chunk
+
 
 
 def split_results_file(blast_table):
@@ -143,11 +154,48 @@ def split_ionfile_by_results(ion_file, blast_chunk):
     fp.close();
     
     # cut ionfile using first and last lines
+    ion_chunk = open(blast_chunk + ".fastq", "w");
+
     fp = open(ion_file);
     for i, line in enumerate(fp):
         if i >= first_line:
-            print line.strip();
+            ion_chunk.write(line);
         if i > last_line - 1:
+            print "Splitting " + ion_file + " into chunk " + blast_chunk + ".fastq"
             break
     fp.close();
+
+    ion_chunk.close();
+
+    # return ion_chunk filename
+    return blast_chunk + ".fastq";
     
+
+
+def filter_reads(ion_chunk, blast_chunk):
+    # get dict of ion_id : gene_id
+    # to blast_data
+    blast_file = open(blast_chunk, "r");
+    blast_data = blast_file.readlines();
+    blast_file.close();
+
+    # iterate over ion torrent reads
+    for seq_record in SeqIO.parse(ion_chunk, "fastq"):
+        for line in blast_data:
+            #print len(blast_data);
+            orig_line = line;
+            line = line.strip();
+            line = line.split(",");
+
+            ion_id  = line[0];
+            gene_id = line[1];
+            #print ion_id, gene_id
+
+            if str(seq_record.id) == ion_id:
+                blast_data.remove(orig_line);
+                
+                filename = gene_id + ".fastq";
+                exon_out = open(filename, "a");
+                SeqIO.write(seq_record, exon_out, "fastq");
+                exon_out.close();
+                break;
