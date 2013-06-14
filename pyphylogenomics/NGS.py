@@ -23,10 +23,10 @@ import subprocess;
 
 def prepare_data(ionfile):
     '''
-    * Changes quality format from Phred to Solexa (which is required by the 
-      fastx-toolkit). 
+    * Changes quality format from Phred to Solexa (which is required by the fastx-toolkit). 
     * Changes sequences id to incremental numbers.
     * Creates temporal FASTA file.
+
     Files generated will be written to folder ``data/modified/`` 
 
     * ``ionfile`` argument is FASTQ format file as produced by IonTorrent
@@ -73,9 +73,8 @@ def parse_blast_results(blast_table, ion_file):
     IonTorrent reads into bins that match each of the target genes (or reference
     sequences).
     To speed up things a few tricks are made:
-        * Split CSV file into several chunks.
-        * Split ionfile.fastq into complementary chunks so that the reads in the CSV chunks
-          will be found in our fastq chunks. 
+    * Split CSV file into several chunks.
+    * Split ionfile.fastq into complementary chunks so that the reads in the CSV chunks will be found in our fastq chunks. 
     Reads will be written into separate FASTQ files, one per matching target
     gene.
     These files will be written in the folder ``output``.
@@ -141,7 +140,7 @@ def separate_by_index(fastq_file, index_list, folder="", levenshtein_distance=1)
     >>> index_list = "indexes.fasta";
     >>> folder     = "output";
     >>> for file in glob.glob("output/gene*.fastq"):
-    >>>     NGS.separate_by_index(file, index_list, folder);
+    ...     NGS.separate_by_index(file, index_list, folder);
     '''
     print "Processing file " + fastq_file;
     if folder != "":

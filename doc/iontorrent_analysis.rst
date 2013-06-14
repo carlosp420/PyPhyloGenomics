@@ -53,6 +53,9 @@ according to matching genes.
 It will take a while to parse the results. The output will be several FASTQ files (one
 per target gene) containing our matching IonTorrent reads.
 
+
+Separate gene bins according to indexes (or barcodes)
+-----------------------------------------------------
 Then we need to separate those files according to the indexes that were used in our wet-lab 
 protocol. We used one index (or barcode) for each voucher specimen that went into the 
 IonTorrent.
@@ -66,6 +69,13 @@ if we accept up to 1 mistake during the sequencing of the index region.
 
 PyPhyloGenomics uses `Levenshtein distances <http://en.wikipedia.org/wiki/Levenshtein_distance>`_ 
 for comparison of index sequences.
+
+We assume that our FASTQ bins to separate are in the folder ``output`` and begin with the 
+prefix ``gene``.
     
     >>> from pyphylogenomics import NGS;
-    >>> 
+    >>> import glob; # this module allow us selecting many files by using wildcards
+    >>> index_list = "indexes.fasta";
+    >>> folder     = "output";
+    >>> for file in glob.glob("output/gene*.fastq"):
+    ...     NGS.separate_by_index(file, index_list, folder);
