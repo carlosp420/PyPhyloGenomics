@@ -27,7 +27,8 @@ Documentation
    :numbered:
 
    getting-started
-   iontorrent_analysis
+   ngs_analysis
+   ngs_assembly
 
 
 .. automodule:: OrthoDB
