@@ -17,7 +17,7 @@ Prepare raw NGS data
 The function ``prepare_data()`` in the module ``NGS`` will make a copy of your NGS data (which should be in
 FASTQ format) into a new file and do the following:
 
-* Change the quality format from Phred to Solexa (which is required by the fastx-toolkit). 
+* Change the quality format from Phred to Solexa (which is required by the fastx-toolkit).
 * Change the sequences id to incremental numbers.
 * Create a FASTA file for temporal use.
 
@@ -41,5 +41,31 @@ IonTorrent data in several bins (one bin per gene).
     >>> BLAST.blastn(query_seqs, genome); 
     BLASTn finished!
     The BLAST results were written in to the file  data/modified/wrk_ionfile_blastn_out.csv
+
+We will use the recently generated ``wrk_ionfile_blastn_out.csv`` file to filter our reads
+according to matching genes.
+
+    >>> from pyphylogenomics import NGS;
+    >>> blast_table = "wrk_ionfile_blastn_out";
+    >>> ion_file    = "wrk_ionfile.fastq";
+    >>> NGS.parse_blast_results(blast_table, ion_file);
+
+It will take a while to parse the results. The output will be several FASTQ files (one
+per target gene) containing our matching IonTorrent reads.
+
+Then we need to separate those files according to the indexes that were used in our wet-lab 
+protocol. We used one index (or barcode) for each voucher specimen that went into the 
+IonTorrent.
+And we will use those reads to make out which reads belong to each of our specimens.
+It is possible that due to some errors in base calling during the sequencing procedure, 
+mistakes might appear in the sequenced index region. 
+Thus, we will need to perform string comparisons accepting differences of up to 1 nucleotide
+between our expected and sequenced indexes.
+Our indexes differ in two nucleotides (they should ideally differ more) so we are safe
+if we accept up to 1 mistake during the sequencing of the index region.
+
+PyPhyloGenomics uses `Levenshtein distances <http://en.wikipedia.org/wiki/Levenshtein_distance>`_ 
+for comparison of index sequences.
     
-    
+    >>> from pyphylogenomics import NGS;
+    >>> 

@@ -6,10 +6,10 @@ NGS
 ===
 
 Prepares output data from sequencing round in IonTorrent (FASTQ format file). 
-(i) Changes quality format from Phred to Solexa (which is required by the 
-    fastx-toolkit). 
-(ii) Changes sequences id to incremental numbers.
-(iii) Creates temporal FASTA file.
+
+* Changes quality format from Phred to Solexa (which is required by the fastx-toolkit). 
+* Changes sequences id to incremental numbers.
+* Creates temporal FASTA file.
 '''
 
 import glob;
@@ -29,7 +29,7 @@ def prepare_data(ionfile):
     * Creates temporal FASTA file.
     Files generated will be written to folder ``data/modified/`` 
 
-    ``ionfile`` argument is FASTQ format file as produced by IonTorrent
+    * ``ionfile`` argument is FASTQ format file as produced by IonTorrent
 
     Example:
 
@@ -67,7 +67,7 @@ def prepare_data(ionfile):
             + " has been created.";
 
 
-def parse_blast_results(blast_table, sbj_db):
+def parse_blast_results(blast_table, ion_file):
     '''
     This function uses the BLAST results from a CSV file and separates the 
     IonTorrent reads into bins that match each of the target genes (or reference
@@ -100,7 +100,7 @@ def parse_blast_results(blast_table, sbj_db):
 
     # split fastq file into chunks
     for file in glob.iglob(os.path.join("output", "_re*.csv")):
-        ion_chunk = split_ionfile_by_results(sbj_db, file);
+        ion_chunk = split_ionfile_by_results(ion_file, file);
 
         # now we need to iterate over each chunk of blast result and fastq file
         # and separate the reads into bins according to matching gene
@@ -108,6 +108,131 @@ def parse_blast_results(blast_table, sbj_db):
         # folder is the "output" folder that we are using to keep our result data
         filter_reads(ion_chunk, file, folder);
         print "Filtering reads in file " + ion_chunk
+
+
+def separate_by_index(fastq_file, index_list, folder="", levenshtein_distance=1):
+    '''
+    This function divides FASTQ reads into bins according to a list of indexes
+    (or barcodes).
+    The *index_list* should be in FASTA format.
+    It will compare the template indexes and those in the reads and accept
+    indexes with a difference no bigger than the *levenshtein* distance (default
+    1 base pair difference).
+
+    See http://en.wikipedia.org/wiki/Levenshtein_distance
+
+    * ``fastq_file`` FASTQ format containing reads as produced by IonTorrent
+    * ``index_list`` FASTA format file containing indexes (or barcodes)
+    * ``folder`` *Optional*: Directory containing FASTQ format files to process
+    * ``levenshtein_distance`` *Optional*, default = 1: Maximum number of different nucleotides that will be accepted when comparing template and sequenced indexes (due to erros in base calling during sequencing). 
+
+    Example:
+
+    >>> from pyphylogenomics import NGS;
+    >>> fastq_file = "gene_rps5.fastq";
+    >>> index_list = "indexes.fasta";
+    >>> folder     = "output";
+    >>> NGS.separate_by_index(fastq_file, index_list, folder);
+
+    You can also automate parsing many FASTQ files at once:
+
+    >>> from pyphylogenomics import NGS;
+    >>> import glob; # this module allow us selecting many files by using wildcards
+    >>> index_list = "indexes.fasta";
+    >>> folder     = "output";
+    >>> for file in glob.glob("output/gene*.fastq"):
+    >>>     NGS.separate_by_index(file, index_list, folder);
+    '''
+    print "Processing file " + fastq_file;
+    if folder != "":
+        folder = re.sub("/$", "", folder);
+        folder = os.path.abspath(folder);
+        print "Output files will be written into " + folder
+
+    for seq_record in SeqIO.parse(index_list, "fasta"):
+        for fastq_record in SeqIO.parse(fastq_file, "fastq"):
+            found_index = "";
+            found_index = find_index_in_seq(seq_record, fastq_record, levenshtein_distance);
+            if found_index == "TRUE":
+                basename = os.path.basename(fastq_file);
+                if folder != "":
+                    filename = str(seq_record.id) + "_" + re.sub(".fastq", "", basename) + ".fastq";
+                    filename = os.path.join(folder, filename);
+                else:
+                    filename = str(seq_record.id) + "_" + re.sub(".fastq", "", basename) + ".fastq";
+                output_handle = open(filename, "a");
+                SeqIO.write(fastq_record, output_handle, "fastq");
+                output_handle.close();
+
+
+def find_index_in_seq(barcode, seq, levenshtein_distance):
+    '''
+    \* *Internal function* \*
+
+    Arguments:  *barcode*,  *read sequence*.
+    Iterate through primer's degenerated IUPAC and try to find it in sequence
+    read.
+    Return TRUE on success.
+    '''
+    found = "false";
+
+    while (found != "true" ):
+        barcode_seq = str(barcode.seq) 
+        barcode_read = str(seq.seq)[0:8];
+
+        # compare levenshtein
+        distance = levenshtein(barcode_seq.upper(), barcode_read.upper());
+
+        if distance < levenshtein_distance + 1:
+            # accept
+            found = "true";
+
+            #if str(seq.id) not in fastq_id_list:
+                #fastq_id_list.append(str(seq.id));
+            return "TRUE";
+        else:
+            # reversecomplement
+            barcode_seq = str(barcode.seq.reverse_complement())
+
+            # compare levenshtein
+            distance = levenshtein(barcode_seq.upper(), barcode_read.upper());
+
+            if distance < levenshtein_distance + 1:
+                #print "Found reverse complement";
+                # accept
+                found = "true";
+    
+                #if str(seq.id) not in fastq_id_list:
+                    #fastq_id_list.append(str(seq.id));
+                return "TRUE";
+
+        return "FALSE";
+
+
+
+def levenshtein(a,b):
+    '''
+    \* *Internal function* \*
+
+    Calculates the Levenshtein distance between a and b.
+    '''
+    n, m = len(a), len(b)
+    if n > m:
+        # Make sure n <= m, to use O(min(n,m)) space
+        a,b = b,a
+        n,m = m,n
+        
+    current = range(n+1)
+    for i in range(1,m+1):
+        previous, current = current, [i]+[0]*n
+        for j in range(1,n+1):
+            add, delete = previous[j]+1, current[j-1]+1
+            change = previous[j-1]
+            if a[j-1] != b[i-1]:
+                change = change + 1
+            current[j] = min(add, delete, change)
+            
+    return current[n]
 
 
 

@@ -36,6 +36,8 @@ Documentation
    :members:
 .. automodule:: MUSCLE
    :members:
+.. automodule:: NGS
+   :members:
 
 
 Indices and tables
