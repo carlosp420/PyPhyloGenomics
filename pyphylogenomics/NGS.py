@@ -177,7 +177,7 @@ def find_index_in_seq(barcode, seq, levenshtein_distance):
 
     while (found != "true" ):
         barcode_seq = str(barcode.seq) 
-        barcode_read = str(seq.seq)[0:8];
+        barcode_read = str(seq.seq)[0:len(barcode_seq)];
 
         # compare levenshtein
         distance = levenshtein(barcode_seq.upper(), barcode_read.upper());
