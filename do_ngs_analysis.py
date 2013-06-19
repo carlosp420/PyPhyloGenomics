@@ -16,7 +16,7 @@ from pyphylogenomics import BLAST;
 
 query_seqs = "data/modified/wrk_ionfile.fasta";
 genome = "target_genes.fasta";
-#BLAST.blastn(query_seqs, genome); 
+#BLAST.blastn(query_seqs, genome); # blast results saved as XYZ_blast_out.csv
 
 blast_table = "data/modified/wrk_ionfile_blastn_out.csv";
 sbj_db      = "data/modified/wrk_ionfile.fastq";
