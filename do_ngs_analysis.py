@@ -7,7 +7,7 @@ import os;
 from pyphylogenomics import NGS;
 
 ionfile = "ionrun.fastq";
-#NGS.prepare_data(ionfile); # file is written to data/modified/
+#NGS.prepare_data(ionfile); # file is written to data/modified/wrk_ionfile.fasta
 
 
 
@@ -16,7 +16,7 @@ from pyphylogenomics import BLAST;
 
 query_seqs = "data/modified/wrk_ionfile.fasta";
 genome = "target_genes.fasta";
-#BLAST.blastn(query_seqs, genome); # blast results saved as XYZ_blast_out.csv
+#BLAST.blastn(query_seqs, genome); # blast results saved as wrk_ionfile_blast_out.csv
 
 blast_table = "data/modified/wrk_ionfile_blastn_out.csv";
 sbj_db      = "data/modified/wrk_ionfile.fastq";
