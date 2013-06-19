@@ -7,7 +7,8 @@ import os;
 from pyphylogenomics import NGS;
 
 ionfile = "ionrun.fastq";
-#NGS.prepare_data(ionfile);
+#NGS.prepare_data(ionfile); # file is written to data/modified/
+
 
 
 # find reads matching target genes using BLAST
