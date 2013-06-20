@@ -155,10 +155,10 @@ def separate_by_index(fastq_file, index_list, folder="", levenshtein_distance=1)
             if found_index == "TRUE":
                 basename = os.path.basename(fastq_file);
                 if folder != "":
-                    filename = str(seq_record.id) + "_" + re.sub(".fastq", "", basename) + ".fastq";
+                    filename = "index_" + str(seq_record.id) + "_" + re.sub(".fastq", "", basename) + ".fastq";
                     filename = os.path.join(folder, filename);
                 else:
-                    filename = str(seq_record.id) + "_" + re.sub(".fastq", "", basename) + ".fastq";
+                    filename = "index_" + str(seq_record.id) + "_" + re.sub(".fastq", "", basename) + ".fastq";
                 output_handle = open(filename, "a");
                 SeqIO.write(fastq_record, output_handle, "fastq");
                 output_handle.close();
