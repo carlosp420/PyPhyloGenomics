@@ -164,6 +164,180 @@ def separate_by_index(fastq_file, index_list, folder="", levenshtein_distance=1)
                 output_handle.close();
 
 
+def assembly(fastq_file, index_length, min_quality=20, percentage=70, min_length=50):
+    '''
+    Do *de novo* assembly of expected sequences after doing quality control of a
+    FASTQ file. Quality control includes dropping reads with low quality values,
+    trimming of bad quality end and trimming index region.
+
+    * ``fastq_file`` FASTQ format file that ideally has been separated by gene and index using the functions :py:func:`NGS.parse_blast_results` and :py:func:`NGS.separate_by_index`
+    * ``index_length`` number of base pairs of the indexes. They will be trimmed from the reads during processing.
+    * ``min_quality`` minimum quality score to keep (20 by default)
+    * ``percentage``  minimum percent of base pairs that need to have ``min_quality`` (70% by default)
+    * ``min_length`` minimum length of read sequences to keep (50 by default)
+    
+
+    Example:
+
+    >>> from pyphylogenomics import NGS;
+    >>> fastq_file   = "index_Ion_4_gene_rps5.fastq";
+    >>> index_length = 8;
+    >>> min_quality  = 30; # optional
+    >>> percentage   = 80; # optional
+    >>> min_length   = 60; # optional
+    >>> NGS.assembly(fastq_file, index_length, min_quality, percentage, min_length);
+    '''
+    # Do quality control first
+    q = quality_control(fastq_file, index_length, min_quality, percentage, min_length);
+    if q == "ok":
+        command = "bash assembly_velvet.sh filter3.fastq";
+        filter3_output = subprocess.check_output(command, shell=True);
+        filter3_params = get_velvet_params(filter3_output);
+
+        best_input_kmer = guess_best_kmer(filter3_params);
+        command = "bash assembly_velvet2.sh " + best_input_kmer[0] + ".fastq "
+        command += str(best_input_kmer[1]);
+        assembly = subprocess.check_call(command, shell=True);
+
+        if assembly == 0:
+            if count_reads("test/contigs.fa", "fasta") > 0:
+                print "yyyyyyyyyyyyyyy" + str(count_reads("test/contigs.fa", "fasta"));
+                filename = fastq_file + "_assembled.fas";
+                os.rename("test/contigs.fa", fastq_file + "_assembled.fas");
+                print "Assembled sequence has been saved as file " + filename;
+    else:
+        print "Couldn't process file " + fastq_file;
+
+
+def count_reads(fastqFile, file_format):
+    '''
+    \* *Internal function* \*
+    '''
+    count = 0;
+    for seq_record in SeqIO.parse(fastqFile, file_format):
+        count = count + 1;
+    return count;
+
+# ----------------------------------------------------------------------------
+# @input: output from runing velvet assembly on all Kmer values
+# @output: a dictionary with the parameters: kmer, nodes, n50, max, total
+def get_velvet_params(output):
+    '''
+    \* *Internal function* \*
+    '''
+    output = output.split("\n");
+    mydict = dict();
+    kmer = 31;
+    for line in output:
+        if "n50" in line:
+            lista = dict();
+            nodes = re.search("(\d+)\snodes", line);
+            nodes = nodes.groups()[0];
+            lista['nodes'] = nodes;
+
+            n50 = re.search("n50 of (\d+)", line);
+            n50 = n50.groups()[0]; 
+            lista['n50'] = n50;
+
+            maxim = re.search("max\s(\d+)", line);
+            maxim = maxim.groups()[0];
+            lista['max'] = maxim;
+
+            total = re.search("total\s(\d+)", line);
+            total = total.groups()[0];
+            lista['total'] = total;
+
+            mydict[kmer] = lista;
+            kmer = kmer - 2;
+    return mydict;
+                
+
+
+# ----------------------------------------------------------------------------
+# @input: params from two runs of velvet on all Kmer values
+#            these inputs are dictionaries
+# @output: a list containing:
+#            - the filtered file number either filter2 or filter3
+#            - the best kmer value found by comparison of the two
+def guess_best_kmer(filter3_params):
+    '''
+    \* *Internal function* \*
+    '''
+    n50 = [];
+    for i in filter3_params:
+        n50.append(int(filter3_params[i]['n50']));
+        n50.sort();
+        n50.reverse();
+    filter3_n50 = n50[0];
+
+    for i in filter3_params:
+        if filter3_params[i]['n50'] == str(filter3_n50):
+            return ["filter3", i];
+        
+# ----------------------------------------------------------------------------
+# @input: output from runing velvet assembly on all Kmer values
+# @output: a dictionary with the parameters: kmer, nodes, n50, max, total
+def get_velvet_params(output):
+    '''
+    \* *Internal function* \*
+    '''
+    output = output.split("\n");
+    mydict = dict();
+    kmer = 31;
+    for line in output:
+        if "n50" in line:
+            lista = dict();
+            nodes = re.search("(\d+)\snodes", line);
+            nodes = nodes.groups()[0];
+            lista['nodes'] = nodes;
+
+            n50 = re.search("n50 of (\d+)", line);
+            n50 = n50.groups()[0]; 
+            lista['n50'] = n50;
+
+            maxim = re.search("max\s(\d+)", line);
+            maxim = maxim.groups()[0];
+            lista['max'] = maxim;
+
+            total = re.search("total\s(\d+)", line);
+            total = total.groups()[0];
+            lista['total'] = total;
+
+            mydict[kmer] = lista;
+            kmer = kmer - 2;
+    return mydict;
+                
+
+
+
+
+def quality_control(fastq_file, index_length, min_quality=20, percentage=70, min_length=50):
+    '''
+    \* *Internal function* \*
+
+    Use fastx-tools to do quality control on FASTQ file.
+    '''
+
+    command  = "fastq_quality_filter -q " + str(min_quality) + " -p " + str(percentage);
+    command += " -i " + fastq_file + " -o filter1.fastq";
+    p = subprocess.check_call(command, shell=True);
+    print "Processing file " +  fastq_file;
+
+    index_length = index_length + 1;
+    command = "fastx_trimmer -f " + str(index_length) + " -i filter1.fastq -o filter2.fastq";
+    p = subprocess.check_call(command, shell=True);
+    print "Removing indexes"
+
+    command = "fastq_quality_trimmer -t " + str(min_quality) + " -l ";
+    command += str(min_length) + " -i filter2.fastq -o filter3.fastq";
+    p = subprocess.check_call(command, shell=True);
+    print "Trimming low quality end";
+
+    if p == 0:
+        return "ok";
+	
+
+
 def find_index_in_seq(barcode, seq, levenshtein_distance):
     '''
     \* *Internal function* \*
