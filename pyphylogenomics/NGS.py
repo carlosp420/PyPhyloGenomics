@@ -21,21 +21,28 @@ from Bio import SeqIO;
 import subprocess;
 
 
-def prepare_data(ionfile):
+def prepare_data(ionfile, index_length):
     '''
     * Changes quality format from Phred to Solexa (which is required by the fastx-toolkit). 
     * Changes sequences id to incremental numbers.
-    * Creates temporal FASTA file.
+    * Creates temporal FASTA file with the indexes removed from the sequences.
 
     Files generated will be written to folder ``data/modified/`` 
 
     * ``ionfile`` argument is FASTQ format file as produced by IonTorrent
+    * ``index_length`` number of base pairs of your indexes. This is necessary \
+                       to trim the indexes before blasting the FASTA file      \
+                       against the reference gene sequences.
 
     Example:
 
     >>> from pyphylogenomics import NGS
     >>> ionfile = "ionrun.fastq";
+    >>> index_length = 8;
     >>> NGS.prepare_data(ionfile);
+    Your file has been saved using Solexa quality format as data/modified/wrk_ionfile.fastq
+    Your sequence IDs have been changed to numbers.
+    The FASTA format file data/modified/wrk_ionfile.fasta has been created.
     '''
     # create folder to keep data
     folder = os.path.join("data", "modified");
@@ -46,7 +53,7 @@ def prepare_data(ionfile):
     # write file to work on
     wrkfile = os.path.join(folder, "wrk_ionfile.fastq")
     SeqIO.convert(ionfile, "fastq", wrkfile, "fastq-solexa");
-    print "\nYour file has been saved using Solexa quality format as " + wrkfile
+    print "Your file has been saved using Solexa quality format as " + wrkfile
 
     # change sequences id to incremental numbers
     command = "fastx_renamer -n COUNT -i " + wrkfile + " -o tmp.fastq"
@@ -54,16 +61,25 @@ def prepare_data(ionfile):
     if p != 0:
         print "\nError, couldn't execute " + command;
         sys.exit();
-    print "\nYour sequence IDs have been changed to numbers."
+    print "Your sequence IDs have been changed to numbers."
 
     # replace working file with temporal file
     os.rename("tmp.fastq", wrkfile);
 
     # create temporal FASTA file
-    command = "fastq_to_fasta -i " + wrkfile + " -o " + os.path.join(folder,
-                "wrk_ionfile.fasta");
+    command = "fastq_to_fasta -i " + wrkfile + " -o tmp.fasta";
     p = subprocess.check_call(command, shell=True);
-    print "\nThe FASTA format file " + os.path.join(folder, "wrk_ionfile.fasta") \
+
+    # trim index region
+    index_length = int(index_length) + 1;
+    command  = "fastx_trimmer -f " + str(index_length) + " -i tmp.fasta " 
+    command += "-o " + os.path.join(folder, "wrk_ionfile.fasta");
+    p = subprocess.check_call(command, shell=True);
+
+    if os.path.isfile("tmp.fasta"):
+        os.remove("tmp.fasta");
+
+    print "The FASTA format file " + os.path.join(folder, "wrk_ionfile.fasta") \
             + " has been created.";
 
 
