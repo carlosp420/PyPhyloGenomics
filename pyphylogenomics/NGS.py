@@ -475,6 +475,10 @@ def split_ionfile_by_results(ion_file, blast_chunk):
 
 
 def filter_reads(ion_chunk, blast_chunk, folder):
+    # Accepting alignment lengths higher than 40 bp
+    # longer than our primer lengths
+    min_aln_length = 40;
+
     # get dict of ion_id : gene_id
     # to blast_data
     blast_file = open(blast_chunk, "r");
@@ -491,9 +495,10 @@ def filter_reads(ion_chunk, blast_chunk, folder):
 
             ion_id  = line[0];
             gene_id = line[1];
-            #print ion_id, gene_id
+            aln_length = int(line[3]);
+            #print ion_id, gene_id, aln_length, min_aln_length
 
-            if str(seq_record.id) == ion_id:
+            if str(seq_record.id) == ion_id and aln_length > min_aln_length:
                 blast_data.remove(orig_line);
                 
                 filename = os.path.join(folder, "gene_" + gene_id + ".fastq");
