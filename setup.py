@@ -29,5 +29,5 @@ setup(
 					("Environment :: Console"),
 					],
 
-		install_requires=['biopython','pp', 'requests']
+		install_requires=['biopython','pp','requests','beautifulsoup4']
 		);
