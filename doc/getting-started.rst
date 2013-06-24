@@ -40,7 +40,7 @@ The OrthoDB_ database has a catalog of orthologous protein-coding genes for vert
 .. _OrthoDB: http://cegg.unige.ch/orthodb6
 .. _OrthoDB6_Arthropoda_tabtex.gz: ftp://cegg.unige.ch/OrthoDB6/
 
-For this guick getting-started guide, we will download the table of orthologous genes for Arthropoda from OrthoDB's ftp server OrthoDB6_Arthropoda_tabtex.gz_.
+For this quick getting-started guide, we will download the table of orthologous genes for Arthropoda from OrthoDB's ftp server OrthoDB6_Arthropoda_tabtex.gz_.
 
 Starting off:
 
@@ -271,6 +271,15 @@ The function ``designPrimers`` will send an alignment to primers4clades_ along (
 It is recommended that you enter your email as one of the parameters so that primers4clades_ can send you an email with very detailed results for you to insect. Just in case you don't provide your email, the very detailed results will be saved in the same folder of your alignments as HTML files.
 
 .. warning:: Please keep in mind that the ``designPrimers`` function will return very little data, i.e. only the forward and reverse primers for an alignment. But it might be necessary that you inspect the detailed information saved as HTML files or the emails sent to you by primers4clades_. You will receive one email for each alignment.
+
+Before primer design it could be useful to trim off the ends of the sequences
+so that all sequences will have the same length:
+
+    >>> from pyphylogenomics import MUSCLE
+    >>> MUSCLE.bluntSplicer("alignments/") # folder_path containing the FASTA file alignments
+
+This will produce FASTA files ending in **"_bluntlySpliced.fas"**. You may want to remove the old 
+unspliced FASTA files before doing primer design.
 
 Automated primer design via primers4clades_:
 

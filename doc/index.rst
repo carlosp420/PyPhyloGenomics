@@ -19,6 +19,11 @@ It includes tools for:
 * analysis of Next Generation Sequencing data, and
 * gene sequences assembly.
 
+Download
+========
+Download the source code from `github <https://github.com/carlosp420/PyPhyloGenomics>`_.
+
+
 Documentation
 =============
 
