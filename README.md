@@ -58,7 +58,9 @@ Download and install from [here](http://hannonlab.cshl.edu/fastx_toolkit/). Or:
     sudo apt-get install fastx-toolkit
 
 ## Reading PyPhyloGenomics' documentation:
-After installling:
+Read the online documentation here: [http://carlosp420.github.io/PyPhyloGenomics/](http://carlosp420.github.io/PyPhyloGenomics/)
+
+Or, after installling do the following:
 
     cd doc  
     make html
