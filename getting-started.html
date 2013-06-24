@@ -1,0 +1,476 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. Getting started with PyPhyloGenomics: Gene Search &mdash; PyPhyloGenomics 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="PyPhyloGenomics 0.1.0 documentation" href="index.html" />
+    <link rel="next" title="2. Analysis of raw data output from IonTorrent" href="iontorrent_analysis.html" />
+    <link rel="prev" title="Welcome to PyPhyloGenomics’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="iontorrent_analysis.html" title="2. Analysis of raw data output from IonTorrent"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to PyPhyloGenomics’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyPhyloGenomics 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started-with-pyphylogenomics-gene-search">
+<h1>1. Getting started with PyPhyloGenomics: Gene Search<a class="headerlink" href="#getting-started-with-pyphylogenomics-gene-search" title="Permalink to this headline">¶</a></h1>
+<p>Some snippets of code to get you started with writing code using PyPhyloGenomics.</p>
+<div class="section" id="finding-candidate-genes-from-bombyx-mori">
+<h2>1.1. Finding candidate genes from <em>Bombyx mori</em><a class="headerlink" href="#finding-candidate-genes-from-bombyx-mori" title="Permalink to this headline">¶</a></h2>
+<p>We need to obtain candidate genes to be used in phylogenetic inference that have to fulfill the following requirements:</p>
+<ul class="simple">
+<li>Our genes should be orthologs.</li>
+<li>Our genes should be single-copy genes.</li>
+<li>Their sequence need to be around 251 DNA base pairs in length.</li>
+</ul>
+<p>We will assume that our Next Generation Sequencer available is the <a class="reference external" href="http://www.iontorrent.com/">IonTorrent</a>.</p>
+<p>We have to consider the <a class="reference external" href="http://www.iontorrent.com/">IonTorrent</a> platform requirements to arrive to our target 250bp gene length:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="65%" />
+<col width="35%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Primer</th>
+<th class="head">Length (bp)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Adapter A</td>
+<td>30</td>
+</tr>
+<tr class="row-odd"><td>5&#8217; Index</td>
+<td>8</td>
+</tr>
+<tr class="row-even"><td>5&#8217; Degenerate Primer</td>
+<td>25</td>
+</tr>
+<tr class="row-odd"><td>Exon</td>
+<td><strong>???</strong></td>
+</tr>
+<tr class="row-even"><td>3&#8217; Degenerate Primer</td>
+<td>25</td>
+</tr>
+<tr class="row-odd"><td>3&#8217; Index</td>
+<td>8</td>
+</tr>
+<tr class="row-even"><td>Adapter P</td>
+<td>23</td>
+</tr>
+</tbody>
+</table>
+<p>For <a class="reference external" href="http://www.iontorrent.com/">IonTorrent</a> Platform2, the maximum length that can be sequenced is from 280bp to 320bp in total. Thus, <tt class="docutils literal"><span class="pre">320</span> <span class="pre">-</span> <span class="pre">119</span> <span class="pre">=</span> <span class="pre">201</span></tt> is the maximum internal gene region (region within degenerate primers).</p>
+<p>Therefore, for the new set of primers, being designed for Platform2, we have a maximum amplicon size of <tt class="docutils literal"><span class="pre">201</span> <span class="pre">+</span> <span class="pre">25*2</span> <span class="pre">=</span> <span class="pre">251bp</span></tt>.</p>
+<p>The <a class="reference external" href="http://cegg.unige.ch/orthodb6">OrthoDB</a> database has a catalog of orthologous protein-coding genes for vertebrates, arthropods and other living groups.</p>
+<p>For this guick getting-started guide, we will download the table of orthologous genes for Arthropoda from OrthoDB&#8217;s ftp server <a class="reference external" href="ftp://cegg.unige.ch/OrthoDB6/">OrthoDB6_Arthropoda_tabtex.gz</a>.</p>
+<p>Starting off:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyphylogenomics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">OrthoDB</span>
+</pre></div>
+</div>
+<p>To see the full documentation you can use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">pyphylogenomics</span><span class="p">)</span> <span class="c"># shows list of modules</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">pyphylogenomics</span><span class="o">.</span><span class="n">OrthoDB</span><span class="p">)</span> <span class="c"># shows help for a specific module and its functions</span>
+</pre></div>
+</div>
+<p>This also works:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">OrthoDB</span><span class="p">)</span> <span class="c"># shows help for a specific module and its functions</span>
+</pre></div>
+</div>
+<p>We will find all single-copy genes for the silk moth <em>Bombyx mori</em> using the table from <a class="reference external" href="http://cegg.unige.ch/orthodb6">OrthoDB</a> as input file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">in_file</span> <span class="o">=</span> <span class="s">&#39;OrthoDB6_Arthropoda_tabtext.csv&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span> <span class="o">=</span> <span class="n">OrthoDB</span><span class="o">.</span><span class="n">single_copy_genes</span><span class="p">(</span><span class="n">in_file</span><span class="p">,</span> <span class="s">&#39;Bombyx mori&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Found gene: BGIBMGA011628</span>
+<span class="go">Found gene: BGIBMGA002142</span>
+<span class="go">Found gene: BGIBMGA014116</span>
+<span class="go">Found 12167 genes.</span>
+</pre></div>
+</div>
+<p>The variable <tt class="docutils literal"><span class="pre">genes</span></tt> is a list of IDs for single-copy genes extracted from the OrthoDB table:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">genes</span><span class="p">;</span>
+<span class="gp">...</span>
+<span class="go">&#39;BGIBMGA012533&#39;, &#39;BGIBMGA014144&#39;, &#39;BGIBMGA011628&#39;, &#39;BGIBMGA002142&#39;, &#39;BGIBMGA014116&#39;,</span>
+<span class="go">&#39;BGIBMGA000220&#39;, &#39;BGIBMGA007580&#39;, &#39;BGIBMGA013398&#39;, &#39;BGIBMGA011517&#39;, &#39;BGIBMGA011820&#39;,</span>
+<span class="go">&#39;BGIBMGA014318&#39;, &#39;BGIBMGA013470&#39;, &#39;BGIBMGA011304&#39;, &#39;BGIBMGA005643&#39;, &#39;BGIBMGA002698&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">);</span>
+<span class="go">12167</span>
+</pre></div>
+</div>
+<p>We will use these gene IDs to obtain the gene sequences from the <em>Bombyx mori</em> genome. The genome can be downloaded from <a class="reference external" href="http://www.silkdb.org/silkdb/doc/download.html">silkdb.org</a>.
+We will download the <strong>Consensus gene set by merging all the gene sets using GLEAN: Fasta</strong> file <tt class="docutils literal"><span class="pre">silkworm_glean_cds.fa.tar.gz</span></tt>.</p>
+<p>Untar the gzipped file and you will get the FASTA formatted file <tt class="docutils literal"><span class="pre">silkcds.fa</span></tt> containing gene IDs and sequences for <em>Bombyx mori</em>.</p>
+<p>We will need to BLASTn these single-copy genes against the <em>Bombyx mori</em> genome
+in order to get exon sizes:</p>
+<ol class="arabic">
+<li><p class="first">Pull all sequences for our gene IDs from the CDS file and write them to a file <tt class="docutils literal"><span class="pre">pulled_seqs.fa</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">BLAST</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cds_file</span> <span class="o">=</span> <span class="s">&quot;silkcds.fa&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">get_cds</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">cds_file</span><span class="p">)</span>
+<span class="go">12167  sequences were written to file pulled_seqs.fa</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Download the <em>Bombyx mori</em> genome from <a class="reference external" href="http://www.silkdb.org/silkdb/doc/download.html">silkdb.org</a> (download the file <tt class="docutils literal"><span class="pre">silkworm_genome_v2.0.fa.tar.gz</span></tt>). Unzip and untar the file to your working directory and you will get the file <tt class="docutils literal"><span class="pre">silkgenome.fa</span></tt></p>
+</li>
+<li><p class="first">Do a BLASTn of the sequences against the <em>Bombyx mori</em> genome. The input arguments are your file containing the sequences for single-copy genes (<tt class="docutils literal"><span class="pre">pulled_seqs.fa</span></tt>) and your file with the genome of <em>Bombyx mori</em> which is in FASTA format (<tt class="docutils literal"><span class="pre">silkgenome.fa</span></tt>).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&#39;pulled_seqs.fa&#39;</span><span class="p">,</span> <span class="s">&#39;silkgenome.fa&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">BLASTn finished!</span>
+<span class="go">The BLAST results were written in to the file  pulled_seqs_blastn_out.csv</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>The file <tt class="docutils literal"><span class="pre">pulled_seqs_blastn_out.csv</span></tt> contains a BLAST output table with the blast results. <strong>PyPhyloGenomics</strong> has functions to filter out the table and get information to answer the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Which are the longest gene-sequence to genome matches?</li>
+<li>Which are the genes that are &#8220;distantly enough&#8221; from each other? So that, they can used as independent evolutionary entities?</li>
+</ul>
+</div></blockquote>
+<ol class="arabic" start="4">
+<li><p class="first">As stated before, we prefer long exons for each of the candidate genes ( &gt; 300 nucleotides):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exons</span> <span class="o">=</span> <span class="n">BLAST</span><span class="o">.</span><span class="n">getLargestExon</span><span class="p">(</span><span class="s">&quot;pulled_seqs_blastn_out.csv&quot;</span><span class="p">,</span> <span class="n">E_value</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">ident</span><span class="o">=</span><span class="mi">98</span><span class="p">,</span> <span class="n">exon_len</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="go">Parsing BLAST table ...</span>
+<span class="go">Deleting exons below 300 nucleotides ...</span>
+<span class="go">There are 7411 exons</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Some small segments of sequences might be similar to non-homologous regions of the genome. We will use the function <tt class="docutils literal"><span class="pre">eraseFalsePosi</span></tt> to keep those matches of longest length:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exons</span> <span class="o">=</span> <span class="n">BLAST</span><span class="o">.</span><span class="n">eraseFalsePosi</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span> <span class="c"># Drop presumable false positives.</span>
+<span class="go">Erasing False Positives ...</span>
+<span class="go">There are 6346 exons</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Ideally we want exons that are not too close to each other in the genome to avoid gene linkage. So we will keep only those exons that are apart by 810 kilobases:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exons</span> <span class="o">=</span> <span class="n">BLAST</span><span class="o">.</span><span class="n">wellSeparatedExons</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span> <span class="c"># Keep exons separated by &gt; 810KB</span>
+<span class="go">Identifying exons separated by 810000 bases ...</span>
+<span class="go">There are 575 exons</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Finally we can use a function to save the obtained exons while making sure they are in frame. We need to use as additional arguments the genome file and output filename:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">storeExonsInFrame</span><span class="p">(</span><span class="n">exons</span><span class="p">,</span> <span class="s">&quot;pulled_seqs.fa&quot;</span><span class="p">,</span> <span class="s">&quot;Bombyx_exons.fas&quot;</span><span class="p">)</span>
+<span class="go">Storing exons ...</span>
+<span class="go">A total of 575 exons are kept</span>
+<span class="go">These exons have been stored in the file: Bombyx_exons.fas</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="validation-of-exon-structure">
+<h2>1.2. Validation of exon structure<a class="headerlink" href="#validation-of-exon-structure" title="Permalink to this headline">¶</a></h2>
+<p>We have now 575 single copy exons extracted from the <em>Bombyx mori</em> genome. Let&#8217;s find
+out whether these exons are conserved in other Arthropoda species.</p>
+<p>For example we can compare these 575 exons with the genome of the monarch butterfly
+<em>Danaus plexippus</em>.</p>
+<div class="section" id="danaus-plexippus">
+<h3>1.2.1. <em>Danaus plexippus</em><a class="headerlink" href="#danaus-plexippus" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">Download the version two of the monarch butterfly genome from here: <a class="reference external" href="http://danaus.genomeprojectsolutions-databases.com/Genome_seq_stats.html">http://danaus.genomeprojectsolutions-databases.com/Genome_seq_stats.html</a></p>
+</li>
+<li><p class="first">Extract the genome as FASTA file using <tt class="docutils literal"><span class="pre">gunzip</span></tt>:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">gunzip</span> <span class="pre">Dp_genome_v2.fasta.gz</span></tt></li>
+</ul>
+</li>
+<li><p class="first">Do a blastn of our Long Exons against the <em>Danaus</em> genome:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&quot;Bombyx_exons.fas&quot;</span><span class="p">,</span> <span class="s">&quot;Dp_genome_v2.fasta&quot;</span><span class="p">);</span>
+<span class="gp">...</span>
+<span class="go">BLASTn finished!</span>
+<span class="go">The BLAST results were written in to the file Bombyx_exons_blastn_out.csv</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">We need to parse the output blast table and extract the exons from <em>Danaus</em> that are longer than 300bp and are homologous to the exons of <em>Bombyx mori</em>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastParser</span><span class="p">(</span><span class="s">&quot;Bombyx_exons_blastn_out.csv&quot;</span><span class="p">,</span> <span class="s">&quot;Dp_genome_v2.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Danaus_exons.fas&quot;</span><span class="p">,</span> <span class="n">sp_name</span><span class="o">=</span><span class="s">&quot;Danaus&quot;</span><span class="p">)</span>
+<span class="go">Reading files ...</span>
+<span class="go">Parsing BLAST table ...</span>
+<span class="go">A total of 158 sequences passed the thresholds.</span>
+<span class="go">They have been stored in the file: Danaus_exons.fas</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>The parameter <tt class="docutils literal"><span class="pre">sp_name</span></tt> is important as it will be used as part of the exons IDs.</p>
+</div>
+<div class="section" id="heliconius-melpomene">
+<h3>1.2.2. <em>Heliconius melpomene</em><a class="headerlink" href="#heliconius-melpomene" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">We can continue finding homologous exons in other related butterflies. For example <em>Heliconius melpomene</em>.</p>
+</li>
+<li><p class="first">Download the genome from here: <a class="reference external" href="http://metazoa.ensembl.org/Heliconius_melpomene/Info/Index">http://metazoa.ensembl.org/Heliconius_melpomene/Info/Index</a></p>
+</li>
+<li><p class="first">Extract the genome as FASTA file:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">gunzip</span> <span class="pre">Heliconius_melpomene.Hmel1.17.dna_rm.toplevel.fa.gz</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">mv</span> <span class="pre">Heliconius_melpomene.Hmel1.17.dna_rm.toplevel.fa</span> <span class="pre">Heliconius_genome.fa</span></tt></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">BLASTn the <em>Bombyx mori</em> exons against the <em>Heliconius</em> genome:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&quot;Bombyx_exons.fas&quot;</span><span class="p">,</span> <span class="s">&quot;Heliconius_genome.fa&quot;</span><span class="p">);</span>
+<span class="gp">...</span>
+<span class="go">BLASTn finished!</span>
+<span class="go">The BLAST results were written in to the file  Bombyx_exons_blastn_out.csv</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Parse the blast table, extract the exon sequences and save them to a file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastParser</span><span class="p">(</span><span class="s">&quot;Bombyx_exons_blastn_out.csv&quot;</span><span class="p">,</span> <span class="s">&quot;Heliconius_genome.fa&quot;</span><span class="p">,</span> <span class="s">&quot;Heliconius_exons.fas&quot;</span><span class="p">,</span> <span class="n">sp_name</span><span class="o">=</span><span class="s">&quot;Heliconius&quot;</span><span class="p">)</span>
+<span class="go">Reading files ...</span>
+<span class="go">Parsing BLAST table ...</span>
+<span class="go">A total of 145 sequences passed the thresholds.</span>
+<span class="go">They have been stored in the file: Heliconius_exons.fas</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="manduca-sexta">
+<h3>1.2.3. <em>Manduca sexta</em><a class="headerlink" href="#manduca-sexta" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">Repeating the procedure for the <em>tobacco hornworm</em>.</p>
+</li>
+<li><p class="first">Download the genome from <a class="reference external" href="ftp://ftp.bioinformatics.ksu.edu/pub/Manduca/">ftp://ftp.bioinformatics.ksu.edu/pub/Manduca/</a></p>
+</li>
+<li><p class="first">We downloaded the file <tt class="docutils literal"><span class="pre">Msex05162011.genome.fa</span></tt>.</p>
+</li>
+<li><p class="first">Blasted the <em>Bombyx mori</em> exons against the <em>Manduca</em> genome:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&quot;Bombyx_exons.fas&quot;</span><span class="p">,</span> <span class="s">&quot;Msex05162011.genome.fa&quot;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">BLASTn finished!</span>
+<span class="go">The BLAST results were written in to the file  Bombyx_exons_blastn_out.csv</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Parsing the output blast table:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastParser</span><span class="p">(</span><span class="s">&quot;Bombyx_exons_blastn_out.csv&quot;</span><span class="p">,</span> <span class="s">&quot;Msex05162011.genome.fa&quot;</span><span class="p">,</span> <span class="s">&quot;Manduca_exons.fas&quot;</span><span class="p">,</span> <span class="n">sp_name</span><span class="o">=</span><span class="s">&quot;Manduca&quot;</span><span class="p">)</span>
+<span class="go">Reading files ...</span>
+<span class="go">Parsing BLAST table ...</span>
+<span class="go">A total of 219 sequences passed the thresholds.</span>
+<span class="go">They have been stored in the file: Manduca_exons.fas</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="small-break">
+<h2>1.3. Small break<a class="headerlink" href="#small-break" title="Permalink to this headline">¶</a></h2>
+<p>A <strong>quick summary</strong> of the work so far:</p>
+<ol class="arabic simple">
+<li>We obtained a list of orthologous and single copy genes by parsing the dataset for Arthopod genes from <a class="reference external" href="http://cegg.unige.ch/orthodb6">OrthoDB</a>.</li>
+<li>From those genes, we took the exon sequences for <em>Bombyx mori</em> from its Coding DNA Sequences (CDS) from <a class="reference external" href="http://www.silkdb.org/silkdb/doc/download.html">silkdb.org</a>.</li>
+<li>We want to be sure that there are no introns inside our candidate exons. So we blasted the CDS sequences against the <em>Bombyx mori</em> genome.</li>
+<li>We filtered those exons that were longer than 300 bp, were separated by 810 kilobases and got them inframe.</li>
+<li>We did massive blasting of these selection of exons against genomes of related species: <em>Danaus plexippus</em>, <em>Heliconius melpomene</em> and <em>Manduca sexta</em>.</li>
+<li>We got one FASTA file with the homologous regions for each species genome.</li>
+<li>Now, we will proceed to align all those homologous exons in order to design primers.</li>
+<li>Thus, we will be albe to sequence these exons accross a wide range of species in the order Lepidoptera.</li>
+</ol>
+</div>
+<div class="section" id="exon-alignment">
+<h2>1.4. Exon Alignment<a class="headerlink" href="#exon-alignment" title="Permalink to this headline">¶</a></h2>
+<p>We will use our module <tt class="docutils literal"><span class="pre">MUSCLE</span></tt> to do the alignment. We need to use as input a python list of the filenames that contain the exons of each species.
+All aligned sequences will be written into a folder called <tt class="docutils literal"><span class="pre">alignments</span></tt> as FASTA files (one file per exon).</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In the list of files, we will put <strong>FIRST</strong> the file for <em>Bombyx mori</em>, so that it will be used as &#8220;master&#8221; file. This is because the script will look for sequences in other files that appear in the file for <em>Bombyx mori</em>.</p>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">MUSCLE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Bombyx_exons.fas&#39;</span><span class="p">,</span> <span class="s">&#39;Danaus_exons.fas&#39;</span><span class="p">,</span><span class="s">&#39;Heliconius_exons.fas&#39;</span><span class="p">,</span><span class="s">&#39;Manduca_exons.fas&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MUSCLE</span><span class="o">.</span><span class="n">batchAlignment</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Pooling gene BGIBMGA000851:1-597</span>
+<span class="go">Pooling gene BGIBMGA010204:1-516</span>
+<span class="go">132 alignments have been saved in the folder &quot;alignments&quot;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It is always recommended to check by eye every alignment that has been generated by any software. Once you are sure that the alignment is correct, we can continue with the analysis.</p>
+</div>
+</div>
+<div class="section" id="primer-design">
+<h2>1.5. Primer design<a class="headerlink" href="#primer-design" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have our exons/genes from several species (<em>Bombyx</em>, <em>Manduca</em>, <em>Danaus</em> and <em>Heliconius</em> in this example), we can design primers in order to sequence these genes across a wide range of butterflies and/or moths.</p>
+<p>Since we have 132 candidate genes to design primers for, we can automate the primer design using a nice tool available in <strong>PyPhyloGenomics</strong>.</p>
+<p>The function <tt class="docutils literal"><span class="pre">designPrimers</span></tt> will send an alignment to <a class="reference external" href="http://floresta.eead.csic.es/primers4clades/#0">primers4clades</a> along (with some parameters) and do a request for primer design. This function will return the degenerate primers as estimated by <a class="reference external" href="http://floresta.eead.csic.es/primers4clades/#0">primers4clades</a>.</p>
+<p>It is recommended that you enter your email as one of the parameters so that <a class="reference external" href="http://floresta.eead.csic.es/primers4clades/#0">primers4clades</a> can send you an email with very detailed results for you to insect. Just in case you don&#8217;t provide your email, the very detailed results will be saved in the same folder of your alignments as HTML files.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Please keep in mind that the <tt class="docutils literal"><span class="pre">designPrimers</span></tt> function will return very little data, i.e. only the forward and reverse primers for an alignment. But it might be necessary that you inspect the detailed information saved as HTML files or the emails sent to you by <a class="reference external" href="http://floresta.eead.csic.es/primers4clades/#0">primers4clades</a>. You will receive one email for each alignment.</p>
+</div>
+<p>Automated primer design via <a class="reference external" href="http://floresta.eead.csic.es/primers4clades/#0">primers4clades</a>:</p>
+<blockquote>
+<div><blockquote>
+<div><ul>
+<li><p class="first">Alignment in FASTA format containing at least 4 sequences.</p>
+</li>
+<li><p class="first">Several parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>temperature</li>
+<li>minimium amplicon length</li>
+<li>maximum amplicon length</li>
+<li>genetic code</li>
+<li>cluster type</li>
+<li>substitution model</li>
+<li>email address</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>Example:
+The values shown are the default. Change them if needed.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">MUSCLE</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">folder</span> <span class="o">=</span> <span class="s">&quot;alignments&quot;</span>   <span class="c"># folder containing the FASTA file alignments</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tm</span> <span class="o">=</span> <span class="s">&quot;55&quot;</span>               <span class="c"># annealing temperature</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_amplength</span> <span class="o">=</span> <span class="s">&quot;250&quot;</span>   <span class="c"># minimium amplicon length</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">max_amplength</span> <span class="o">=</span> <span class="s">&quot;500&quot;</span>   <span class="c"># maximum amplicon length</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gencode</span> <span class="o">=</span> <span class="s">&quot;universal&quot;</span>   <span class="c"># see below for all available genetic codes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mode</span>  <span class="o">=</span> <span class="s">&quot;primers&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clustype</span> <span class="o">=</span> <span class="s">&quot;dna&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amptype</span> <span class="o">=</span> <span class="s">&quot;dna_GTRG&quot;</span>    <span class="c"># substitution model used to estimate phylogenetic information</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">email</span> <span class="o">=</span> <span class="s">&quot;youremail@email.com&quot;</span>   <span class="c"># primer4clades will send you an email with very detailed results</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MUSCLE</span><span class="o">.</span><span class="n">designPrimers</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">tm</span><span class="p">,</span> <span class="n">min_amplength</span><span class="p">,</span> <span class="n">max_amplength</span><span class="p">,</span> <span class="n">gencode</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">clustype</span><span class="p">,</span> <span class="n">amptype</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Done.</span>
+<span class="go">All primers have been saved in the file &quot;primers.fas&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>All primers will be saved to a file (<tt class="docutils literal"><span class="pre">primers.fas</span></tt>). However, it is recommended that you study the very detailed
+output saved into your <tt class="docutils literal"><span class="pre">alignments</span></tt> folder as HTML files so that you can decide to use these primers or not.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. Getting started with PyPhyloGenomics: Gene Search</a><ul>
+<li><a class="reference internal" href="#finding-candidate-genes-from-bombyx-mori">1.1. Finding candidate genes from <em>Bombyx mori</em></a></li>
+<li><a class="reference internal" href="#validation-of-exon-structure">1.2. Validation of exon structure</a><ul>
+<li><a class="reference internal" href="#danaus-plexippus">1.2.1. <em>Danaus plexippus</em></a></li>
+<li><a class="reference internal" href="#heliconius-melpomene">1.2.2. <em>Heliconius melpomene</em></a></li>
+<li><a class="reference internal" href="#manduca-sexta">1.2.3. <em>Manduca sexta</em></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#small-break">1.3. Small break</a></li>
+<li><a class="reference internal" href="#exon-alignment">1.4. Exon Alignment</a></li>
+<li><a class="reference internal" href="#primer-design">1.5. Primer design</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to PyPhyloGenomics&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="iontorrent_analysis.html"
+                        title="next chapter">2. Analysis of raw data output from IonTorrent</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/getting-started.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="iontorrent_analysis.html" title="2. Analysis of raw data output from IonTorrent"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to PyPhyloGenomics’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">PyPhyloGenomics 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Carlos Peña, Victor Solis, Pavel Matos, Chris Wheat.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

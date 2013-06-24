@@ -1,1 +1,595 @@
-My Github page
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to PyPhyloGenomics’s documentation! &mdash; PyPhyloGenomics 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="PyPhyloGenomics 0.1.0 documentation" href="#" />
+    <link rel="next" title="1. Getting started with PyPhyloGenomics: Gene Search" href="getting-started.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="getting-started.html" title="1. Getting started with PyPhyloGenomics: Gene Search"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">PyPhyloGenomics 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-pyphylogenomics-s-documentation">
+<h1>Welcome to PyPhyloGenomics&#8217;s documentation!<a class="headerlink" href="#welcome-to-pyphylogenomics-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><strong>PyPhyloGenomics</strong> is a Python toolkit for developing phylogenomic markers in novel species for  Next Generation sequence data.</p>
+<p>It includes tools for:</p>
+<ul class="simple">
+<li>discovery of homologous genes from species genomes.</li>
+<li>primer design.</li>
+<li>analysis of Next Generation Sequencing data, and</li>
+<li>gene sequences assembly.</li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">1. Getting started with PyPhyloGenomics: Gene Search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#finding-candidate-genes-from-bombyx-mori">1.1. Finding candidate genes from <em>Bombyx mori</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#validation-of-exon-structure">1.2. Validation of exon structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#small-break">1.3. Small break</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#exon-alignment">1.4. Exon Alignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#primer-design">1.5. Primer design</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ngs_analysis.html">2. Analysis of raw data output from IonTorrent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ngs_analysis.html#prepare-raw-ngs-data">2.1. Prepare raw NGS data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ngs_analysis.html#find-reads-matching-target-genes">2.2. Find reads matching target genes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ngs_analysis.html#separate-gene-bins-according-to-indexes-or-barcodes">2.3. Separate gene bins according to indexes (or barcodes)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ngs_assembly.html">3. Assembly of expected gene sequences</a></li>
+</ul>
+</div>
+<span class="target" id="module-OrthoDB"></span><div class="section" id="orthodb">
+<h3>OrthoDB<a class="headerlink" href="#orthodb" title="Permalink to this headline">¶</a></h3>
+<p>This module uses the table <tt class="docutils literal"><span class="pre">OrthoDB6_Arthropoda_tabtext.csv</span></tt>
+downloaded from OrthoDB (the database of orthologous groups) 
+<a class="reference external" href="ftp://cegg.unige.ch/OrthoDB6">ftp://cegg.unige.ch/OrthoDB6</a> to extract certain features and objects
+described below.</p>
+<dl class="function">
+<dt id="OrthoDB.copies_per_gene">
+<tt class="descclassname">OrthoDB.</tt><tt class="descname">copies_per_gene</tt><big>(</big><em>in_file</em><big>)</big><a class="headerlink" href="#OrthoDB.copies_per_gene" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+<p>Creates a dictionary with the number of copies per gene and per species.</p>
+<p>The dictionary has as keys tuples=(species_name, gene_name) and
+values=integer that represent the number of copies of that gene
+in the species.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="OrthoDB.copies_per_gene_table">
+<tt class="descclassname">OrthoDB.</tt><tt class="descname">copies_per_gene_table</tt><big>(</big><em>in_file</em>, <em>out_file</em><big>)</big><a class="headerlink" href="#OrthoDB.copies_per_gene_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the number of copies a gene has per species in a file.</p>
+<p>The output file is a table, where each row is a gene, and each columm
+is a species. The values in the table are the number of gene copies.
+Note: the first row in the otput table is the number of single-copy
+genes in a given species.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="OrthoDB.single_copy_genes">
+<tt class="descclassname">OrthoDB.</tt><tt class="descname">single_copy_genes</tt><big>(</big><em>in_file</em>, <em>species_name</em><big>)</big><a class="headerlink" href="#OrthoDB.single_copy_genes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of single-copy genes for a species given by user.</p>
+<p>The species name should be in the same format as stated in the input 
+file <em>in_file</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="OrthoDB.single_copy_in_species">
+<tt class="descclassname">OrthoDB.</tt><tt class="descname">single_copy_in_species</tt><big>(</big><em>in_file</em>, <em>gene_name</em><big>)</big><a class="headerlink" href="#OrthoDB.single_copy_in_species" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the species where the gene_name given by user is a single-copy gene.</p>
+<p>The gene name should be in the same format as stated in the input file
+<em>in_file</em>.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-BLAST"></span><div class="section" id="blast">
+<h3>BLAST<a class="headerlink" href="#blast" title="Permalink to this headline">¶</a></h3>
+<p>Prepares data and executes BLAST commands to create BLAST database.
+Performs blastn of user sequences against genomic sequences.
+Provides functions to parse the generated BLAST tables and extract exons.</p>
+<dl class="function">
+<dt id="BLAST.batch_iterator">
+<tt class="descclassname">BLAST.</tt><tt class="descname">batch_iterator</tt><big>(</big><em>iterator</em>, <em>batch_size</em><big>)</big><a class="headerlink" href="#BLAST.batch_iterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns lists of length batch_size.</p>
+<p># Taken from <a class="reference external" href="http://biopython.org/wiki/Split_large_file">http://biopython.org/wiki/Split_large_file</a></p>
+<p>This can be used on any iterator, for example to batch up
+SeqRecord objects from Bio.SeqIO.parse(...), or to batch
+Alignment objects from Bio.AlignIO.parse(...), or simply
+lines from a file handle.</p>
+<p>This is a generator function, and it returns lists of the
+entries from the supplied iterator.  Each list will have
+batch_size entries, although the final list may be shorter.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="BLAST.blastParser">
+<tt class="descclassname">BLAST.</tt><tt class="descname">blastParser</tt><big>(</big><em>blast_table</em>, <em>sbj_db</em>, <em>out_file</em>, <em>sp_name='homologous'</em>, <em>E_value=0.01</em>, <em>ident=75</em>, <em>exon_len=300</em><big>)</big><a class="headerlink" href="#BLAST.blastParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the subjects&#8217; sequences aligned with the queries as long as they pass
+the thresholds given on the parameters.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastParser</span><span class="p">(</span><span class="s">&quot;LongExons_out_blastn_out.csv&quot;</span><span class="p">,</span> <span class="s">&quot;Dp_genome_v2.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Danaus_exons.fas&quot;</span><span class="p">,</span> <span class="n">sp_name</span><span class="o">=</span><span class="s">&quot;Danaus&quot;</span><span class="p">);</span>
+<span class="go">Reading files ...</span>
+<span class="go">Parsing BLAST table ...</span>
+<span class="go">A total of 158 sequences passed the thresholds.</span>
+<span class="go">They have been stored in the file: Danaus_exons.fas</span>
+</pre></div>
+</div>
+<p>The parameter <tt class="docutils literal"><span class="pre">sp_name</span></tt> is important as it will be used as part of the exons IDs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="BLAST.blastn">
+<tt class="descclassname">BLAST.</tt><tt class="descname">blastn</tt><big>(</big><em>query_seqs</em>, <em>genome</em>, <em>e_value=1e-05</em><big>)</big><a class="headerlink" href="#BLAST.blastn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a BLASTn of user&#8217;s sequences against a genome. It will create a
+BLAST database from the genome file first.</p>
+<p><tt class="docutils literal"><span class="pre">query_seqs</span></tt> argument is a FASTA file of users sequences.
+<tt class="docutils literal"><span class="pre">genome</span></tt> argument is a FASTA file of a species genome.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="BLAST.eraseFalsePosi">
+<tt class="descclassname">BLAST.</tt><tt class="descname">eraseFalsePosi</tt><big>(</big><em>exons_dict</em><big>)</big><a class="headerlink" href="#BLAST.eraseFalsePosi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keeps the query-sbj match with the longest alignment number.</p>
+<p>From a dictionary generated with the getLargestExon function, where 2 or more
+query-sbj matches shared the same query, eraseFalsePosi keeps the query-sbj
+match with the longest alignment.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="BLAST.filterByMinDist">
+<tt class="descclassname">BLAST.</tt><tt class="descname">filterByMinDist</tt><big>(</big><em>genes_loci</em>, <em>MinDist</em><big>)</big><a class="headerlink" href="#BLAST.filterByMinDist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns those genes that are separated from its precedent neighbour
+by &lt; MinDist threshold.</p>
+<p>The parameter genes_loci is a list of tuples, where each tuple
+consists of 3 items: a gene_id, start_position and end_position.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="BLAST.getLargestExon">
+<tt class="descclassname">BLAST.</tt><tt class="descname">getLargestExon</tt><big>(</big><em>blast_table</em>, <em>E_value=0.001</em>, <em>ident=98</em>, <em>exon_len=300</em><big>)</big><a class="headerlink" href="#BLAST.getLargestExon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the highest alignment number for each query-sbj match from a blast table.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="BLAST.get_cds">
+<tt class="descclassname">BLAST.</tt><tt class="descname">get_cds</tt><big>(</big><em>genes</em>, <em>cds_file</em><big>)</big><a class="headerlink" href="#BLAST.get_cds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes a FASTA file containing CDS sequences: <tt class="docutils literal"><span class="pre">pulled_seqs.fa</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">genes</span></tt> argument is a list of gene IDs.
+<tt class="docutils literal"><span class="pre">cds_file</span></tt> is the file name of predicted CDS for a species in FASTA format.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="BLAST.makeblastdb">
+<tt class="descclassname">BLAST.</tt><tt class="descname">makeblastdb</tt><big>(</big><em>genome</em>, <em>mask=False</em><big>)</big><a class="headerlink" href="#BLAST.makeblastdb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a BLAST database from a genome in FASTA format and
+optionally eliminates low-complexity regions from the sequences.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="BLAST.storeExonsInFrame">
+<tt class="descclassname">BLAST.</tt><tt class="descname">storeExonsInFrame</tt><big>(</big><em>exons_dict</em>, <em>queries_db</em>, <em>out_file</em><big>)</big><a class="headerlink" href="#BLAST.storeExonsInFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Strips the exon&#8217;s ends, so that it is in frame, and then stores the results in a file.</p>
+<p>Strip the exon&#8217;s first and last residues so that they correspond to the start
+and end of a codon, respectively. Then stores the stripped exons in a file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="BLAST.wellSeparatedExons">
+<tt class="descclassname">BLAST.</tt><tt class="descname">wellSeparatedExons</tt><big>(</big><em>exons_dict</em>, <em>MinDist=810000</em><big>)</big><a class="headerlink" href="#BLAST.wellSeparatedExons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keeps the exons whose distance to the following exon is &gt; MinDist.</p>
+<p>From a dictionary generated with the getLargestExon function, where 2 or more
+query-sbj matches shared the same sbj, wellSeparatedExons keeps the query-sbj
+match whose distance to the following query-sbj match is greater than MinDist.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-MUSCLE"></span><div class="section" id="muscle">
+<h3>MUSCLE<a class="headerlink" href="#muscle" title="Permalink to this headline">¶</a></h3>
+<p>Reads in sequences from files, group homologous sequences based on gene IDs and aligns them.</p>
+<dl class="function">
+<dt id="MUSCLE.batchAlignment">
+<tt class="descclassname">MUSCLE.</tt><tt class="descname">batchAlignment</tt><big>(</big><em>files</em><big>)</big><a class="headerlink" href="#MUSCLE.batchAlignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads in sequences from files, group homologous sequences and aligns them.</p>
+<p><tt class="docutils literal"><span class="pre">files</span></tt> a list of file names. The first file in the list should
+be the master file (e.g. exon sequences of <em>Bombyx mori</em>).</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">MUSCLE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Bmori_exons.fas&#39;</span><span class="p">,</span> <span class="s">&#39;Danaus_exons.fas&#39;</span><span class="p">,</span><span class="s">&#39;Heliconius_exons.fas&#39;</span><span class="p">,</span><span class="s">&#39;Manduca_exons.fas&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MUSCLE</span><span class="o">.</span><span class="n">batchAlignment</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All aligned sequences will be written into a folder called <tt class="docutils literal"><span class="pre">alignments</span></tt> as
+FASTA files (one file per exon).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="MUSCLE.bluntSplicer">
+<tt class="descclassname">MUSCLE.</tt><tt class="descname">bluntSplicer</tt><big>(</big><em>folder_path</em>, <em>window=20</em><big>)</big><a class="headerlink" href="#MUSCLE.bluntSplicer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Splices Multiple Sequence Alignments objects found in <em>folder_path</em>.
+Objects should be in FASTA format. Gaps from both flanks of the alignments
+will be trimmed.</p>
+<p>Window size is used to find gaps in flanks (default 20 nucleotides).
+<strong>bluntSplicer</strong> reads the MSA files from <em>folder_path</em>, and stores the spliced MSAs
+in the same folder.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">MUSCLE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MUSCLE</span><span class="o">.</span><span class="n">bluntSplicer</span><span class="p">(</span><span class="s">&quot;alignments/&quot;</span><span class="p">)</span> <span class="c"># folder_path containing the FASTA file alignments</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="MUSCLE.designPrimers">
+<tt class="descclassname">MUSCLE.</tt><tt class="descname">designPrimers</tt><big>(</big><em>folder</em>, <em>tm='55'</em>, <em>min_amplength='100'</em>, <em>max_amplength='500'</em>, <em>gencode='universal'</em>, <em>mode='primers'</em>, <em>clustype='dna'</em>, <em>amptype='dna_GTRG'</em>, <em>email=''</em><big>)</big><a class="headerlink" href="#MUSCLE.designPrimers" title="Permalink to this definition">¶</a></dt>
+<dd><p>It will send a FASTA alignment to <a class="reference external" href="http://floresta.eead.csic.es/primers4clades/#0">primers4clades</a> in order to design degenerate primers. Input data needed:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Alignment in FASTA format containing at least 4 sequences.</p>
+</li>
+<li><p class="first">Several parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>temperature</li>
+<li>minimium amplicon length</li>
+<li>maximum amplicon length</li>
+<li>genetic code</li>
+<li>cluster type</li>
+<li>substitution model</li>
+<li>email address</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>Example:
+The values shown are the default. Change them if needed.</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">MUSCLE</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">folder</span> <span class="o">=</span> <span class="s">&quot;alignments&quot;</span>   <span class="c"># folder containing the FASTA file alignments</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tm</span> <span class="o">=</span> <span class="s">&quot;55&quot;</span>               <span class="c"># annealing temperature</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_amplength</span> <span class="o">=</span> <span class="s">&quot;250&quot;</span>   <span class="c"># minimium amplicon length</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">max_amplength</span> <span class="o">=</span> <span class="s">&quot;500&quot;</span>   <span class="c"># maximum amplicon length</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gencode</span> <span class="o">=</span> <span class="s">&quot;universal&quot;</span>   <span class="c"># see below for all available genetic codes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mode</span>  <span class="o">=</span> <span class="s">&quot;primers&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clustype</span> <span class="o">=</span> <span class="s">&quot;dna&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amptype</span> <span class="o">=</span> <span class="s">&quot;dna_GTRG&quot;</span>    <span class="c"># substitution model used to estimate phylogenetic information</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">email</span> <span class="o">=</span> <span class="s">&quot;youremail@email.com&quot;</span>   <span class="c"># primer4clades will send you an email with very detailed results</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MUSCLE</span><span class="o">.</span><span class="n">designPrimers</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">tm</span><span class="p">,</span> <span class="n">min_amplength</span><span class="p">,</span> <span class="n">max_amplength</span><span class="p">,</span> <span class="n">gencode</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">clustype</span><span class="p">,</span> <span class="n">amptype</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The best primer pairs will be printed to your screen. Detailed results will
+be saved as HTML files in your alignments folder. But it is recommended if
+you also get the results by email. <a class="reference external" href="http://floresta.eead.csic.es/primers4clades/#0">primers4clades</a> will send you one email
+for each alignment.</p>
+<p>The genetic code table (variable <tt class="docutils literal"><span class="pre">gencode</span></tt>) can be any of the following:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">universal</span></tt> for standard</li>
+<li><tt class="docutils literal"><span class="pre">2</span></tt> for vertebrate mitochondrial</li>
+<li><tt class="docutils literal"><span class="pre">3</span></tt> for yeast mitochondrial</li>
+<li><tt class="docutils literal"><span class="pre">4</span></tt> for mold and protozoa mitochondrial</li>
+<li><tt class="docutils literal"><span class="pre">5</span></tt> for invertebrate mitochondrial</li>
+<li><tt class="docutils literal"><span class="pre">6</span></tt> for ciliate</li>
+<li><tt class="docutils literal"><span class="pre">9</span></tt> for echinoderm and flatworm</li>
+<li><tt class="docutils literal"><span class="pre">10</span></tt> for  euplotid nuclear</li>
+<li><tt class="docutils literal"><span class="pre">11</span></tt> for  bacterial and plastid</li>
+<li><tt class="docutils literal"><span class="pre">12</span></tt> for  alternative yeast nuclear</li>
+<li><tt class="docutils literal"><span class="pre">13</span></tt> for  ascidian mitochondrial</li>
+<li><tt class="docutils literal"><span class="pre">14</span></tt> for  flatworm mitochondrial</li>
+<li><tt class="docutils literal"><span class="pre">15</span></tt> for  Blepharisma nuclear</li>
+<li><tt class="docutils literal"><span class="pre">16</span></tt> for  Chlorophycean mitochondrial</li>
+<li><tt class="docutils literal"><span class="pre">21</span></tt> for  Trematode mitochondrial</li>
+<li><tt class="docutils literal"><span class="pre">22</span></tt> for  Scenedesmus obliquus mitochondrial</li>
+<li><tt class="docutils literal"><span class="pre">23</span></tt> for  Thraustochytrium mitochondrial</li>
+</ul>
+<p>The evolutionary substitution model can be any of the following (variable
+<tt class="docutils literal"><span class="pre">amptype</span></tt>):</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">protein_WAGG</span></tt>  for protein WAG+G</li>
+<li><tt class="docutils literal"><span class="pre">protein_JTTG</span></tt>  for protein JTT+G</li>
+<li><tt class="docutils literal"><span class="pre">protein_Blosum62G</span></tt>  for protein Blosum62+G</li>
+<li><tt class="docutils literal"><span class="pre">protein_VTG</span></tt>  for protein VT+G</li>
+<li><tt class="docutils literal"><span class="pre">protein_DayhoffG</span></tt>  for protein Dayhoff+G</li>
+<li><tt class="docutils literal"><span class="pre">protein_MtREVG</span></tt>  for protein MtREV+G</li>
+<li><tt class="docutils literal"><span class="pre">dna_HKYG</span></tt>  for dna HKY+G</li>
+<li><tt class="docutils literal"><span class="pre">dna_GTRG</span></tt>  for dna GTR+G</li>
+<li><tt class="docutils literal"><span class="pre">dna_K80G</span></tt>  for dna K80+G</li>
+<li><tt class="docutils literal"><span class="pre">dna_TrNG</span></tt>  for dna TrN+G</li>
+<li><tt class="docutils literal"><span class="pre">dna_JC69G</span></tt>  for dna JC69+G</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<span class="target" id="module-NGS"></span><div class="section" id="ngs">
+<h3>NGS<a class="headerlink" href="#ngs" title="Permalink to this headline">¶</a></h3>
+<p>Prepares output data from sequencing round in IonTorrent (FASTQ format file).</p>
+<ul class="simple">
+<li>Changes quality format from Phred to Solexa (which is required by the fastx-toolkit).</li>
+<li>Changes sequences id to incremental numbers.</li>
+<li>Creates temporal FASTA file.</li>
+</ul>
+<dl class="function">
+<dt id="NGS.assembly">
+<tt class="descclassname">NGS.</tt><tt class="descname">assembly</tt><big>(</big><em>fastq_file</em>, <em>index_length</em>, <em>min_quality=20</em>, <em>percentage=70</em>, <em>min_length=50</em><big>)</big><a class="headerlink" href="#NGS.assembly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do <em>de novo</em> assembly of expected sequences after doing quality control of a
+FASTQ file. Quality control includes dropping reads with low quality values,
+trimming of bad quality end and trimming index region.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">fastq_file</span></tt> FASTQ format file that ideally has been separated by gene and index using the functions <a class="reference internal" href="#NGS.parse_blast_results" title="NGS.parse_blast_results"><tt class="xref py py-func docutils literal"><span class="pre">NGS.parse_blast_results()</span></tt></a> and <a class="reference internal" href="#NGS.separate_by_index" title="NGS.separate_by_index"><tt class="xref py py-func docutils literal"><span class="pre">NGS.separate_by_index()</span></tt></a></li>
+<li><tt class="docutils literal"><span class="pre">index_length</span></tt> number of base pairs of the indexes. They will be trimmed from the reads during processing.</li>
+<li><tt class="docutils literal"><span class="pre">min_quality</span></tt> minimum quality score to keep (20 by default)</li>
+<li><tt class="docutils literal"><span class="pre">percentage</span></tt>  minimum percent of base pairs that need to have <tt class="docutils literal"><span class="pre">min_quality</span></tt> (70% by default)</li>
+<li><tt class="docutils literal"><span class="pre">min_length</span></tt> minimum length of read sequences to keep (50 by default)</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fastq_file</span>   <span class="o">=</span> <span class="s">&quot;index_Ion_4_gene_rps5.fastq&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">index_length</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_quality</span>  <span class="o">=</span> <span class="mi">30</span><span class="p">;</span> <span class="c"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">percentage</span>   <span class="o">=</span> <span class="mi">80</span><span class="p">;</span> <span class="c"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_length</span>   <span class="o">=</span> <span class="mi">60</span><span class="p">;</span> <span class="c"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">assembly</span><span class="p">(</span><span class="n">fastq_file</span><span class="p">,</span> <span class="n">index_length</span><span class="p">,</span> <span class="n">min_quality</span><span class="p">,</span> <span class="n">percentage</span><span class="p">,</span> <span class="n">min_length</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.count_reads">
+<tt class="descclassname">NGS.</tt><tt class="descname">count_reads</tt><big>(</big><em>fastqFile</em>, <em>file_format</em><big>)</big><a class="headerlink" href="#NGS.count_reads" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.find_index_in_seq">
+<tt class="descclassname">NGS.</tt><tt class="descname">find_index_in_seq</tt><big>(</big><em>barcode</em>, <em>seq</em>, <em>levenshtein_distance</em><big>)</big><a class="headerlink" href="#NGS.find_index_in_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+<p>Arguments:  <em>barcode</em>,  <em>read sequence</em>.
+Iterate through primer&#8217;s degenerated IUPAC and try to find it in sequence
+read.
+Return TRUE on success.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.get_velvet_params">
+<tt class="descclassname">NGS.</tt><tt class="descname">get_velvet_params</tt><big>(</big><em>output</em><big>)</big><a class="headerlink" href="#NGS.get_velvet_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.guess_best_kmer">
+<tt class="descclassname">NGS.</tt><tt class="descname">guess_best_kmer</tt><big>(</big><em>filter3_params</em><big>)</big><a class="headerlink" href="#NGS.guess_best_kmer" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.levenshtein">
+<tt class="descclassname">NGS.</tt><tt class="descname">levenshtein</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#NGS.levenshtein" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+<p>Calculates the Levenshtein distance between a and b.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.parse_blast_results">
+<tt class="descclassname">NGS.</tt><tt class="descname">parse_blast_results</tt><big>(</big><em>blast_table</em>, <em>ion_file</em><big>)</big><a class="headerlink" href="#NGS.parse_blast_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function uses the BLAST results from a CSV file and separates the 
+IonTorrent reads into bins that match each of the target genes (or reference
+sequences).
+To speed up things a few tricks are made:
+* Split CSV file into several chunks.
+* Split ionfile.fastq into complementary chunks so that the reads in the CSV chunks will be found in our fastq chunks. 
+Reads will be written into separate FASTQ files, one per matching target
+gene.
+These files will be written in the folder <tt class="docutils literal"><span class="pre">output</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.prepare_data">
+<tt class="descclassname">NGS.</tt><tt class="descname">prepare_data</tt><big>(</big><em>ionfile</em>, <em>index_length</em><big>)</big><a class="headerlink" href="#NGS.prepare_data" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Changes quality format from Phred to Solexa (which is required by the fastx-toolkit).</li>
+<li>Changes sequences id to incremental numbers.</li>
+<li>Creates temporal FASTA file with the indexes removed from the sequences.</li>
+</ul>
+<p>Files generated will be written to folder <tt class="docutils literal"><span class="pre">data/modified/</span></tt></p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">ionfile</span></tt> argument is FASTQ format file as produced by IonTorrent</li>
+<li><tt class="docutils literal"><span class="pre">index_length</span></tt> number of base pairs of your indexes. This is necessary                        to trim the indexes before blasting the FASTA file                             against the reference gene sequences.</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ionfile</span> <span class="o">=</span> <span class="s">&quot;ionrun.fastq&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">index_length</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">(</span><span class="n">ionfile</span><span class="p">);</span>
+<span class="go">Your file has been saved using Solexa quality format as data/modified/wrk_ionfile.fastq</span>
+<span class="go">Your sequence IDs have been changed to numbers.</span>
+<span class="go">The FASTA format file data/modified/wrk_ionfile.fasta has been created.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.quality_control">
+<tt class="descclassname">NGS.</tt><tt class="descname">quality_control</tt><big>(</big><em>fastq_file</em>, <em>index_length</em>, <em>min_quality=20</em>, <em>percentage=70</em>, <em>min_length=50</em><big>)</big><a class="headerlink" href="#NGS.quality_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+<p>Use fastx-tools to do quality control on FASTQ file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.separate_by_index">
+<tt class="descclassname">NGS.</tt><tt class="descname">separate_by_index</tt><big>(</big><em>fastq_file</em>, <em>index_list</em>, <em>folder=''</em>, <em>levenshtein_distance=1</em><big>)</big><a class="headerlink" href="#NGS.separate_by_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function divides FASTQ reads into bins according to a list of indexes
+(or barcodes).
+The <em>index_list</em> should be in FASTA format.
+It will compare the template indexes and those in the reads and accept
+indexes with a difference no bigger than the <em>levenshtein</em> distance (default
+1 base pair difference).</p>
+<p>See <a class="reference external" href="http://en.wikipedia.org/wiki/Levenshtein_distance">http://en.wikipedia.org/wiki/Levenshtein_distance</a></p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">fastq_file</span></tt> FASTQ format containing reads as produced by IonTorrent</li>
+<li><tt class="docutils literal"><span class="pre">index_list</span></tt> FASTA format file containing indexes (or barcodes)</li>
+<li><tt class="docutils literal"><span class="pre">folder</span></tt> <em>Optional</em>: Directory containing FASTQ format files to process</li>
+<li><tt class="docutils literal"><span class="pre">levenshtein_distance</span></tt> <em>Optional</em>, default = 1: Maximum number of different nucleotides that will be accepted when comparing template and sequenced indexes (due to erros in base calling during sequencing).</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fastq_file</span> <span class="o">=</span> <span class="s">&quot;gene_rps5.fastq&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">index_list</span> <span class="o">=</span> <span class="s">&quot;indexes.fasta&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">folder</span>     <span class="o">=</span> <span class="s">&quot;output&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">separate_by_index</span><span class="p">(</span><span class="n">fastq_file</span><span class="p">,</span> <span class="n">index_list</span><span class="p">,</span> <span class="n">folder</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>You can also automate parsing many FASTQ files at once:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">glob</span><span class="p">;</span> <span class="c"># this module allow us selecting many files by using wildcards</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">index_list</span> <span class="o">=</span> <span class="s">&quot;indexes.fasta&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">folder</span>     <span class="o">=</span> <span class="s">&quot;output&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&quot;output/gene*.fastq&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">NGS</span><span class="o">.</span><span class="n">separate_by_index</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">index_list</span><span class="p">,</span> <span class="n">folder</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.split_ionfile_by_results">
+<tt class="descclassname">NGS.</tt><tt class="descname">split_ionfile_by_results</tt><big>(</big><em>ion_file</em>, <em>blast_chunk</em><big>)</big><a class="headerlink" href="#NGS.split_ionfile_by_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+<p>This function divides an IonTorrent run file into chunks that match chunks
+of a BLAST results file in CSV format.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="NGS.split_results_file">
+<tt class="descclassname">NGS.</tt><tt class="descname">split_results_file</tt><big>(</big><em>blast_table</em><big>)</big><a class="headerlink" href="#NGS.split_results_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+<p>Split a CSV format result file from a BLAST in chunks.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to PyPhyloGenomics&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a><ul>
+<li><a class="reference internal" href="#orthodb">OrthoDB</a></li>
+<li><a class="reference internal" href="#blast">BLAST</a></li>
+<li><a class="reference internal" href="#muscle">MUSCLE</a></li>
+<li><a class="reference internal" href="#ngs">NGS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="getting-started.html"
+                        title="next chapter">1. Getting started with PyPhyloGenomics: Gene Search</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="getting-started.html" title="1. Getting started with PyPhyloGenomics: Gene Search"
+             >next</a> |</li>
+        <li><a href="#">PyPhyloGenomics 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Carlos Peña, Victor Solis, Pavel Matos, Chris Wheat.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
