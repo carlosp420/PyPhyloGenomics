@@ -55,7 +55,10 @@ If you are using Windows you can download the executable file **muscle3.8.31_i86
 and save it in your Python folder (C:\Python27\) as **muscle.exe**.
 
 ### BLAST
-Download and install the BLAST+ executables from the [NCBI website](http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
+Download and install the BLAST+ executables from the
+[NCBI website](http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download). Or try:
+
+    sudo apt-get install ncbi-blast+
 
 ### fastx-toolkit
 Download and install from [here](http://hannonlab.cshl.edu/fastx_toolkit/). Or:
