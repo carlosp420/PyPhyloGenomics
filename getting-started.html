@@ -104,7 +104,7 @@
 <p>For <a class="reference external" href="http://www.iontorrent.com/">IonTorrent</a> Platform2, the maximum length that can be sequenced is from 280bp to 320bp in total. Thus, <tt class="docutils literal"><span class="pre">320</span> <span class="pre">-</span> <span class="pre">119</span> <span class="pre">=</span> <span class="pre">201</span></tt> is the maximum internal gene region (region within degenerate primers).</p>
 <p>Therefore, for the new set of primers, being designed for Platform2, we have a maximum amplicon size of <tt class="docutils literal"><span class="pre">201</span> <span class="pre">+</span> <span class="pre">25*2</span> <span class="pre">=</span> <span class="pre">251bp</span></tt>.</p>
 <p>The <a class="reference external" href="http://cegg.unige.ch/orthodb6">OrthoDB</a> database has a catalog of orthologous protein-coding genes for vertebrates, arthropods and other living groups.</p>
-<p>For this guick getting-started guide, we will download the table of orthologous genes for Arthropoda from OrthoDB&#8217;s ftp server <a class="reference external" href="ftp://cegg.unige.ch/OrthoDB6/">OrthoDB6_Arthropoda_tabtex.gz</a>.</p>
+<p>For this quick getting-started guide, we will download the table of orthologous genes for Arthropoda from OrthoDB&#8217;s ftp server <a class="reference external" href="ftp://cegg.unige.ch/OrthoDB6/">OrthoDB6_Arthropoda_tabtex.gz</a>.</p>
 <p>Starting off:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyphylogenomics</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">OrthoDB</span>
@@ -350,6 +350,14 @@ All aligned sequences will be written into a folder called <tt class="docutils l
 <p class="first admonition-title">Warning</p>
 <p class="last">Please keep in mind that the <tt class="docutils literal"><span class="pre">designPrimers</span></tt> function will return very little data, i.e. only the forward and reverse primers for an alignment. But it might be necessary that you inspect the detailed information saved as HTML files or the emails sent to you by <a class="reference external" href="http://floresta.eead.csic.es/primers4clades/#0">primers4clades</a>. You will receive one email for each alignment.</p>
 </div>
+<p>Before primer design it could be useful to trim off the ends of the sequences
+so that all sequences will have the same length:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">MUSCLE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MUSCLE</span><span class="o">.</span><span class="n">bluntSplicer</span><span class="p">(</span><span class="s">&quot;alignments/&quot;</span><span class="p">)</span> <span class="c"># folder_path containing the FASTA file alignments</span>
+</pre></div>
+</div>
+<p>This will produce FASTA files ending in <strong>&#8220;_bluntlySpliced.fas&#8221;</strong>. You may want to remove the old
+unspliced FASTA files before doing primer design.</p>
 <p>Automated primer design via <a class="reference external" href="http://floresta.eead.csic.es/primers4clades/#0">primers4clades</a>:</p>
 <blockquote>
 <div><blockquote>
