@@ -22,7 +22,7 @@ import time;
 
 def get_cds(genes, cds_file):
     '''
-    Writes a FASTA file containing CDS sequences: ``pulled_seqs.fa``
+    Writes a FASTA file containing CDS sequences: ``pulled_seqs.fasta``
     
     ``genes`` argument is a list of gene IDs.
     ``cds_file`` is the file name of predicted CDS for a species in FASTA format.
@@ -35,8 +35,8 @@ def get_cds(genes, cds_file):
         if this_id in genes:
             records.append(SeqRecord(seq_record.seq, id=this_id));
 
-    SeqIO.write(records, open("pulled_seqs.fa", "w"), "fasta") 
-    print len(records), " sequences were written to file pulled_seqs.fa in the current working directory.";
+    SeqIO.write(records, open("pulled_seqs.fasta", "w"), "fasta") 
+    print len(records), " sequences were written to file pulled_seqs.fasta in the current working directory.";
 
 
 
@@ -107,7 +107,7 @@ def blastn(query_seqs, genome, e_value=0.00001):
 
     files = [];
     for i, batch in enumerate(batch_iterator(record_iter, nseqs/divisor)):
-        filename = "group_%i.fas" % (i+1);
+        filename = "group_%i.fasta" % (i+1);
         files.append(filename);
         handle = open(filename, "w");
         count = SeqIO.write(batch, handle, "fasta");
@@ -328,7 +328,7 @@ def blastParser(blast_table, sbj_db, out_file, sp_name = 'homologous', E_value =
     
     table = open(blast_table, "r")
     sbj_dict = SeqIO.index(sbj_db, "fasta")
-    seqs = []
+    seqs = {}
     
     print "Parsing BLAST table ..."  
     for alignment in table:
@@ -345,7 +345,7 @@ def blastParser(blast_table, sbj_db, out_file, sp_name = 'homologous', E_value =
                 seq = sbj_dict[align_vars[1]].seq[start:end]
                 ID = align_vars[0] + '-' + '_'.join(sp_name.split()) + '_' + align_vars[1] + ':' + str(start+1)+'-'+str(end)
                 DE = sp_name + ' sequence homologous to ' + align_vars[0] + ':' + str(align_vars[6])+'-'+str(align_vars[7])
-                seqs.append(SeqRecord(seq, id=ID, description=DE))
+                seqs[ID] = SeqRecord(seq, id=ID, description=DE)
                   
             else: # The alignment is with the sbj negative strand.
                 start = align_vars[9] - 1
@@ -353,10 +353,10 @@ def blastParser(blast_table, sbj_db, out_file, sp_name = 'homologous', E_value =
                 seq = sbj_dict[align_vars[1]].seq[start:end].reverse_complement() # Reverse and complement the plus strand!
                 ID = align_vars[0] + '-' + '_'.join(sp_name.split()) + '_' + align_vars[1] + ':c' + str(end)+'-'+str(start+1)
                 DE = sp_name + ' sequence homologous to ' + align_vars[0] + ':' + str(align_vars[6])+'-'+str(align_vars[7])
-                seqs.append(SeqRecord(seq, id=ID, description=DE))
+                seqs[ID] = SeqRecord(seq, id=ID, description=DE)
 
 
-    SeqIO.write(seqs, open(out_file, "w"), "fasta")
+    SeqIO.write(seqs.values(), open(out_file, "w"), "fasta")
     print "A total of %s sequences passed the thresholds." % len(seqs)
     print "They have been stored in the file: " + out_file
 
