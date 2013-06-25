@@ -21,9 +21,19 @@ FASTQ format) into a new file and do the following:
 * Change the sequences id to incremental numbers.
 * Create a FASTA file for temporal use.
 
+    Files generated will be written to folder ``data/modified/`` 
+
+    * ``ionfile`` argument is FASTQ format file as produced by IonTorrent
+    * ``index_length`` number of base pairs of your indexes. This is necessary \
+                       to trim the indexes before blasting the FASTA file      \
+                       against the reference gene sequences.
+
+    Example:
+
     >>> from pyphylogenomics import NGS
     >>> ionfile = "ionrun.fastq";
-    >>> NGS.prepare_data(ionfile);
+    >>> index_length = 8;
+    >>> NGS.prepare_data(ionfile, index_length);
     Your file has been saved using Solexa quality format as data/modified/wrk_ionfile.fastq
     Your sequence IDs have been changed to numbers.
     The FASTA format file data/modified/wrk_ionfile.fasta has been created.
@@ -34,6 +44,9 @@ We can separate the sequenced reads that match the expected genes by using BLAST
 we need as input a FASTA format file to create a BLAST database.
 We will blast the file ``wrk_ionfile.fasta`` and then will parse the results to divide our
 IonTorrent data in several bins (one bin per gene).
+
+This step will accept matching reads that align more than 40bp to the
+expected gene sequence. Function :py:func:`NGS.filter_reads`
 
     >>> from pyphylogenomics import BLAST;
     >>> query_seqs = "data/modified/wrk_ionfile.fasta";
@@ -46,12 +59,13 @@ We will use the recently generated ``wrk_ionfile_blastn_out.csv`` file to filter
 according to matching genes.
 
     >>> from pyphylogenomics import NGS;
-    >>> blast_table = "wrk_ionfile_blastn_out";
-    >>> ion_file    = "wrk_ionfile.fastq";
+    >>> blast_table = "data/modified/wrk_ionfile_blastn_out";
+    >>> ion_file    = "data/modified/wrk_ionfile.fastq";
     >>> NGS.parse_blast_results(blast_table, ion_file);
 
 It will take a while to parse the results. The output will be several FASTQ files (one
-per target gene) containing our matching IonTorrent reads.
+per target gene) containing our matching IonTorrent reads. The files will have the 
+prefix **gene_**.
 
 
 Separate gene bins according to indexes (or barcodes)

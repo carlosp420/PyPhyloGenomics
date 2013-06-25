@@ -39,7 +39,7 @@ def prepare_data(ionfile, index_length):
     >>> from pyphylogenomics import NGS
     >>> ionfile = "ionrun.fastq";
     >>> index_length = 8;
-    >>> NGS.prepare_data(ionfile);
+    >>> NGS.prepare_data(ionfile, index_length);
     Your file has been saved using Solexa quality format as data/modified/wrk_ionfile.fastq
     Your sequence IDs have been changed to numbers.
     The FASTA format file data/modified/wrk_ionfile.fasta has been created.
@@ -94,6 +94,10 @@ def parse_blast_results(blast_table, ion_file):
     Reads will be written into separate FASTQ files, one per matching target
     gene.
     These files will be written in the folder ``output``.
+
+    This step will accept matching reads that align more than 40bp to the
+    expected gene sequence. Function :py:func:`NGS.filter_reads`
+
     '''
     # create folder to keep output data
     folder = "output";
@@ -491,8 +495,12 @@ def split_ionfile_by_results(ion_file, blast_chunk):
 
 
 def filter_reads(ion_chunk, blast_chunk, folder):
-    # Accepting alignment lengths higher than 40 bp
-    # longer than our primer lengths
+    '''
+    \* *Internal function* \*
+
+    Accepting alignment lengths higher than 40 bp
+    longer than our primer lengths
+    '''
     min_aln_length = 40;
 
     # get dict of ion_id : gene_id

@@ -7,7 +7,8 @@ import os;
 from pyphylogenomics import NGS;
 
 ionfile = "ionrun.fastq";
-#NGS.prepare_data(ionfile); # file is written to data/modified/wrk_ionfile.fasta
+index_length = "8";
+#NGS.prepare_data(ionfile, index_length); # file is written to data/modified/wrk_ionfile.fasta
 
 
 
