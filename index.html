@@ -156,11 +156,11 @@ batch_size entries, although the final list may be shorter.</p>
 <dd><p>Returns the subjects&#8217; sequences aligned with the queries as long as they pass
 the thresholds given on the parameters.</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastParser</span><span class="p">(</span><span class="s">&quot;LongExons_out_blastn_out.csv&quot;</span><span class="p">,</span> <span class="s">&quot;Dp_genome_v2.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Danaus_exons.fas&quot;</span><span class="p">,</span> <span class="n">sp_name</span><span class="o">=</span><span class="s">&quot;Danaus&quot;</span><span class="p">);</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastParser</span><span class="p">(</span><span class="s">&quot;LongExons_out_blastn_out.csv&quot;</span><span class="p">,</span> <span class="s">&quot;Dp_genome_v2.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Danaus_exons.fasta&quot;</span><span class="p">,</span> <span class="n">sp_name</span><span class="o">=</span><span class="s">&quot;Danaus&quot;</span><span class="p">);</span>
 <span class="go">Reading files ...</span>
 <span class="go">Parsing BLAST table ...</span>
 <span class="go">A total of 158 sequences passed the thresholds.</span>
-<span class="go">They have been stored in the file: Danaus_exons.fas</span>
+<span class="go">They have been stored in the file: Danaus_exons.fasta</span>
 </pre></div>
 </div>
 <p>The parameter <tt class="docutils literal"><span class="pre">sp_name</span></tt> is important as it will be used as part of the exons IDs.</p>
