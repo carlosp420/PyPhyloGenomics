@@ -86,18 +86,18 @@ Untar the gzipped file and you will get the FASTA formatted file ``silkcds.fa`` 
 We will need to BLASTn these single-copy genes against the *Bombyx mori* genome
 in order to get exon sizes:
 
-1. Pull all sequences for our gene IDs from the CDS file and write them to a file ``pulled_seqs.fa``:
+1. Pull all sequences for our gene IDs from the CDS file and write them to a file ``pulled_seqs.fasta``:
 
     >>> from pyphylogenomics import BLAST
     >>> cds_file = "silkcds.fa"
     >>> BLAST.get_cds(genes, cds_file)
-    12167  sequences were written to file pulled_seqs.fa
+    12167  sequences were written to file pulled_seqs.fasta
 
 2. Download the *Bombyx mori* genome from silkdb.org_ (download the file ``silkworm_genome_v2.0.fa.tar.gz``). Unzip and untar the file to your working directory and you will get the file ``silkgenome.fa``
  
-3. Do a BLASTn of the sequences against the *Bombyx mori* genome. The input arguments are your file containing the sequences for single-copy genes (``pulled_seqs.fa``) and your file with the genome of *Bombyx mori* which is in FASTA format (``silkgenome.fa``).
+3. Do a BLASTn of the sequences against the *Bombyx mori* genome. The input arguments are your file containing the sequences for single-copy genes (``pulled_seqs.fasta``) and your file with the genome of *Bombyx mori* which is in FASTA format (``silkgenome.fa``).
 
-    >>> BLAST.blastn('pulled_seqs.fa', 'silkgenome.fa')
+    >>> BLAST.blastn('pulled_seqs.fasta', 'silkgenome.fa')
     ...
     BLASTn finished!
     The BLAST results were written in to the file  pulled_seqs_blastn_out.csv  
@@ -114,7 +114,7 @@ The file ``pulled_seqs_blastn_out.csv`` contains a BLAST output table with the b
     Deleting exons below 300 nucleotides ...
     There are 7411 exons
 
-5. Some small segments of sequences might be similar to non-homologous regions of the genome. We will use the function ``eraseFalsePosi`` to keep those matches of longest length:
+5. Some small segments of sequences might match exons present in more than one scaffold. We will use the function ``eraseFalsePosi`` to keep those matches of longest length:
 
     >>> exons = BLAST.eraseFalsePosi(exons) # Drop presumable false positives.
     Erasing False Positives ...
@@ -128,10 +128,10 @@ The file ``pulled_seqs_blastn_out.csv`` contains a BLAST output table with the b
 
 7. Finally we can use a function to save the obtained exons while making sure they are in frame. We need to use as additional arguments the genome file and output filename:
 
-    >>> BLAST.storeExonsInFrame(exons, "pulled_seqs.fa", "Bombyx_exons.fas") 
+    >>> BLAST.storeExonsInFrame(exons, "pulled_seqs.fasta", "Bombyx_exons.fasta") 
     Storing exons ...
     A total of 575 exons are kept
-    These exons have been stored in the file: Bombyx_exons.fas
+    These exons have been stored in the file: Bombyx_exons.fasta
 
 
 ----------------------------
@@ -155,18 +155,18 @@ For example we can compare these 575 exons with the genome of the monarch butter
 
 3. Do a blastn of our Long Exons against the *Danaus* genome:
 
-    >>> BLAST.blastn("Bombyx_exons.fas", "Dp_genome_v2.fasta");
+    >>> BLAST.blastn("Bombyx_exons.fasta", "Dp_genome_v2.fasta");
     ...
     BLASTn finished!
     The BLAST results were written in to the file Bombyx_exons_blastn_out.csv
     
 4. We need to parse the output blast table and extract the exons from *Danaus* that are longer than 300bp and are homologous to the exons of *Bombyx mori*.
 
-    >>> BLAST.blastParser("Bombyx_exons_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fas", sp_name="Danaus")
+    >>> BLAST.blastParser("Bombyx_exons_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fasta", sp_name="Danaus")
     Reading files ...
     Parsing BLAST table ...
     A total of 158 sequences passed the thresholds.
-    They have been stored in the file: Danaus_exons.fas
+    They have been stored in the file: Danaus_exons.fasta
 
 The parameter ``sp_name`` is important as it will be used as part of the exons IDs.
  
@@ -184,18 +184,18 @@ The parameter ``sp_name`` is important as it will be used as part of the exons I
 
 4. BLASTn the *Bombyx mori* exons against the *Heliconius* genome:
 
-    >>> BLAST.blastn("Bombyx_exons.fas", "Heliconius_genome.fa");
+    >>> BLAST.blastn("Bombyx_exons.fasta", "Heliconius_genome.fa");
     ...
     BLASTn finished!
     The BLAST results were written in to the file  Bombyx_exons_blastn_out.csv
 
 5. Parse the blast table, extract the exon sequences and save them to a file:
 
-    >>> BLAST.blastParser("Bombyx_exons_blastn_out.csv", "Heliconius_genome.fa", "Heliconius_exons.fas", sp_name="Heliconius")
+    >>> BLAST.blastParser("Bombyx_exons_blastn_out.csv", "Heliconius_genome.fa", "Heliconius_exons.fasta", sp_name="Heliconius")
     Reading files ...
     Parsing BLAST table ...
     A total of 145 sequences passed the thresholds.
-    They have been stored in the file: Heliconius_exons.fas
+    They have been stored in the file: Heliconius_exons.fasta
     
 	    
 ^^^^^^^^^^^^^^^
@@ -207,17 +207,17 @@ The parameter ``sp_name`` is important as it will be used as part of the exons I
 3. We downloaded the file ``Msex05162011.genome.fa``.
 4. Blasted the *Bombyx mori* exons against the *Manduca* genome:
 
-    >>> BLAST.blastn("Bombyx_exons.fas", "Msex05162011.genome.fa")
+    >>> BLAST.blastn("Bombyx_exons.fasta", "Msex05162011.genome.fa")
     ...
     BLASTn finished!
     The BLAST results were written in to the file  Bombyx_exons_blastn_out.csv
 5. Parsing the output blast table:
 
-    >>> BLAST.blastParser("Bombyx_exons_blastn_out.csv", "Msex05162011.genome.fa", "Manduca_exons.fas", sp_name="Manduca")
+    >>> BLAST.blastParser("Bombyx_exons_blastn_out.csv", "Msex05162011.genome.fa", "Manduca_exons.fasta", sp_name="Manduca")
     Reading files ...
     Parsing BLAST table ...
     A total of 219 sequences passed the thresholds.
-    They have been stored in the file: Manduca_exons.fas
+    They have been stored in the file: Manduca_exons.fasta
     
 
 -----------
@@ -248,7 +248,7 @@ All aligned sequences will be written into a folder called ``alignments`` as FAS
 Example:
 
     >>> from pyphylogenomics import MUSCLE
-    >>> files = ['Bombyx_exons.fas', 'Danaus_exons.fas','Heliconius_exons.fas','Manduca_exons.fas']
+    >>> files = ['Bombyx_exons.fasta', 'Danaus_exons.fasta','Heliconius_exons.fasta','Manduca_exons.fasta']
     >>> MUSCLE.batchAlignment(files)
     ...
     Pooling gene BGIBMGA000851:1-597
@@ -278,7 +278,7 @@ so that all sequences will have the same length:
     >>> from pyphylogenomics import MUSCLE
     >>> MUSCLE.bluntSplicer("alignments/") # folder_path containing the FASTA file alignments
 
-This will produce FASTA files ending in **"_bluntlySpliced.fas"**. You may want to remove the old 
+This will produce FASTA files ending in **"_bluntlySpliced.fasta"**. You may want to remove the old 
 unspliced FASTA files before doing primer design.
 
 Automated primer design via primers4clades_:
@@ -312,9 +312,9 @@ Automated primer design via primers4clades_:
     >>> MUSCLE.designPrimers(folder, tm, min_amplength, max_amplength, gencode, mode, clustype, amptype, email)
     ...
     Done.
-    All primers have been saved in the file "primers.fas"
+    All primers have been saved in the file "primers.fasta"
     
-All primers will be saved to a file (``primers.fas``). However, it is recommended that you study the very detailed
+All primers will be saved to a file (``primers.fasta``). However, it is recommended that you study the very detailed
 output saved into your ``alignments`` folder as HTML files so that you can decide to use these primers or not.
 
 .. _primers4clades: http://floresta.eead.csic.es/primers4clades/#0

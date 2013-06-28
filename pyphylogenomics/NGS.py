@@ -222,8 +222,8 @@ def assembly(fastq_file, index_length, min_quality=20, percentage=70, min_length
         if assembly == 0:
             if count_reads("test/contigs.fa", "fasta") > 0:
                 print "yyyyyyyyyyyyyyy" + str(count_reads("test/contigs.fa", "fasta"));
-                filename = fastq_file + "_assembled.fas";
-                os.rename("test/contigs.fa", fastq_file + "_assembled.fas");
+                filename = fastq_file + "_assembled.fasta";
+                os.rename("test/contigs.fa", fastq_file + "_assembled.fasta");
                 print "Assembled sequence has been saved as file " + filename;
     else:
         print "Couldn't process file " + fastq_file;

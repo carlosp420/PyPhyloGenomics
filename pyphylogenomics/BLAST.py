@@ -315,11 +315,11 @@ def blastParser(blast_table, sbj_db, out_file, sp_name = 'homologous', E_value =
 
     Example:
 
-    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fas", sp_name="Danaus");
+    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fasta", sp_name="Danaus");
     Reading files ...
     Parsing BLAST table ...
     A total of 158 sequences passed the thresholds.
-    They have been stored in the file: Danaus_exons.fas
+    They have been stored in the file: Danaus_exons.fasta
 
     The parameter ``sp_name`` is important as it will be used as part of the exons IDs.
     """

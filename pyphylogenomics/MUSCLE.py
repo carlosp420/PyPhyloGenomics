@@ -32,7 +32,7 @@ def batchAlignment(files):
     Example:
     
     >>> from pyphylogenomics import MUSCLE
-    >>> files = ['Bmori_exons.fas', 'Danaus_exons.fas','Heliconius_exons.fas','Manduca_exons.fas']
+    >>> files = ['Bmori_exons.fasta', 'Danaus_exons.fasta','Heliconius_exons.fasta','Manduca_exons.fasta']
     >>> MUSCLE.batchAlignment(files)
 
     All aligned sequences will be written into a folder called ``alignments`` as
@@ -73,7 +73,7 @@ def batchAlignment(files):
         if len(seqs_list) > 2: # Now perfom the MSA.
             count += 1
 
-            path = os.path.join(folder, ID1.split(':')[0] + ".fas");
+            path = os.path.join(folder, ID1.split(':')[0] + ".fasta");
             muscle_cline = MuscleCommandline(out=path, fasta=True)
         
             child = subprocess.Popen(str(muscle_cline),
@@ -111,7 +111,7 @@ def bluntSplicer(folder_path, window=20):
     folder_path = re.sub("/$", "", folder_path);
 
     # MUSCLE.batchAlignment.py created a alignments folder_path.
-    for path in glob.glob(os.path.join(folder_path, "*.fas")): 
+    for path in glob.glob(os.path.join(folder_path, "*.fasta")): 
         alignment = AlignIO.read(path,"fasta")
         print "\nSplicing %s file" % path.split("\\")[-1]
         for i in range(0,alignment.get_alignment_length()): # For checking gaps on the left flank.
@@ -138,7 +138,7 @@ def bluntSplicer(folder_path, window=20):
                 end = i
                 break
 
-        out = path.split(".fas")[0] + "_bluntlySpliced.fas" # Saving edited MSAs in same folder.
+        out = path.split(".fasta")[0] + "_bluntlySpliced.fasta" # Saving edited MSAs in same folder.
         AlignIO.write (alignment[:,start:end], out, "fasta")
 
 
@@ -274,8 +274,8 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
 
 
             # Write primers to alignment file
-            SeqIO.write(primers, "primers.fas", "fasta");
-            print "\nDone.\nAll primers have been saved in the file \"primers.fas\"";
+            SeqIO.write(primers, "primers.fasta", "fasta");
+            print "\nDone.\nAll primers have been saved in the file \"primers.fasta\"";
 
         else:
             print "\nError! the folder \"%s\" is empty.\n" % folder;
