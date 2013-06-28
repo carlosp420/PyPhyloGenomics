@@ -9,8 +9,8 @@
     
     <title>1. Getting started with PyPhyloGenomics: Gene Search &mdash; PyPhyloGenomics 0.1.0 documentation</title>
     
-    <link rel="stylesheet" href="static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -21,10 +21,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="static/jquery.js"></script>
-    <script type="text/javascript" src="static/underscore.js"></script>
-    <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="PyPhyloGenomics 0.1.0 documentation" href="index.html" />
     <link rel="next" title="2. Analysis of raw data output from IonTorrent" href="ngs_analysis.html" />
     <link rel="prev" title="Welcome to PyPhyloGenomics’s documentation!" href="index.html" /> 
@@ -180,7 +180,7 @@ in order to get exon sizes:</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Some small segments of sequences might be similar to non-homologous regions of the genome. We will use the function <tt class="docutils literal"><span class="pre">eraseFalsePosi</span></tt> to keep those matches of longest length:</p>
+<li><p class="first">Some small segments of sequences might match exons present in more than one scaffold. We will use the function <tt class="docutils literal"><span class="pre">eraseFalsePosi</span></tt> to keep those matches of longest length:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exons</span> <span class="o">=</span> <span class="n">BLAST</span><span class="o">.</span><span class="n">eraseFalsePosi</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span> <span class="c"># Drop presumable false positives.</span>
 <span class="go">Erasing False Positives ...</span>
 <span class="go">There are 6346 exons</span>
@@ -195,10 +195,10 @@ in order to get exon sizes:</p>
 </div>
 </li>
 <li><p class="first">Finally we can use a function to save the obtained exons while making sure they are in frame. We need to use as additional arguments the genome file and output filename:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">storeExonsInFrame</span><span class="p">(</span><span class="n">exons</span><span class="p">,</span> <span class="s">&quot;pulled_seqs.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Bombyx_exons.fas&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">storeExonsInFrame</span><span class="p">(</span><span class="n">exons</span><span class="p">,</span> <span class="s">&quot;pulled_seqs.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Bombyx_exons.fasta&quot;</span><span class="p">)</span>
 <span class="go">Storing exons ...</span>
 <span class="go">A total of 575 exons are kept</span>
-<span class="go">These exons have been stored in the file: Bombyx_exons.fas</span>
+<span class="go">These exons have been stored in the file: Bombyx_exons.fasta</span>
 </pre></div>
 </div>
 </li>
@@ -221,7 +221,7 @@ out whether these exons are conserved in other Arthropoda species.</p>
 </ul>
 </li>
 <li><p class="first">Do a blastn of our Long Exons against the <em>Danaus</em> genome:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&quot;Bombyx_exons.fas&quot;</span><span class="p">,</span> <span class="s">&quot;Dp_genome_v2.fasta&quot;</span><span class="p">);</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&quot;Bombyx_exons.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Dp_genome_v2.fasta&quot;</span><span class="p">);</span>
 <span class="gp">...</span>
 <span class="go">BLASTn finished!</span>
 <span class="go">The BLAST results were written in to the file Bombyx_exons_blastn_out.csv</span>
@@ -256,7 +256,7 @@ out whether these exons are conserved in other Arthropoda species.</p>
 </div></blockquote>
 </li>
 <li><p class="first">BLASTn the <em>Bombyx mori</em> exons against the <em>Heliconius</em> genome:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&quot;Bombyx_exons.fas&quot;</span><span class="p">,</span> <span class="s">&quot;Heliconius_genome.fa&quot;</span><span class="p">);</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&quot;Bombyx_exons.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Heliconius_genome.fa&quot;</span><span class="p">);</span>
 <span class="gp">...</span>
 <span class="go">BLASTn finished!</span>
 <span class="go">The BLAST results were written in to the file  Bombyx_exons_blastn_out.csv</span>
@@ -284,7 +284,7 @@ out whether these exons are conserved in other Arthropoda species.</p>
 <li><p class="first">We downloaded the file <tt class="docutils literal"><span class="pre">Msex05162011.genome.fa</span></tt>.</p>
 </li>
 <li><p class="first">Blasted the <em>Bombyx mori</em> exons against the <em>Manduca</em> genome:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&quot;Bombyx_exons.fas&quot;</span><span class="p">,</span> <span class="s">&quot;Msex05162011.genome.fa&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&quot;Bombyx_exons.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Msex05162011.genome.fa&quot;</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">BLASTn finished!</span>
 <span class="go">The BLAST results were written in to the file  Bombyx_exons_blastn_out.csv</span>
@@ -327,7 +327,7 @@ All aligned sequences will be written into a folder called <tt class="docutils l
 </div>
 <p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">MUSCLE</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Bombyx_exons.fas&#39;</span><span class="p">,</span> <span class="s">&#39;Danaus_exons.fas&#39;</span><span class="p">,</span><span class="s">&#39;Heliconius_exons.fas&#39;</span><span class="p">,</span><span class="s">&#39;Manduca_exons.fas&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Bombyx_exons.fasta&#39;</span><span class="p">,</span> <span class="s">&#39;Danaus_exons.fas&#39;</span><span class="p">,</span><span class="s">&#39;Heliconius_exons.fas&#39;</span><span class="p">,</span><span class="s">&#39;Manduca_exons.fas&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MUSCLE</span><span class="o">.</span><span class="n">batchAlignment</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">Pooling gene BGIBMGA000851:1-597</span>
@@ -438,7 +438,7 @@ output saved into your <tt class="docutils literal"><span class="pre">alignments
                         title="next chapter">2. Analysis of raw data output from IonTorrent</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="sources/getting-started.txt"
+    <li><a href="_sources/getting-started.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
