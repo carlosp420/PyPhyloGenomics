@@ -202,7 +202,7 @@ consists of 3 items: a gene_id, start_position and end_position.</p>
 <dl class="function">
 <dt id="BLAST.get_cds">
 <tt class="descclassname">BLAST.</tt><tt class="descname">get_cds</tt><big>(</big><em>genes</em>, <em>cds_file</em><big>)</big><a class="headerlink" href="#BLAST.get_cds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes a FASTA file containing CDS sequences: <tt class="docutils literal"><span class="pre">pulled_seqs.fa</span></tt></p>
+<dd><p>Writes a FASTA file containing CDS sequences: <tt class="docutils literal"><span class="pre">pulled_seqs.fasta</span></tt></p>
 <p><tt class="docutils literal"><span class="pre">genes</span></tt> argument is a list of gene IDs.
 <tt class="docutils literal"><span class="pre">cds_file</span></tt> is the file name of predicted CDS for a species in FASTA format.</p>
 </dd></dl>
@@ -393,6 +393,14 @@ trimming of bad quality end and trimming index region.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="NGS.filter_reads">
+<tt class="descclassname">NGS.</tt><tt class="descname">filter_reads</tt><big>(</big><em>ion_chunk</em>, <em>blast_chunk</em>, <em>folder</em><big>)</big><a class="headerlink" href="#NGS.filter_reads" title="Permalink to this definition">¶</a></dt>
+<dd><p>* <em>Internal function</em> *</p>
+<p>Accepting alignment lengths higher than 40 bp
+longer than our primer lengths</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="NGS.find_index_in_seq">
 <tt class="descclassname">NGS.</tt><tt class="descname">find_index_in_seq</tt><big>(</big><em>barcode</em>, <em>seq</em>, <em>levenshtein_distance</em><big>)</big><a class="headerlink" href="#NGS.find_index_in_seq" title="Permalink to this definition">¶</a></dt>
 <dd><p>* <em>Internal function</em> *</p>
@@ -433,6 +441,8 @@ To speed up things a few tricks are made:
 Reads will be written into separate FASTQ files, one per matching target
 gene.
 These files will be written in the folder <tt class="docutils literal"><span class="pre">output</span></tt>.</p>
+<p>This step will accept matching reads that align more than 40bp to the
+expected gene sequence. Function <a class="reference internal" href="#NGS.filter_reads" title="NGS.filter_reads"><tt class="xref py py-func docutils literal"><span class="pre">NGS.filter_reads()</span></tt></a></p>
 </dd></dl>
 
 <dl class="function">
@@ -452,7 +462,7 @@ These files will be written in the folder <tt class="docutils literal"><span cla
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ionfile</span> <span class="o">=</span> <span class="s">&quot;ionrun.fastq&quot;</span><span class="p">;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">index_length</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">(</span><span class="n">ionfile</span><span class="p">);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">(</span><span class="n">ionfile</span><span class="p">,</span> <span class="n">index_length</span><span class="p">);</span>
 <span class="go">Your file has been saved using Solexa quality format as data/modified/wrk_ionfile.fastq</span>
 <span class="go">Your sequence IDs have been changed to numbers.</span>
 <span class="go">The FASTA format file data/modified/wrk_ionfile.fasta has been created.</span>

@@ -145,18 +145,18 @@ We will download the <strong>Consensus gene set by merging all the gene sets usi
 <p>We will need to BLASTn these single-copy genes against the <em>Bombyx mori</em> genome
 in order to get exon sizes:</p>
 <ol class="arabic">
-<li><p class="first">Pull all sequences for our gene IDs from the CDS file and write them to a file <tt class="docutils literal"><span class="pre">pulled_seqs.fa</span></tt>:</p>
+<li><p class="first">Pull all sequences for our gene IDs from the CDS file and write them to a file <tt class="docutils literal"><span class="pre">pulled_seqs.fasta</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">BLAST</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cds_file</span> <span class="o">=</span> <span class="s">&quot;silkcds.fa&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">get_cds</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">cds_file</span><span class="p">)</span>
-<span class="go">12167  sequences were written to file pulled_seqs.fa</span>
+<span class="go">12167  sequences were written to file pulled_seqs.fasta</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Download the <em>Bombyx mori</em> genome from <a class="reference external" href="http://www.silkdb.org/silkdb/doc/download.html">silkdb.org</a> (download the file <tt class="docutils literal"><span class="pre">silkworm_genome_v2.0.fa.tar.gz</span></tt>). Unzip and untar the file to your working directory and you will get the file <tt class="docutils literal"><span class="pre">silkgenome.fa</span></tt></p>
 </li>
-<li><p class="first">Do a BLASTn of the sequences against the <em>Bombyx mori</em> genome. The input arguments are your file containing the sequences for single-copy genes (<tt class="docutils literal"><span class="pre">pulled_seqs.fa</span></tt>) and your file with the genome of <em>Bombyx mori</em> which is in FASTA format (<tt class="docutils literal"><span class="pre">silkgenome.fa</span></tt>).</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&#39;pulled_seqs.fa&#39;</span><span class="p">,</span> <span class="s">&#39;silkgenome.fa&#39;</span><span class="p">)</span>
+<li><p class="first">Do a BLASTn of the sequences against the <em>Bombyx mori</em> genome. The input arguments are your file containing the sequences for single-copy genes (<tt class="docutils literal"><span class="pre">pulled_seqs.fasta</span></tt>) and your file with the genome of <em>Bombyx mori</em> which is in FASTA format (<tt class="docutils literal"><span class="pre">silkgenome.fa</span></tt>).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="s">&#39;pulled_seqs.fasta&#39;</span><span class="p">,</span> <span class="s">&#39;silkgenome.fa&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">BLASTn finished!</span>
 <span class="go">The BLAST results were written in to the file  pulled_seqs_blastn_out.csv</span>
@@ -195,7 +195,7 @@ in order to get exon sizes:</p>
 </div>
 </li>
 <li><p class="first">Finally we can use a function to save the obtained exons while making sure they are in frame. We need to use as additional arguments the genome file and output filename:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">storeExonsInFrame</span><span class="p">(</span><span class="n">exons</span><span class="p">,</span> <span class="s">&quot;pulled_seqs.fa&quot;</span><span class="p">,</span> <span class="s">&quot;Bombyx_exons.fas&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">storeExonsInFrame</span><span class="p">(</span><span class="n">exons</span><span class="p">,</span> <span class="s">&quot;pulled_seqs.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Bombyx_exons.fas&quot;</span><span class="p">)</span>
 <span class="go">Storing exons ...</span>
 <span class="go">A total of 575 exons are kept</span>
 <span class="go">These exons have been stored in the file: Bombyx_exons.fas</span>

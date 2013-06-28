@@ -78,14 +78,29 @@ FASTQ format) into a new file and do the following:</p>
 <li><p class="first">Change the sequences id to incremental numbers.</p>
 </li>
 <li><p class="first">Create a FASTA file for temporal use.</p>
+<blockquote>
+<div><p>Files generated will be written to folder <tt class="docutils literal"><span class="pre">data/modified/</span></tt></p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">ionfile</span></tt> argument is FASTQ format file as produced by IonTorrent</p>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">index_length</span></tt> number of base pairs of your indexes. This is necessary </dt>
+<dd><p class="first last">to trim the indexes before blasting the FASTA file      against the reference gene sequences.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ionfile</span> <span class="o">=</span> <span class="s">&quot;ionrun.fastq&quot;</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">(</span><span class="n">ionfile</span><span class="p">);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">index_length</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">(</span><span class="n">ionfile</span><span class="p">,</span> <span class="n">index_length</span><span class="p">);</span>
 <span class="go">Your file has been saved using Solexa quality format as data/modified/wrk_ionfile.fastq</span>
 <span class="go">Your sequence IDs have been changed to numbers.</span>
 <span class="go">The FASTA format file data/modified/wrk_ionfile.fasta has been created.</span>
 </pre></div>
 </div>
+</div></blockquote>
 </li>
 </ul>
 </div>
@@ -95,6 +110,8 @@ FASTQ format) into a new file and do the following:</p>
 we need as input a FASTA format file to create a BLAST database.
 We will blast the file <tt class="docutils literal"><span class="pre">wrk_ionfile.fasta</span></tt> and then will parse the results to divide our
 IonTorrent data in several bins (one bin per gene).</p>
+<p>This step will accept matching reads that align more than 40bp to the
+expected gene sequence. Function <a class="reference internal" href="index.html#NGS.filter_reads" title="NGS.filter_reads"><tt class="xref py py-func docutils literal"><span class="pre">NGS.filter_reads()</span></tt></a></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">BLAST</span><span class="p">;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">query_seqs</span> <span class="o">=</span> <span class="s">&quot;data/modified/wrk_ionfile.fasta&quot;</span><span class="p">;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">genome</span> <span class="o">=</span> <span class="s">&quot;target_genes.fasta&quot;</span><span class="p">;</span>
@@ -106,13 +123,14 @@ IonTorrent data in several bins (one bin per gene).</p>
 <p>We will use the recently generated <tt class="docutils literal"><span class="pre">wrk_ionfile_blastn_out.csv</span></tt> file to filter our reads
 according to matching genes.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">blast_table</span> <span class="o">=</span> <span class="s">&quot;wrk_ionfile_blastn_out&quot;</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ion_file</span>    <span class="o">=</span> <span class="s">&quot;wrk_ionfile.fastq&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blast_table</span> <span class="o">=</span> <span class="s">&quot;data/modified/wrk_ionfile_blastn_out&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ion_file</span>    <span class="o">=</span> <span class="s">&quot;data/modified/wrk_ionfile.fastq&quot;</span><span class="p">;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">parse_blast_results</span><span class="p">(</span><span class="n">blast_table</span><span class="p">,</span> <span class="n">ion_file</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>It will take a while to parse the results. The output will be several FASTQ files (one
-per target gene) containing our matching IonTorrent reads.</p>
+per target gene) containing our matching IonTorrent reads. The files will have the
+prefix <strong>gene_</strong>.</p>
 </div>
 <div class="section" id="separate-gene-bins-according-to-indexes-or-barcodes">
 <h2>2.3. Separate gene bins according to indexes (or barcodes)<a class="headerlink" href="#separate-gene-bins-according-to-indexes-or-barcodes" title="Permalink to this headline">¶</a></h2>
