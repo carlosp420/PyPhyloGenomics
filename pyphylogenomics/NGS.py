@@ -10,6 +10,11 @@ Prepares output data from sequencing round in IonTorrent (FASTQ format file).
 * Changes quality format from Phred to Solexa (which is required by the fastx-toolkit). 
 * Changes sequences id to incremental numbers.
 * Creates temporal FASTA file.
+
+This module also finds matches between reads and expected gene regions by using
+BLASTn, and separates reads based on matches against indexes.
+
+It also has functions to do assembly of reads using ``velvet``.
 '''
 
 import glob;
