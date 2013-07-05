@@ -19,6 +19,7 @@ import re;
 import shutil;
 from Bio import SeqIO;
 import subprocess;
+import requests;
 
 
 def prepare_data(ionfile, index_length):
@@ -209,6 +210,20 @@ def assembly(fastq_file, index_length, min_quality=20, percentage=70, min_length
     '''
     # Do quality control first
     q = quality_control(fastq_file, index_length, min_quality, percentage, min_length);
+    try:
+        with open('assembly_velvet.sh'): pass
+    except:
+        # downloading scripts to local folder
+        r = requests.get("https://raw.github.com/carlosp420/PyPhyloGenomics/master/assembly_velvet.sh")
+        f = open("assembly_velvet.sh", "w");
+        f.write(r.content);
+        f.close();
+
+        r = requests.get("https://raw.github.com/carlosp420/PyPhyloGenomics/master/assembly_velvet2.sh")
+        f = open("assembly_velvet2.sh", "w");
+        f.write(r.content);
+        f.close();
+
     if q == "ok":
         command = "bash assembly_velvet.sh filter3.fastq";
         filter3_output = subprocess.check_output(command, shell=True);
@@ -221,9 +236,9 @@ def assembly(fastq_file, index_length, min_quality=20, percentage=70, min_length
 
         if assembly == 0:
             if count_reads("test/contigs.fa", "fasta") > 0:
-                print "yyyyyyyyyyyyyyy" + str(count_reads("test/contigs.fa", "fasta"));
-                filename = fastq_file + "_assembled.fasta";
-                os.rename("test/contigs.fa", fastq_file + "_assembled.fasta");
+                print "The assembly produced " + str(count_reads("test/contigs.fa", "fasta")) + " potential contigs";
+                filename = re.sub(".fastq$", "", fastq_file) + "_assembled.fasta";
+                os.rename("test/contigs.fa", filename);
                 print "Assembled sequence has been saved as file " + filename;
     else:
         print "Couldn't process file " + fastq_file;
