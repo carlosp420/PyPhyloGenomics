@@ -26,7 +26,6 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
     <link rel="top" title="PyPhyloGenomics 0.1.0 documentation" href="index.html" />
-    <link rel="next" title="3. Assembly of expected gene sequences" href="ngs_assembly.html" />
     <link rel="prev" title="1. Getting started with PyPhyloGenomics: Gene Search" href="getting-started.html" /> 
   </head>
   <body>
@@ -39,9 +38,6 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="ngs_assembly.html" title="3. Assembly of expected gene sequences"
-             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="getting-started.html" title="1. Getting started with PyPhyloGenomics: Gene Search"
              accesskey="P">previous</a> |</li>
@@ -162,6 +158,9 @@ prefix <tt class="docutils literal"><span class="pre">gene</span></tt>.</p>
 depending on the sequence ID found in the <tt class="docutils literal"><span class="pre">indexes.fasta</span></tt> file.</p>
 <p>For example, one of our files was written as <strong>index_IonADA_2_gene_rps5.fastq</strong>.</p>
 <p>Depending on the amount of your data, this process can take several hours.</p>
+</div>
+<div class="section" id="assembly-of-reads-into-consensus-sequences">
+<h2>2.4. Assembly of reads into consensus sequences<a class="headerlink" href="#assembly-of-reads-into-consensus-sequences" title="Permalink to this headline">¶</a></h2>
 <p>Once we have one FASTQ file for each gene and for each specimen or barcode, we can
 start doing the assembly of the consensus sequence.</p>
 <p>It might be necessary for you to try out several parameters that will affect the final
@@ -203,6 +202,7 @@ best Kmer value and use it to do a final assembly.</p>
 <li><a class="reference internal" href="#prepare-raw-ngs-data">2.1. Prepare raw NGS data</a></li>
 <li><a class="reference internal" href="#find-reads-matching-target-genes">2.2. Find reads matching target genes</a></li>
 <li><a class="reference internal" href="#separate-gene-bins-according-to-indexes-or-barcodes">2.3. Separate gene bins according to indexes (or barcodes)</a></li>
+<li><a class="reference internal" href="#assembly-of-reads-into-consensus-sequences">2.4. Assembly of reads into consensus sequences</a></li>
 </ul>
 </li>
 </ul>
@@ -210,9 +210,6 @@ best Kmer value and use it to do a final assembly.</p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="getting-started.html"
                         title="previous chapter">1. Getting started with PyPhyloGenomics: Gene Search</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="ngs_assembly.html"
-                        title="next chapter">3. Assembly of expected gene sequences</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="sources/ngs_analysis.txt"
@@ -244,9 +241,6 @@ best Kmer value and use it to do a final assembly.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="ngs_assembly.html" title="3. Assembly of expected gene sequences"
-             >next</a> |</li>
         <li class="right" >
           <a href="getting-started.html" title="1. Getting started with PyPhyloGenomics: Gene Search"
              >previous</a> |</li>

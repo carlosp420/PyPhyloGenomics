@@ -103,6 +103,9 @@ For example, one of our files was written as **index_IonADA_2_gene_rps5.fastq**.
 
 Depending on the amount of your data, this process can take several hours.
 
+
+Assembly of reads into consensus sequences
+------------------------------------------
 Once we have one FASTQ file for each gene and for each specimen or barcode, we can
 start doing the assembly of the consensus sequence.
 
