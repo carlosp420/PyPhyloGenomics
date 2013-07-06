@@ -121,7 +121,7 @@ expected gene sequence. Function <a class="reference internal" href="index.html#
 </pre></div>
 </div>
 <p>We will use the recently generated <tt class="docutils literal"><span class="pre">wrk_ionfile_blastn_out.csv</span></tt> file to filter our reads
-according to matching genes.</p>
+that match our expected gene sequences.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">blast_table</span> <span class="o">=</span> <span class="s">&quot;data/modified/wrk_ionfile_blastn_out&quot;</span><span class="p">;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ion_file</span>    <span class="o">=</span> <span class="s">&quot;data/modified/wrk_ionfile.fastq&quot;</span><span class="p">;</span>
@@ -134,16 +134,17 @@ prefix <strong>gene_</strong>.</p>
 </div>
 <div class="section" id="separate-gene-bins-according-to-indexes-or-barcodes">
 <h2>2.3. Separate gene bins according to indexes (or barcodes)<a class="headerlink" href="#separate-gene-bins-according-to-indexes-or-barcodes" title="Permalink to this headline">¶</a></h2>
-<p>Then we need to separate those files according to the indexes that were used in our wet-lab
-protocol. We used one index (or barcode) for each voucher specimen that went into the
-IonTorrent.
-And we will use those reads to make out which reads belong to each of our specimens.
-It is possible that due to some errors in base calling during the sequencing procedure,
+<p>Then we need to separate the files prefixed by <strong>gene_</strong> according to the indexes
+that were used in our wet-lab protocol.
+We used one index (or barcode) for each voucher specimen that went into the
+Ion Torrent.
+And we will use those reads to figure out which reads belong to each of our specimens.
+It is possible that due to some errors in base calling during the sequencing procedure
 mistakes might appear in the sequenced index region.
 Thus, we will need to perform string comparisons accepting differences of up to 1 nucleotide
 between our expected and sequenced indexes.
-Our indexes differ in two nucleotides (they should ideally differ more) so we are safe
-if we accept up to 1 mistake during the sequencing of the index region.</p>
+Our indexes differ in two nucleotides (they should ideally differ more) so it is safe
+to accept up to 1 mistake during the sequencing of the index region.</p>
 <p>PyPhyloGenomics uses <a class="reference external" href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distances</a>
 for comparison of index sequences.</p>
 <p>We assume that our FASTQ bins to separate are in the folder <tt class="docutils literal"><span class="pre">output</span></tt> and begin with the
@@ -157,6 +158,36 @@ prefix <tt class="docutils literal"><span class="pre">gene</span></tt>.</p>
 <span class="gp">... </span>    <span class="n">NGS</span><span class="o">.</span><span class="n">separate_by_index</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">index_list</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">levenshtein_distance</span><span class="p">);</span>
 </pre></div>
 </div>
+<p>All the reads will be saved to files with the prefix <strong>index_</strong> and a identifier
+depending on the sequence ID found in the <tt class="docutils literal"><span class="pre">indexes.fasta</span></tt> file.</p>
+<p>For example, one of our files was written as <strong>index_IonADA_2_gene_rps5.fastq</strong>.</p>
+<p>Depending on the amount of your data, this process can take several hours.</p>
+<p>Once we have one FASTQ file for each gene and for each specimen or barcode, we can
+start doing the assembly of the consensus sequence.</p>
+<p>It might be necessary for you to try out several parameters that will affect the final
+assembled sequence. For example you might want to be strict and remove read with
+low quality values (by default PyPhyloGenomics uses <tt class="docutils literal"><span class="pre">min_quality</span> <span class="pre">=</span> <span class="pre">20</span></tt>) or change
+the percentage of high quality values per read (default is <tt class="docutils literal"><span class="pre">percentage</span> <span class="pre">=</span> <span class="pre">80</span></tt>).</p>
+<p>After each iteration of parameters you can check the assembled sequences and
+evaluate the sequence length and coverage and decide whether to accept of reject
+the sequence.</p>
+<p>We will do the assembly using the commonly used assembler <tt class="docutils literal"><span class="pre">velvet</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fastq_file</span>   <span class="o">=</span> <span class="s">&quot;index_Ion_4_gene_rps5.fastq&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">index_length</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_quality</span>  <span class="o">=</span> <span class="mi">30</span><span class="p">;</span> <span class="c"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">percentage</span>   <span class="o">=</span> <span class="mi">80</span><span class="p">;</span> <span class="c"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_length</span>   <span class="o">=</span> <span class="mi">60</span><span class="p">;</span> <span class="c"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">assembly</span><span class="p">(</span><span class="n">fastq_file</span><span class="p">,</span> <span class="n">index_length</span><span class="p">,</span> <span class="n">min_quality</span><span class="p">,</span> <span class="n">percentage</span><span class="p">,</span> <span class="n">min_length</span><span class="p">);</span>
+<span class="go">Final graph has 3 nodes and n50 of 102, max 121, total 250, using 0/60354 reads</span>
+<span class="go">The assembly produced 2 potential contigs</span>
+<span class="go">Assembled sequence has been saved as file index_Ion_4_gene_rps5_assembled.fasta</span>
+</pre></div>
+</div>
+<p>This procedure performs quality control over the reads and then trying out
+assembling the sequences using several Kmer values. Later it tries to guess the
+best Kmer value and use it to do a final assembly.</p>
+<p>The potential contigs are written to the file  <tt class="docutils literal"><span class="pre">index_Ion_4_gene_rps5_assembled.fasta</span></tt>.</p>
 </div>
 </div>
 

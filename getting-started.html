@@ -356,7 +356,7 @@ so that all sequences will have the same length:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MUSCLE</span><span class="o">.</span><span class="n">bluntSplicer</span><span class="p">(</span><span class="s">&quot;alignments/&quot;</span><span class="p">)</span> <span class="c"># folder_path containing the FASTA file alignments</span>
 </pre></div>
 </div>
-<p>This will produce FASTA files ending in <strong>&#8220;_bluntlySpliced.fas&#8221;</strong>. You may want to remove the old
+<p>This will produce FASTA files ending in <strong>&#8220;_bluntlySpliced.fasta&#8221;</strong>. You may want to remove the old
 unspliced FASTA files before doing primer design.</p>
 <p>Automated primer design via <a class="reference external" href="http://floresta.eead.csic.es/primers4clades/#0">primers4clades</a>:</p>
 <blockquote>
@@ -398,11 +398,11 @@ The values shown are the default. Change them if needed.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MUSCLE</span><span class="o">.</span><span class="n">designPrimers</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">tm</span><span class="p">,</span> <span class="n">min_amplength</span><span class="p">,</span> <span class="n">max_amplength</span><span class="p">,</span> <span class="n">gencode</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">clustype</span><span class="p">,</span> <span class="n">amptype</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">Done.</span>
-<span class="go">All primers have been saved in the file &quot;primers.fas&quot;</span>
+<span class="go">All primers have been saved in the file &quot;primers.fasta&quot;</span>
 </pre></div>
 </div>
 </div></blockquote>
-<p>All primers will be saved to a file (<tt class="docutils literal"><span class="pre">primers.fas</span></tt>). However, it is recommended that you study the very detailed
+<p>All primers will be saved to a file (<tt class="docutils literal"><span class="pre">primers.fasta</span></tt>). However, it is recommended that you study the very detailed
 output saved into your <tt class="docutils literal"><span class="pre">alignments</span></tt> folder as HTML files so that you can decide to use these primers or not.</p>
 </div>
 </div>

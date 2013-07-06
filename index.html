@@ -243,7 +243,7 @@ match whose distance to the following query-sbj match is greater than MinDist.</
 be the master file (e.g. exon sequences of <em>Bombyx mori</em>).</p>
 <p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">MUSCLE</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Bmori_exons.fas&#39;</span><span class="p">,</span> <span class="s">&#39;Danaus_exons.fas&#39;</span><span class="p">,</span><span class="s">&#39;Heliconius_exons.fas&#39;</span><span class="p">,</span><span class="s">&#39;Manduca_exons.fas&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Bmori_exons.fasta&#39;</span><span class="p">,</span> <span class="s">&#39;Danaus_exons.fasta&#39;</span><span class="p">,</span><span class="s">&#39;Heliconius_exons.fasta&#39;</span><span class="p">,</span><span class="s">&#39;Manduca_exons.fasta&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MUSCLE</span><span class="o">.</span><span class="n">batchAlignment</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -361,6 +361,9 @@ for each alignment.</p>
 <li>Changes sequences id to incremental numbers.</li>
 <li>Creates temporal FASTA file.</li>
 </ul>
+<p>This module also finds matches between reads and expected gene regions by using
+BLASTn, and separates reads based on matches against indexes.</p>
+<p>It also has functions to do assembly of reads using <tt class="docutils literal"><span class="pre">velvet</span></tt>.</p>
 <dl class="function">
 <dt id="NGS.assembly">
 <tt class="descclassname">NGS.</tt><tt class="descname">assembly</tt><big>(</big><em>fastq_file</em>, <em>index_length</em>, <em>min_quality=20</em>, <em>percentage=70</em>, <em>min_length=50</em><big>)</big><a class="headerlink" href="#NGS.assembly" title="Permalink to this definition">¶</a></dt>
