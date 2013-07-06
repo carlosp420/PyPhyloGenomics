@@ -33,7 +33,6 @@ Documentation
 
    getting-started
    ngs_analysis
-   ngs_assembly
 
 
 .. automodule:: OrthoDB
