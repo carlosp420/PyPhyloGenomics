@@ -47,14 +47,14 @@ def makeblastdb(genome, mask=False):
     '''
 
     if mask == True:
-        command = 'dustmasker -in '+ genome + ' -infmt fasta -parse_seqids '
+        command = 'dustmasker -in '+ genome + ' -infmt fasta '
         command += '-outfmt maskinfo_asn1_bin -out ' + genome + '_dust.asnb'
         print "masking low_complexity regions..."
         p = subprocess.check_output(command, shell=True) # identifying low-complexity regions.
         print p
         
         command = 'makeblastdb -in ' + genome + ' -input_type fasta -dbtype nucl '
-        command += '-parse_seqids -mask_data ' + genome + '_dust.asnb '
+        command += '-mask_data ' + genome + '_dust.asnb '
         command += '-out ' + genome + ' -title "Whole Genome without low-complexity regions"'
         print "creating database..."
         p = subprocess.check_output(command, shell=True) # Overwriting the genome file.
@@ -62,14 +62,14 @@ def makeblastdb(genome, mask=False):
 
     else:
         command  = 'makeblastdb -in ' + genome + ' -input_type fasta -dbtype nucl '
-        command += '-parse_seqids -out ' + genome + ' -title "Whole Genome unmasked"'
+        command += '-out ' + genome + ' -title "Whole Genome unmasked"'
         print "creating database..."
         p = subprocess.check_output(command, shell=True) 
         print p
 
 
 
-def blastn(query_seqs, genome, e_value=0.00001):
+def blastn(query_seqs, genome, e_value=0.00001, mask=True):
     '''
     Performs a BLASTn of user's sequences against a genome. It will create a
     BLAST database from the genome file first.
@@ -79,7 +79,7 @@ def blastn(query_seqs, genome, e_value=0.00001):
     '''
 
     # do a BLAST database first
-    makeblastdb(genome, mask=False);
+    makeblastdb(genome, mask=mask);
     blast_out = query_seqs.split(".")[0]+"_blastn_out.csv" # Name of the output file.
 
     output  = "blasting: " + query_seqs.split("\\")[-1] + " "
@@ -114,7 +114,8 @@ def blastn(query_seqs, genome, e_value=0.00001):
         handle.close();
 
     for f in files:
-        command = 'blastn -query ' + f + ' -db ' + genome + ' -task blastn '
+        command = ('blastn -query ' + f + ' -db ' + genome + ' -task blastn -db_soft_mask 11 ' if mask 
+        else 'blastn -query ' + f + ' -db ' + genome + ' -task blastn ')
         command += '-evalue ' + str(e_value) + ' -out ' + f + "_out.csv" + ' -num_threads 1 -outfmt 10'
         jobs.append(job_server.submit(do_blast, (command,), modules=('subprocess',)))
 
