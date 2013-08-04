@@ -11,6 +11,7 @@ A package to work on Phylogenomics.
 
 
 ##Installing PyPhyloGenomics
+PyPhyloGenomics has been developed in Python v2.7.
 The installer of PyPhyloGenomics will try to download and install all its dependencies as well. 
 To install PyPhyloGenomics use `setup.py`:
 
