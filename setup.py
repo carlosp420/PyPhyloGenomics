@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
 		name='PyPhyloGenomics', 
-		version='0.2.0',
+		version='0.3.3',
 		packages = ['pyphylogenomics'],
 		author="Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat",
 		author_email="mycalesis@gmail.com",
@@ -14,12 +14,12 @@ setup(
 		maintainer_email="mycalesis@gmail.com",
 		contact="Carlos Pena",
 		contact_email="mycalesis@gmail.com",
-		license="GPL v2",
+		license="GPL v3",
 		description="Tools to work in phylogenomics, from NSG group http://nymphalidae.utu.fi",
-		long_description=open('README.md').read(),
+		long_description=open('README.txt').read(),
 		keywords="DNA, genomics, genomes, phylogenetics, genes",
-		url="http://nymphalidae.utu.fi",
-		download_url = "https://github.com/carlosp420/PyPhyloGenomics/",
+		url="http://carlosp420.github.com/PyPhyloGenomics/",
+		download_url = "http://carlosp420.github.com/PyPhyloGenomics/",
 		classifiers=[
 					"Programming Language :: Python",
 					("Topic :: Scientific/Engineering :: Bio-Informatics"),
