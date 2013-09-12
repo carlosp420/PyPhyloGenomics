@@ -25,21 +25,30 @@ class BLASTTest(unittest.TestCase):
         BLAST.makeblastdb(self.genome, mask)
         for name in os.listdir("BLAST/"):
             if name[:10] == "silkcds.fa" and len(name) > 10:
-                os.remove("BLAST/" + name);
+                os.remove("BLAST/" + name)
                 result = "true"
-        self.assertEqual(result, "true");
+        self.assertEqual(result, "true")
 
     def test_makeblastdb_false(self):
         mask = False
         BLAST.makeblastdb(self.genome, mask)
         for name in os.listdir("BLAST/"):
             if name[:10] == "silkcds.fa" and len(name) > 10:
-                os.remove("BLAST/" + name);
+                os.remove("BLAST/" + name)
                 result = "true"
-        self.assertEqual(result, "true");
+        self.assertEqual(result, "true")
 
-    def test_blastn(self)
-        BLAST.blastn("BLAST/query.fas", "BLAST/silkcds.fa");
+    def test_blastn(self):
+        BLAST.blastn("BLAST/query.fas", "BLAST/silkcds.fa")
+        file = open("BLAST/query_blastn_out.csv", "r").readlines()
+        result = file[0].split(",")[1]
+        for name in os.listdir("BLAST/"):
+            if name[:10] == "silkcds.fa" and len(name) > 10:
+                os.remove("BLAST/" + name)
+        os.remove("BLAST/query_blastn_out.csv")
+        self.assertEqual(result, "BGIBMGA000001-TA")
+
+
         
 
 
