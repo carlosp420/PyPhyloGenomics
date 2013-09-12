@@ -38,6 +38,9 @@ class BLASTTest(unittest.TestCase):
                 result = "true"
         self.assertEqual(result, "true");
 
+    def test_blastn(self)
+        BLAST.blastn("BLAST/query.fas", "BLAST/silkcds.fa");
+        
 
 
 
