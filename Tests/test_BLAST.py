@@ -9,6 +9,7 @@ class BLASTTest(unittest.TestCase):
     def setUp(self):
         self.genes = OrthoDB.single_copy_genes("OrthoDB/OrthoDB6_Arthropoda_tabtext.csv", \
                     "Bombyx mori")
+        self.genome = "BLAST/silkcds.fa"
 
     def test_get_cds(self):
         BLAST.get_cds(self.genes, "BLAST/silkcds.fa")
@@ -18,6 +19,24 @@ class BLASTTest(unittest.TestCase):
         """Extracting genes and saving them as fasta file"""
         self.assertEqual(result, 83216)
         os.remove("pulled_seqs.fasta")
+
+    def test_makeblastdb_true(self):
+        mask = True
+        BLAST.makeblastdb(self.genome, mask)
+        for name in os.listdir("BLAST/"):
+            if name[:10] == "silkcds.fa" and len(name) > 10:
+                os.remove("BLAST/" + name);
+                result = "true"
+        self.assertEqual(result, "true");
+
+    def test_makeblastdb_false(self):
+        mask = False
+        BLAST.makeblastdb(self.genome, mask)
+        for name in os.listdir("BLAST/"):
+            if name[:10] == "silkcds.fa" and len(name) > 10:
+                os.remove("BLAST/" + name);
+                result = "true"
+        self.assertEqual(result, "true");
 
 
 
