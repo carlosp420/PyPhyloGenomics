@@ -25,6 +25,7 @@ import shutil;
 from Bio import SeqIO;
 import subprocess;
 import requests;
+import pp;
 
 
 def prepare_data(ionfile, index_length):
@@ -123,16 +124,43 @@ def parse_blast_results(blast_table, ion_file):
         dest = os.path.join("output", file); 
         os.rename(src, dest);
 
-    # split fastq file into chunks
-    for file in glob.iglob(os.path.join("output", "_re*.csv")):
-        ion_chunk = split_ionfile_by_results(ion_file, file);
+    # ppservers list to auto-discovery
+    ppservers = ("*",)
+    job_server = pp.Server(ppservers=ppservers, secret="123")
+    jobs = []
 
-        # now we need to iterate over each chunk of blast result and fastq file
-        # and separate the reads into bins according to matching gene
-        # filter_reads(ion_chunk, blast_chunk):
-        # folder is the "output" folder that we are using to keep our result data
-        filter_reads(ion_chunk, file, folder);
-        print "Filtering reads in file " + ion_chunk
+    # split fastq file into chunks
+    for blast_chunk in glob.iglob(os.path.join("output", "_re*.csv")):
+        jobs.append(job_server.submit(split_ionfile_by_results, (ion_file, blast_chunk),(),()))
+
+    for job in jobs:
+        job();
+
+    job_server.print_stats();
+
+    # progressbar
+    progressbar_width = 20;
+    sys.stdout.write("Progress: [%s]" % (" " * progressbar_width))
+    sys.stdout.flush();
+    sys.stdout.write("\b" * (progressbar_width + 1))
+
+    # now we need to iterate over each chunk of blast result and fastq file
+    # and separate the reads into bins according to matching gene
+    # filter_reads(ion_chunk, blast_chunk):
+    # folder is the "output" folder that we are using to keep our result data
+    jobs = []
+    for ion_chunk in glob.iglob(os.path.join("output", "_re*.fastq")):
+        blast_chunk = ion_chunk[:-5] + "csv"
+        jobs.append(job_server.submit(filter_reads, (ion_chunk, blast_chunk, folder),(),()))
+
+    for job in jobs:
+        sys.stdout.write("#")
+        sys.stdout.flush();
+        job();
+
+    sys.stdout.write("\n")
+    job_server.print_stats();
+
 
 
 def separate_by_index(fastq_file, index_list, folder="", levenshtein_distance=1):
@@ -496,14 +524,15 @@ def split_ionfile_by_results(ion_file, blast_chunk):
     fp.close();
     
     # cut ionfile using first and last lines
-    ion_chunk = open(blast_chunk + ".fastq", "w");
+    # _reaa.fastq
+    ion_chunk = open(blast_chunk[:-4] + ".fastq", "w");
 
     fp = open(ion_file);
     for i, line in enumerate(fp):
         if i >= first_line:
             ion_chunk.write(line);
         if i > last_line - 1:
-            print "Splitting " + ion_file + " into chunk " + blast_chunk + ".fastq"
+            print "Splitting " + ion_file + " into chunk " + blast_chunk[:-4] + ".fastq"
             break
     fp.close();
 
@@ -515,6 +544,7 @@ def split_ionfile_by_results(ion_file, blast_chunk):
 
 
 def filter_reads(ion_chunk, blast_chunk, folder):
+    from Bio import SeqIO;
     '''
     \* *Internal function* \*
 
