@@ -164,6 +164,9 @@ def parse_blast_results(blast_table, ion_file):
 
 
 def separate_by_index(fastq_file, index_list, folder="", levenshtein_distance=1):
+    from Bio import SeqIO
+    from pyphylogenomics import NGS
+
     '''
     This function divides FASTQ reads into bins according to a list of indexes
     (or barcodes).
@@ -205,7 +208,7 @@ def separate_by_index(fastq_file, index_list, folder="", levenshtein_distance=1)
     for seq_record in SeqIO.parse(index_list, "fasta"):
         for fastq_record in SeqIO.parse(fastq_file, "fastq"):
             found_index = "";
-            found_index = find_index_in_seq(seq_record, fastq_record, levenshtein_distance);
+            found_index = NGS.find_index_in_seq(seq_record, fastq_record, levenshtein_distance);
             if found_index == "TRUE":
                 basename = os.path.basename(fastq_file);
                 if folder != "":
