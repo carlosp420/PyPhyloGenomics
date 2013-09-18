@@ -51,11 +51,27 @@ class BLASTTest(unittest.TestCase):
         exons = BLAST.getLargestExon("BLAST/query_blastn_out.csv", 
                 E_value=0.001, ident=98, exon_len=300)
         result = len(exons)
-        self.assertEqual(result, 3)
-        os.remove("BLAST/query_blastn_out.csv")
+        print "==========largexon\n" + str(result) + "=============\n"
+        self.assertEqual(result, 36)
+        #os.remove("BLAST/query_blastn_out.csv")
 
-    # todo BLAST.eraseFaslePosi
-    # todo BLAST.wellSeparatedExons
+    def test_eraseFalsePosi(self):
+        exons = BLAST.getLargestExon("BLAST/query_blastn_out.csv", 
+                E_value=0.001, ident=98, exon_len=300)
+        exons = BLAST.eraseFalsePosi(exons)
+        result = len(exons)
+        print "==========falseposi\n" + str(result) + "=============\n"
+        self.assertEqual(result, 3)
+
+    def test_wellSeparatedExons(self):
+        exons = BLAST.getLargestExon("BLAST/query_blastn_out.csv", 
+                E_value=0.001, ident=98, exon_len=300)
+        exons = BLAST.eraseFalsePosi(exons)
+        exons = BLAST.wellSeparatedExons(exons)
+        result = len(exons)
+        print "==========wellseparated" + str(result) + "=============\n"
+        self.assertEqual(result, 4)
+
     # todo BLAST.storeExonsInFrame
 
 if __name__ == "__main__":
