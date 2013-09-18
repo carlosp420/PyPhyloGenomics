@@ -124,13 +124,13 @@ The file ``pulled_seqs_blastn_out.csv`` contains a BLAST output table with the b
 
     >>> exons = BLAST.wellSeparatedExons(exons) # Keep exons separated by > 810KB
     Identifying exons separated by 810000 bases ...
-    There are 575 exons
+    There are 574 exons
 
 7. Finally we can use a function to save the obtained exons while making sure they are in frame. We need to use as additional arguments the genome file and output filename:
 
     >>> BLAST.storeExonsInFrame(exons, "pulled_seqs.fasta", "Bombyx_exons.fasta") 
     Storing exons ...
-    A total of 575 exons are kept
+    A total of 574 exons are kept
     These exons have been stored in the file: Bombyx_exons.fasta
 
 
@@ -138,10 +138,10 @@ The file ``pulled_seqs_blastn_out.csv`` contains a BLAST output table with the b
 Validation of exon structure
 ----------------------------
 
-We have now 575 single copy exons extracted from the *Bombyx mori* genome. Let's find
+We have now 574 single copy exons extracted from the *Bombyx mori* genome. Let's find
 out whether these exons are conserved in other Arthropoda species.
 
-For example we can compare these 575 exons with the genome of the monarch butterfly
+For example we can compare these 574 exons with the genome of the monarch butterfly
 *Danaus plexippus*.
 
 ^^^^^^^^^^^^^^^^^^

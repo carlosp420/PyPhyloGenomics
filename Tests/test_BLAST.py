@@ -17,7 +17,7 @@ class BLASTTest(unittest.TestCase):
         result = len(f.read())
         f.close()
         """Extracting genes and saving them as fasta file"""
-        self.assertEqual(result, 83216)
+        self.assertEqual(result, 89026)
         os.remove("pulled_seqs.fasta")
 
     def test_makeblastdb_true(self):
@@ -50,10 +50,13 @@ class BLASTTest(unittest.TestCase):
     def test_getLargestExon(self):
         exons = BLAST.getLargestExon("BLAST/query_blastn_out.csv", 
                 E_value=0.001, ident=98, exon_len=300)
-        for i in exons:
-            result = exons[i][0]
-        self.assertEqual(result, "BGIBMGA000001-TA")
+        result = len(exons)
+        self.assertEqual(result, 3)
         os.remove("BLAST/query_blastn_out.csv")
+
+    # todo BLAST.eraseFaslePosi
+    # todo BLAST.wellSeparatedExons
+    # todo BLAST.storeExonsInFrame
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
