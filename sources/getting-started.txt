@@ -58,7 +58,7 @@ This also works:
 
 We will find all single-copy genes for the silk moth *Bombyx mori* using the table from OrthoDB_ as input file:
 
-    >>> in_file = 'OrthoDB6_Arthropoda_tabtext.csv'
+    >>> in_file = 'OrthoDB6_Arthropoda_tabtext'
     >>> genes = OrthoDB.single_copy_genes(in_file, 'Bombyx mori')
     ...
     Found gene: BGIBMGA011628

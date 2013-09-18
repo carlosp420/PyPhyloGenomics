@@ -107,7 +107,7 @@ we need as input a FASTA format file to create a BLAST database.
 We will blast the file <tt class="docutils literal"><span class="pre">wrk_ionfile.fasta</span></tt> and then will parse the results to divide our
 IonTorrent data in several bins (one bin per gene).</p>
 <p>This step will accept matching reads that align more than 40bp to the
-expected gene sequence. Function <a class="reference internal" href="index.html#NGS.filter_reads" title="NGS.filter_reads"><tt class="xref py py-func docutils literal"><span class="pre">NGS.filter_reads()</span></tt></a></p>
+expected gene sequence. Function <tt class="xref py py-func docutils literal"><span class="pre">NGS.filter_reads()</span></tt></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">BLAST</span><span class="p">;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">query_seqs</span> <span class="o">=</span> <span class="s">&quot;data/modified/wrk_ionfile.fasta&quot;</span><span class="p">;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">genome</span> <span class="o">=</span> <span class="s">&quot;target_genes.fasta&quot;</span><span class="p">;</span>

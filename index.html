@@ -371,7 +371,7 @@ BLASTn, and separates reads based on matches against indexes.</p>
 FASTQ file. Quality control includes dropping reads with low quality values,
 trimming of bad quality end and trimming index region.</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">fastq_file</span></tt> FASTQ format file that ideally has been separated by gene and index using the functions <a class="reference internal" href="#NGS.parse_blast_results" title="NGS.parse_blast_results"><tt class="xref py py-func docutils literal"><span class="pre">NGS.parse_blast_results()</span></tt></a> and <a class="reference internal" href="#NGS.separate_by_index" title="NGS.separate_by_index"><tt class="xref py py-func docutils literal"><span class="pre">NGS.separate_by_index()</span></tt></a></li>
+<li><tt class="docutils literal"><span class="pre">fastq_file</span></tt> FASTQ format file that ideally has been separated by gene and index using the functions <a class="reference internal" href="#NGS.parse_blast_results" title="NGS.parse_blast_results"><tt class="xref py py-func docutils literal"><span class="pre">NGS.parse_blast_results()</span></tt></a> and <tt class="xref py py-func docutils literal"><span class="pre">NGS.separate_by_index()</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">index_length</span></tt> number of base pairs of the indexes. They will be trimmed from the reads during processing.</li>
 <li><tt class="docutils literal"><span class="pre">min_quality</span></tt> minimum quality score to keep (20 by default)</li>
 <li><tt class="docutils literal"><span class="pre">percentage</span></tt>  minimum percent of base pairs that need to have <tt class="docutils literal"><span class="pre">min_quality</span></tt> (70% by default)</li>
@@ -393,14 +393,6 @@ trimming of bad quality end and trimming index region.</p>
 <dt id="NGS.count_reads">
 <tt class="descclassname">NGS.</tt><tt class="descname">count_reads</tt><big>(</big><em>fastqFile</em>, <em>file_format</em><big>)</big><a class="headerlink" href="#NGS.count_reads" title="Permalink to this definition">¶</a></dt>
 <dd><p>* <em>Internal function</em> *</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="NGS.filter_reads">
-<tt class="descclassname">NGS.</tt><tt class="descname">filter_reads</tt><big>(</big><em>ion_chunk</em>, <em>blast_chunk</em>, <em>folder</em><big>)</big><a class="headerlink" href="#NGS.filter_reads" title="Permalink to this definition">¶</a></dt>
-<dd><p>* <em>Internal function</em> *</p>
-<p>Accepting alignment lengths higher than 40 bp
-longer than our primer lengths</p>
 </dd></dl>
 
 <dl class="function">
@@ -445,7 +437,7 @@ Reads will be written into separate FASTQ files, one per matching target
 gene.
 These files will be written in the folder <tt class="docutils literal"><span class="pre">output</span></tt>.</p>
 <p>This step will accept matching reads that align more than 40bp to the
-expected gene sequence. Function <a class="reference internal" href="#NGS.filter_reads" title="NGS.filter_reads"><tt class="xref py py-func docutils literal"><span class="pre">NGS.filter_reads()</span></tt></a></p>
+expected gene sequence. Function <tt class="xref py py-func docutils literal"><span class="pre">NGS.filter_reads()</span></tt></p>
 </dd></dl>
 
 <dl class="function">
@@ -478,41 +470,6 @@ expected gene sequence. Function <a class="reference internal" href="#NGS.filter
 <tt class="descclassname">NGS.</tt><tt class="descname">quality_control</tt><big>(</big><em>fastq_file</em>, <em>index_length</em>, <em>min_quality=20</em>, <em>percentage=70</em>, <em>min_length=50</em><big>)</big><a class="headerlink" href="#NGS.quality_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>* <em>Internal function</em> *</p>
 <p>Use fastx-tools to do quality control on FASTQ file.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="NGS.separate_by_index">
-<tt class="descclassname">NGS.</tt><tt class="descname">separate_by_index</tt><big>(</big><em>fastq_file</em>, <em>index_list</em>, <em>folder=''</em>, <em>levenshtein_distance=1</em><big>)</big><a class="headerlink" href="#NGS.separate_by_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function divides FASTQ reads into bins according to a list of indexes
-(or barcodes).
-The <em>index_list</em> should be in FASTA format.
-It will compare the template indexes and those in the reads and accept
-indexes with a difference no bigger than the <em>levenshtein</em> distance (default
-1 base pair difference).</p>
-<p>See <a class="reference external" href="http://en.wikipedia.org/wiki/Levenshtein_distance">http://en.wikipedia.org/wiki/Levenshtein_distance</a></p>
-<ul class="simple">
-<li><tt class="docutils literal"><span class="pre">fastq_file</span></tt> FASTQ format containing reads as produced by IonTorrent</li>
-<li><tt class="docutils literal"><span class="pre">index_list</span></tt> FASTA format file containing indexes (or barcodes)</li>
-<li><tt class="docutils literal"><span class="pre">folder</span></tt> <em>Optional</em>: Directory containing FASTQ format files to process</li>
-<li><tt class="docutils literal"><span class="pre">levenshtein_distance</span></tt> <em>Optional</em>, default = 1: Maximum number of different nucleotides that will be accepted when comparing template and sequenced indexes (due to erros in base calling during sequencing).</li>
-</ul>
-<p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fastq_file</span> <span class="o">=</span> <span class="s">&quot;gene_rps5.fastq&quot;</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">index_list</span> <span class="o">=</span> <span class="s">&quot;indexes.fasta&quot;</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">folder</span>     <span class="o">=</span> <span class="s">&quot;output&quot;</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">separate_by_index</span><span class="p">(</span><span class="n">fastq_file</span><span class="p">,</span> <span class="n">index_list</span><span class="p">,</span> <span class="n">folder</span><span class="p">);</span>
-</pre></div>
-</div>
-<p>You can also automate parsing many FASTQ files at once:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">glob</span><span class="p">;</span> <span class="c"># this module allow us selecting many files by using wildcards</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">index_list</span> <span class="o">=</span> <span class="s">&quot;indexes.fasta&quot;</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">folder</span>     <span class="o">=</span> <span class="s">&quot;output&quot;</span><span class="p">;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&quot;output/gene*.fastq&quot;</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">NGS</span><span class="o">.</span><span class="n">separate_by_index</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">index_list</span><span class="p">,</span> <span class="n">folder</span><span class="p">);</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="function">
