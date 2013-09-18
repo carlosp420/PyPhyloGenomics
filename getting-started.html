@@ -190,14 +190,14 @@ in order to get exon sizes:</p>
 <li><p class="first">Ideally we want exons that are not too close to each other in the genome to avoid gene linkage. So we will keep only those exons that are apart by 810 kilobases:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">exons</span> <span class="o">=</span> <span class="n">BLAST</span><span class="o">.</span><span class="n">wellSeparatedExons</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span> <span class="c"># Keep exons separated by &gt; 810KB</span>
 <span class="go">Identifying exons separated by 810000 bases ...</span>
-<span class="go">There are 575 exons</span>
+<span class="go">There are 574 exons</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Finally we can use a function to save the obtained exons while making sure they are in frame. We need to use as additional arguments the genome file and output filename:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">storeExonsInFrame</span><span class="p">(</span><span class="n">exons</span><span class="p">,</span> <span class="s">&quot;pulled_seqs.fasta&quot;</span><span class="p">,</span> <span class="s">&quot;Bombyx_exons.fasta&quot;</span><span class="p">)</span>
 <span class="go">Storing exons ...</span>
-<span class="go">A total of 575 exons are kept</span>
+<span class="go">A total of 574 exons are kept</span>
 <span class="go">These exons have been stored in the file: Bombyx_exons.fasta</span>
 </pre></div>
 </div>
@@ -206,9 +206,9 @@ in order to get exon sizes:</p>
 </div>
 <div class="section" id="validation-of-exon-structure">
 <h2>1.2. Validation of exon structure<a class="headerlink" href="#validation-of-exon-structure" title="Permalink to this headline">¶</a></h2>
-<p>We have now 575 single copy exons extracted from the <em>Bombyx mori</em> genome. Let&#8217;s find
+<p>We have now 574 single copy exons extracted from the <em>Bombyx mori</em> genome. Let&#8217;s find
 out whether these exons are conserved in other Arthropoda species.</p>
-<p>For example we can compare these 575 exons with the genome of the monarch butterfly
+<p>For example we can compare these 574 exons with the genome of the monarch butterfly
 <em>Danaus plexippus</em>.</p>
 <div class="section" id="danaus-plexippus">
 <h3>1.2.1. <em>Danaus plexippus</em><a class="headerlink" href="#danaus-plexippus" title="Permalink to this headline">¶</a></h3>
