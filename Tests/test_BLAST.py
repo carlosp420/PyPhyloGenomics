@@ -7,8 +7,8 @@ from pyphylogenomics import OrthoDB
 class BLASTTest(unittest.TestCase):
 
     def setUp(self):
-        self.genes = OrthoDB.single_copy_genes("OrthoDB/OrthoDB6_Arthropoda_tabtext.csv", \
-                    "Bombyx mori")
+        self.genes = OrthoDB.single_copy_genes(
+                "OrthoDB/OrthoDB6_Arthropoda_tabtext.csv", "Bombyx mori")
         self.genome = "BLAST/silkcds.fa"
 
     def test_get_cds(self):
@@ -45,15 +45,17 @@ class BLASTTest(unittest.TestCase):
         for name in os.listdir("BLAST/"):
             if name[:10] == "silkcds.fa" and len(name) > 10:
                 os.remove("BLAST/" + name)
-        os.remove("BLAST/query_blastn_out.csv")
         self.assertEqual(result, "BGIBMGA000001-TA")
 
-
-        
-
-
-
+    def test_getLargestExon(self):
+        exons = BLAST.getLargestExon("BLAST/query_blastn_out.csv", 
+                E_value=0.001, ident=98, exon_len=300)
+        for i in exons:
+            result = exons[i][0]
+        self.assertEqual(result, "BGIBMGA000001-TA")
+        os.remove("BLAST/query_blastn_out.csv")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
+
