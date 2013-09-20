@@ -17,8 +17,7 @@ class BLASTTest(unittest.TestCase):
         result = len(f.read())
         f.close()
         """Extracting genes and saving them as fasta file"""
-        #self.assertEqual(result, 89026)
-        self.assertEqual(result, 89028)
+        self.assertEqual(result, 89026)
         os.remove("pulled_seqs.fasta")
 
     def test_makeblastdb_true(self):
