@@ -3,7 +3,7 @@ python:
     - "2.7"
 
 install:
-    - pip install --user-mirrors biopython
-    - pip install --user-mirrors pp
-    - pip install --user-mirrors requests
-    - pip install --user-mirrors beautifulsoup
+    - pip install --use-mirrors biopython
+    - pip install --use-mirrors pp
+    - pip install --use-mirrors requests
+    - pip install --use-mirrors beautifulsoup
