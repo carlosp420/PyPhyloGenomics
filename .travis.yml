@@ -7,5 +7,13 @@ install:
     - pip install --use-mirrors pp
     - pip install --use-mirrors requests
     - pip install --use-mirrors beautifulsoup
+    - pip install --use-mirrors pyphylogenomics
+
+
+before_install:
+    - echo "Fetching and installing BLAST"
+    - wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.2.26/ncbi-blast-2.2.26+-x64-linux.tar.gz
+    - tar -zxvf ncbi-blast-2.2.26+-x64-linux.tar.gz | tail
+    - export PATH="${TRAVIS_BUILD_DIR}/ncbi-blast-2.2.26+/bin:$PATH"
 
 script: python Tests/run_tests.py
