@@ -7,7 +7,7 @@ install:
     - pip install --use-mirrors pp
     - pip install --use-mirrors requests
     - pip install --use-mirrors beautifulsoup
-    - pip install --use-mirrors distribute
+    - pip install --use-mirrors distribute --upgrade
     - pip install --use-mirrors pyphylogenomics
 
 
