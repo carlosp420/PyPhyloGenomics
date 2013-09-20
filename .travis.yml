@@ -7,3 +7,5 @@ install:
     - pip install --use-mirrors pp
     - pip install --use-mirrors requests
     - pip install --use-mirrors beautifulsoup
+
+script: python Tests/run_tests.py
