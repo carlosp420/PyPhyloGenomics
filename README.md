@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/carlosp420/PyPhyloGenomics.png?branch=master)](https://travis-ci.org/carlosp420/PyPhyloGenomics)
+
 #PyPhyloGenomics
 A package to work on Phylogenomics.
 
