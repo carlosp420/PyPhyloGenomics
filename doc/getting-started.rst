@@ -128,10 +128,10 @@ The file ``pulled_seqs_blastn_out.csv`` contains a BLAST output table with the b
 
 7. Finally we can use a function to save the obtained exons while making sure they are in frame. We need to use as additional arguments the genome file and output filename:
 
-    >>> BLAST.storeExonsInFrame(exons, "pulled_seqs.fasta", "Bombyx_exons.fasta") 
+    >>> BLAST.storeExonsInFrame(exons, "pulled_seqs.fasta", "Bombyx_exons.fas") 
     Storing exons ...
     A total of 574 exons are kept
-    These exons have been stored in the file: Bombyx_exons.fasta
+    These exons have been stored in the file: Bombyx_exons.fas
 
 
 ----------------------------
@@ -155,7 +155,7 @@ For example we can compare these 574 exons with the genome of the monarch butter
 
 3. Do a blastn of our Long Exons against the *Danaus* genome:
 
-    >>> BLAST.blastn("Bombyx_exons.fasta", "Dp_genome_v2.fasta");
+    >>> BLAST.blastn("Bombyx_exons.fas", "Dp_genome_v2.fasta");
     ...
     BLASTn finished!
     The BLAST results were written in to the file Bombyx_exons_blastn_out.csv
@@ -184,7 +184,7 @@ The parameter ``sp_name`` is important as it will be used as part of the exons I
 
 4. BLASTn the *Bombyx mori* exons against the *Heliconius* genome:
 
-    >>> BLAST.blastn("Bombyx_exons.fasta", "Heliconius_genome.fa");
+    >>> BLAST.blastn("Bombyx_exons.fas", "Heliconius_genome.fa");
     ...
     BLASTn finished!
     The BLAST results were written in to the file  Bombyx_exons_blastn_out.csv
@@ -207,7 +207,7 @@ The parameter ``sp_name`` is important as it will be used as part of the exons I
 3. We downloaded the file ``Msex05162011.genome.fa``.
 4. Blasted the *Bombyx mori* exons against the *Manduca* genome:
 
-    >>> BLAST.blastn("Bombyx_exons.fasta", "Msex05162011.genome.fa")
+    >>> BLAST.blastn("Bombyx_exons.fas", "Msex05162011.genome.fa")
     ...
     BLASTn finished!
     The BLAST results were written in to the file  Bombyx_exons_blastn_out.csv
@@ -248,7 +248,7 @@ All aligned sequences will be written into a folder called ``alignments`` as FAS
 Example:
 
     >>> from pyphylogenomics import MUSCLE
-    >>> files = ['Bombyx_exons.fasta', 'Danaus_exons.fasta','Heliconius_exons.fasta','Manduca_exons.fasta']
+    >>> files = ['Bombyx_exons.fas', 'Danaus_exons.fasta','Heliconius_exons.fasta','Manduca_exons.fasta']
     >>> MUSCLE.batchAlignment(files)
     ...
     Pooling gene BGIBMGA000851:1-597
