@@ -12,14 +12,14 @@ Introduction
 
 **PyPhyloGenomics** is a Python toolkit for developing phylogenomic markers in novel species for  Next Generation sequence data.
 
-* Developers
+**Developers:**
 
 * Carlos Peña (email: carlos.pena@utu.fi)
 * Victor Solis
 * Pavel Matos
 * Chris Wheat
 
-* It includes tools for:
+** It includes tools for:**
 
 * discovery of homologous genes from species genomes.
 * primer design.

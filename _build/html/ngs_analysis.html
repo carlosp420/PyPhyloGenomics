@@ -1,0 +1,255 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. Analysis of raw data output from IonTorrent &mdash; PyPhyloGenomics 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="PyPhyloGenomics 0.1.0 documentation" href="index.html" />
+    <link rel="prev" title="1. Getting started with PyPhyloGenomics: Gene Search" href="getting-started.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="getting-started.html" title="1. Getting started with PyPhyloGenomics: Gene Search"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyPhyloGenomics 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="analysis-of-raw-data-output-from-iontorrent">
+<h1>2. Analysis of raw data output from IonTorrent<a class="headerlink" href="#analysis-of-raw-data-output-from-iontorrent" title="Permalink to this headline">¶</a></h1>
+<p>We assume that you have ordered primers and perfomed PCR reactions of the found genes on your voucher specimens.
+We also assume that you have followed any wet-lab protocol for library preparation for IonTorrent sequencing.
+In the paper describing PyPhyloGenomics (doi:XXXXXXXXXX), we have used a modified version of
+the protocol in Meyer &amp; Kircher (2010) <a class="footnote-reference" href="#id2" id="id1">[1]</a>.</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Meyer M., Kircher M. 2010. Illumina Sequencing Library Preparation for Highly Multiplexed Target Capture and Sequencing. Cold Spring Harbor Protocols. 2010:5448.</td></tr>
+</tbody>
+</table>
+<p>We assume that your sequencing round was successful and you have data to analyze. In this tutorial,
+we will show how we analyzed our IonTorrent sequence data using PyPhyloGenomics.</p>
+<div class="section" id="prepare-raw-ngs-data">
+<h2>2.1. Prepare raw NGS data<a class="headerlink" href="#prepare-raw-ngs-data" title="Permalink to this headline">¶</a></h2>
+<p>The function <tt class="docutils literal"><span class="pre">prepare_data()</span></tt> in the module <tt class="docutils literal"><span class="pre">NGS</span></tt> will make a copy of your NGS data (which should be in
+FASTQ format) into a new file and do the following:</p>
+<ul>
+<li><p class="first">Change the quality format from Phred to Solexa (which is required by the fastx-toolkit).</p>
+</li>
+<li><p class="first">Change the sequences id to incremental numbers.</p>
+</li>
+<li><p class="first">Create a FASTA file for temporal use.</p>
+<blockquote>
+<div><p>Files generated will be written to folder <tt class="docutils literal"><span class="pre">data/modified/</span></tt></p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">ionfile</span></tt> argument is FASTQ format file as produced by IonTorrent</p>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">index_length</span></tt> number of base pairs of your indexes. This is necessary </dt>
+<dd><p class="first last">to trim the indexes before blasting the FASTA file      against the reference gene sequences.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ionfile</span> <span class="o">=</span> <span class="s">&quot;ionrun.fastq&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">index_length</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">(</span><span class="n">ionfile</span><span class="p">,</span> <span class="n">index_length</span><span class="p">);</span>
+<span class="go">Your file has been saved using Solexa quality format as data/modified/wrk_ionfile.fastq</span>
+<span class="go">Your sequence IDs have been changed to numbers.</span>
+<span class="go">The FASTA format file data/modified/wrk_ionfile.fasta has been created.</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="find-reads-matching-target-genes">
+<h2>2.2. Find reads matching target genes<a class="headerlink" href="#find-reads-matching-target-genes" title="Permalink to this headline">¶</a></h2>
+<p>We can separate the sequenced reads that match the expected genes by using BLAST. For this,
+we need as input a FASTA format file to create a BLAST database.
+We will blast the file <tt class="docutils literal"><span class="pre">wrk_ionfile.fasta</span></tt> and then will parse the results to divide our
+IonTorrent data in several bins (one bin per gene).</p>
+<p>This step will accept matching reads that align more than 40bp to the
+expected gene sequence. Function <tt class="xref py py-func docutils literal"><span class="pre">NGS.filter_reads()</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">BLAST</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query_seqs</span> <span class="o">=</span> <span class="s">&quot;data/modified/wrk_ionfile.fasta&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">genome</span> <span class="o">=</span> <span class="s">&quot;target_genes.fasta&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BLAST</span><span class="o">.</span><span class="n">blastn</span><span class="p">(</span><span class="n">query_seqs</span><span class="p">,</span> <span class="n">genome</span><span class="p">);</span>
+<span class="go">BLASTn finished!</span>
+<span class="go">The BLAST results were written in to the file  data/modified/wrk_ionfile_blastn_out.csv</span>
+</pre></div>
+</div>
+<p>We will use the recently generated <tt class="docutils literal"><span class="pre">wrk_ionfile_blastn_out.csv</span></tt> file to filter our reads
+that match our expected gene sequences.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">blast_table</span> <span class="o">=</span> <span class="s">&quot;data/modified/wrk_ionfile_blastn_out.csv&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ion_file</span>    <span class="o">=</span> <span class="s">&quot;data/modified/wrk_ionfile.fastq&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">parse_blast_results</span><span class="p">(</span><span class="n">blast_table</span><span class="p">,</span> <span class="n">ion_file</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>It will take a while to parse the results. The output will be several FASTQ files (one
+per target gene) containing our matching IonTorrent reads. The files will have the
+prefix <strong>gene_</strong>.</p>
+</div>
+<div class="section" id="separate-gene-bins-according-to-indexes-or-barcodes">
+<h2>2.3. Separate gene bins according to indexes (or barcodes)<a class="headerlink" href="#separate-gene-bins-according-to-indexes-or-barcodes" title="Permalink to this headline">¶</a></h2>
+<p>Then we need to separate the files prefixed by <strong>gene_</strong> according to the indexes
+that were used in our wet-lab protocol.
+We used one index (or barcode) for each voucher specimen that went into the
+Ion Torrent.
+And we will use those reads to figure out which reads belong to each of our specimens.
+It is possible that due to some errors in base calling during the sequencing procedure
+mistakes might appear in the sequenced index region.
+Thus, we will need to perform string comparisons accepting differences of up to 1 nucleotide
+between our expected and sequenced indexes.
+Our indexes differ in two nucleotides (they should ideally differ more) so it is safe
+to accept up to 1 mistake during the sequencing of the index region.</p>
+<p>PyPhyloGenomics uses <a class="reference external" href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distances</a>
+for comparison of index sequences.</p>
+<p>We assume that our FASTQ bins to separate are in the folder <tt class="docutils literal"><span class="pre">output</span></tt> and begin with the
+prefix <tt class="docutils literal"><span class="pre">gene</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">glob</span><span class="p">;</span> <span class="c"># this module allow us selecting many files by using wildcards</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">index_list</span>           <span class="o">=</span> <span class="s">&quot;indexes.fasta&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">folder</span>               <span class="o">=</span> <span class="s">&quot;output&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">levenshtein_distance</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c"># maximum number of differences allowed between index comparisons</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&quot;output/gene*.fastq&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">NGS</span><span class="o">.</span><span class="n">separate_by_index</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">index_list</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">levenshtein_distance</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>All the reads will be saved to files with the prefix <strong>index_</strong> and a identifier
+depending on the sequence ID found in the <tt class="docutils literal"><span class="pre">indexes.fasta</span></tt> file.</p>
+<p>For example, one of our files was written as <strong>index_IonADA_2_gene_rps5.fastq</strong>.</p>
+<p>Depending on the amount of your data, this process can take several hours.</p>
+</div>
+<div class="section" id="assembly-of-reads-into-consensus-sequences">
+<h2>2.4. Assembly of reads into consensus sequences<a class="headerlink" href="#assembly-of-reads-into-consensus-sequences" title="Permalink to this headline">¶</a></h2>
+<p>Once we have one FASTQ file for each gene and for each specimen or barcode, we can
+start doing the assembly of the consensus sequence.</p>
+<p>It might be necessary for you to try out several parameters that will affect the final
+assembled sequence. For example you might want to be strict and remove read with
+low quality values (by default PyPhyloGenomics uses <tt class="docutils literal"><span class="pre">min_quality</span> <span class="pre">=</span> <span class="pre">20</span></tt>) or change
+the percentage of high quality values per read (default is <tt class="docutils literal"><span class="pre">percentage</span> <span class="pre">=</span> <span class="pre">80</span></tt>).</p>
+<p>After each iteration of parameters you can check the assembled sequences and
+evaluate the sequence length and coverage and decide whether to accept of reject
+the sequence.</p>
+<p>We will do the assembly using the commonly used assembler <tt class="docutils literal"><span class="pre">velvet</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyphylogenomics</span> <span class="kn">import</span> <span class="n">NGS</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fastq_file</span>   <span class="o">=</span> <span class="s">&quot;index_Ion_4_gene_rps5.fastq&quot;</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">index_length</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_quality</span>  <span class="o">=</span> <span class="mi">30</span><span class="p">;</span> <span class="c"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">percentage</span>   <span class="o">=</span> <span class="mi">80</span><span class="p">;</span> <span class="c"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_length</span>   <span class="o">=</span> <span class="mi">60</span><span class="p">;</span> <span class="c"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NGS</span><span class="o">.</span><span class="n">assembly</span><span class="p">(</span><span class="n">fastq_file</span><span class="p">,</span> <span class="n">index_length</span><span class="p">,</span> <span class="n">min_quality</span><span class="p">,</span> <span class="n">percentage</span><span class="p">,</span> <span class="n">min_length</span><span class="p">);</span>
+<span class="go">Final graph has 3 nodes and n50 of 102, max 121, total 250, using 0/60354 reads</span>
+<span class="go">The assembly produced 2 potential contigs</span>
+<span class="go">Assembled sequence has been saved as file index_Ion_4_gene_rps5_assembled.fasta</span>
+</pre></div>
+</div>
+<p>This procedure performs quality control over the reads and then trying out
+assembling the sequences using several Kmer values. Later it tries to guess the
+best Kmer value and use it to do a final assembly.</p>
+<p>The potential contigs are written to the file  <tt class="docutils literal"><span class="pre">index_Ion_4_gene_rps5_assembled.fasta</span></tt>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. Analysis of raw data output from IonTorrent</a><ul>
+<li><a class="reference internal" href="#prepare-raw-ngs-data">2.1. Prepare raw NGS data</a></li>
+<li><a class="reference internal" href="#find-reads-matching-target-genes">2.2. Find reads matching target genes</a></li>
+<li><a class="reference internal" href="#separate-gene-bins-according-to-indexes-or-barcodes">2.3. Separate gene bins according to indexes (or barcodes)</a></li>
+<li><a class="reference internal" href="#assembly-of-reads-into-consensus-sequences">2.4. Assembly of reads into consensus sequences</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="getting-started.html"
+                        title="previous chapter">1. Getting started with PyPhyloGenomics: Gene Search</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/ngs_analysis.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="getting-started.html" title="1. Getting started with PyPhyloGenomics: Gene Search"
+             >previous</a> |</li>
+        <li><a href="index.html">PyPhyloGenomics 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Carlos Peña, Victor Solis, Pavel Matos, Chris Wheat.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
