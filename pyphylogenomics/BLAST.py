@@ -148,7 +148,8 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
     for f in files:
         shutil.copyfileobj(open(f + "_out.csv",'rb'), destination)
         os.remove(f + "_out.csv")
-        os.remove(f)
+        if nseqs > 399:
+            os.remove(f)
 
     destination.close()
     print "The BLAST results were written into the file ", blast_out
