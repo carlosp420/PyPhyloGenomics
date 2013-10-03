@@ -96,22 +96,26 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
     job_server = pp.Server(ppservers=ppservers, secret="123");
     jobs = [];
 
-    divisor = 1;
-    while nseqs/divisor > 200:
-        divisor += 1;
-        if divisor > 400:
-            break;
-
     # split fasta file for parallel blast
-    record_iter = SeqIO.parse(open(query_seqs), "fasta");
-
     files = [];
-    for i, batch in enumerate(batch_iterator(record_iter, nseqs/divisor)):
-        filename = "group_%i.fasta" % (i+1);
-        files.append(filename);
-        handle = open(filename, "w");
-        count = SeqIO.write(batch, handle, "fasta");
-        handle.close();
+    divisor = 1;
+    if nseqs > 399:
+        while nseqs/divisor > 200:
+            divisor += 1;
+            if divisor > 400:
+                break;
+
+        record_iter = SeqIO.parse(open(query_seqs), "fasta");
+
+        for i, batch in enumerate(batch_iterator(record_iter, nseqs/divisor)):
+            filename = "group_%i.fasta" % (i+1);
+            files.append(filename);
+            handle = open(filename, "w");
+            count = SeqIO.write(batch, handle, "fasta");
+            handle.close();
+    else:
+        files.append(query_seqs)
+
 
     for f in files:
         command = ('blastn -query ' + f + ' -db ' + genome + ' -task blastn -db_soft_mask 11 ' if mask 
