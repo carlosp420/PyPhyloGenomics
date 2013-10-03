@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
 		name='PyPhyloGenomics', 
-		version='0.3.5',
+		version='0.3.6',
 		packages = ['pyphylogenomics'],
 		author="Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat",
 		author_email="mycalesis@gmail.com",
