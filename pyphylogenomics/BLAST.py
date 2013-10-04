@@ -49,16 +49,20 @@ def makeblastdb(genome, mask=False):
     if mask == True:
         command = 'dustmasker -in '+ genome + ' -infmt fasta '
         command += '-outfmt maskinfo_asn1_bin -out ' + genome + '_dust.asnb'
-        print "masking low_complexity regions..."
-        p = subprocess.check_output(command, shell=True) # identifying low-complexity regions.
-        print p
+        try:
+            with open(genome + "_dust.asnb"):
+                print "Using existing ``" + genome + "_dust.asnb`` database"
+        except IOError:
+            print "masking low_complexity regions..."
+            p = subprocess.check_output(command, shell=True) # identifying low-complexity regions.
+            print p
         
-        command = 'makeblastdb -in ' + genome + ' -input_type fasta -dbtype nucl '
-        command += '-mask_data ' + genome + '_dust.asnb '
-        command += '-out ' + genome + ' -title "Whole Genome without low-complexity regions"'
-        print "creating database..."
-        p = subprocess.check_output(command, shell=True) # Overwriting the genome file.
-        print p
+            command = 'makeblastdb -in ' + genome + ' -input_type fasta -dbtype nucl '
+            command += '-mask_data ' + genome + '_dust.asnb '
+            command += '-out ' + genome + ' -title "Whole Genome without low-complexity regions"'
+            print "creating database..."
+            p = subprocess.check_output(command, shell=True) # Overwriting the genome file.
+            print p
 
     else:
         command  = 'makeblastdb -in ' + genome + ' -input_type fasta -dbtype nucl '
