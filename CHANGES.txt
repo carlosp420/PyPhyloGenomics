@@ -1,3 +1,10 @@
+2013-10-04  Carlos Peña  <mycalesis@gmail.com>
+	v0.3.7
+
+	BLAST database making
+	Avoid redoing the BLAST database when user wants to use dustmaker as this is
+	slow.
+	If no dustmaker required, redo the database as it is quick to do.
 2013-10-03  Carlos Peña  <mycalesis@gmail.com>
 	BLAST: splitting input FASTA files
 	If the FASTA file doesn't need to be splitted, then don't remove the original
