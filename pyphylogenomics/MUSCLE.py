@@ -232,45 +232,47 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
 
             primers = [];
             for aln in alns:
-                print "\nProcessing file \"%s\"" % aln
-                files = {'sequencefile': open(aln, 'rb')}
-                r = requests.post(url, files=files, data=params);
+                # match only files ending in .FAS[TA]
+                if re.search("fas[ta]*$", aln, re.I):
+                    print "\nProcessing file \"%s\"" % aln
+                    files = {'sequencefile': open(aln, 'rb')}
+                    r = requests.post(url, files=files, data=params);
+    
+                    this_file = os.path.split(aln)[1];
+                    this_file = re.sub(".fas.*", "", this_file);
 
-                this_file = os.path.split(aln)[1];
-                this_file = re.sub(".fas.*", "", this_file);
+                    # Save result to file
+                    to_print  = "Writing detailed results as file \"";
+                    to_print += str(aln) + ".html\"";
+                    print to_print;
 
-                # Save result to file
-                to_print  = "Writing detailed results as file \"";
-                to_print += str(aln) + ".html\"";
-                print to_print;
+                    f = open(str(aln) + ".html", "w");
+                    f.write(r.text);
+                    f.close()
 
-                f = open(str(aln) + ".html", "w");
-                f.write(r.text);
-                f.close()
+                    # Show primer pair to user
+                    html_file = string.split(r.text, "\n");
+                    i = 1;
+                    for line in html_file:
+                        if "degen_corr" in line:
+                            seq = "";
+                            seq = line.split(" ")[0].strip();
 
-                # Show primer pair to user
-                html_file = string.split(r.text, "\n");
-                i = 1;
-                for line in html_file:
-                    if "degen_corr" in line:
-                        seq = "";
-                        seq = line.split(" ")[0].strip();
+                            description = line.split(" ")[2].strip();
 
-                        description = line.split(" ")[2].strip();
+                            this_id  = this_file + "_" + line.split(" ")[1].strip();
+                            this_id += "_" + str(i);
 
-                        this_id  = this_file + "_" + line.split(" ")[1].strip();
-                        this_id += "_" + str(i);
+                            seq = Seq(seq, generic_dna);
+                            seq_record = SeqRecord(seq);
+                            seq_record.id = this_id;
+                            seq_record.description = description;
+                            primers.append(seq_record);
+                            i = int(i);
+                            i = i + 1;
 
-                        seq = Seq(seq, generic_dna);
-                        seq_record = SeqRecord(seq);
-                        seq_record.id = this_id;
-                        seq_record.description = description;
-                        primers.append(seq_record);
-                        i = int(i);
-                        i = i + 1;
-
-                    if i == 3:
-                        break;
+                        if i == 3:
+                            break;
 
 
             # Write primers to alignment file

@@ -10,5 +10,5 @@ Next Generation sequence data
 
 #__docformat__ = "epytext en" #not just plaintext
 
-__version__ = "0.3.7"
+__version__ = "0.3.8"
 
