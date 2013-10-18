@@ -1,3 +1,11 @@
+2013-10-18  Carlos Peña  <mycalesis@gmail.com>
+    v0.3.8
+
+    Primer design, only process .fas[ta]* ending files
+    The funcion MUSCLE.designPrimers searches in a folder for files to design
+    primers for. It accepted any file. Now it accept only files ending with the
+    extension .fasta or .fas (case insensitive).
+
 2013-10-04  Carlos Peña  <mycalesis@gmail.com>
 	v0.3.7
 
