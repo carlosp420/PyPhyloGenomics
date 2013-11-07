@@ -1,3 +1,10 @@
+2013-11-07  Carlos Peña  <mycalesis@gmail.com>
+    v0.3.9
+
+    Adding assembly_velvet.sh files
+    These are used when doing assembly of contigs. If they are not
+    in current folder they get downloaded from github.
+
 2013-10-18  Carlos Peña  <mycalesis@gmail.com>
     v0.3.8
 
