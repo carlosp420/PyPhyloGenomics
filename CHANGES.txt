@@ -1,3 +1,13 @@
+2013-11-11  Carlos Peña  <mycalesis@gmail.com>
+    v0.3.10
+
+    Updated internal function `filter_reads`
+    of module NGS. It is more efficient and much quicker now.
+
+    Added UnitTest for filter_reads function
+    It is an internal function in the module NGS that extracts the FASTQ reads
+    according to a BLAST table output and stores them into gene bins.
+
 2013-11-07  Carlos Peña  <mycalesis@gmail.com>
     v0.3.9
 
