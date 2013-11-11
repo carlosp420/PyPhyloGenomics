@@ -543,7 +543,45 @@ def split_ionfile_by_results(ion_file, blast_chunk):
 
     # return ion_chunk filename
     return blast_chunk + ".fastq";
+
+
     
+def prune(folder, blast_data, seq_record, ion_id, min_aln_length):
+    '''
+    \* *Internal function* \*
+
+    Takes a list of BLAST results and gets the gene_ids to save the current
+    FASTQ seq_record into a file.
+    It alse removes from the list those results that have been saved to a file
+    and returns the list.
+    '''
+    from Bio import SeqIO;
+    list = []
+    for i in blast_data:
+        if str(i.split(",")[0]) == str(ion_id):
+            dic = {}
+            dic['line'] = i
+            i = i.split(",")
+            dic['gene_id'] = i[1]
+            dic['ion_id'] = ion_id
+            dic['al_length'] = i[3]
+            list.append(dic)
+
+    # avoid saving the same seq_record into the gene bin twice 
+    last_saved = ""
+    for i in list:
+        if last_saved != i['gene_id']:
+            if i['al_length'] > min_aln_length:
+                filename = os.path.join(folder, "gene_" + i['gene_id'] + ".fastq");
+                exon_out = open(filename, "a");
+                SeqIO.write(seq_record, exon_out, "fastq");
+                exon_out.close();
+                last_saved = i['gene_id']
+        blast_data.remove(i['line'])
+
+    return blast_data
+
+
 
 
 def filter_reads(ion_chunk, blast_chunk, folder):
@@ -556,30 +594,32 @@ def filter_reads(ion_chunk, blast_chunk, folder):
     '''
     min_aln_length = 40;
 
-    # get dict of ion_id : gene_id
-    # to blast_data
     blast_file = open(blast_chunk, "r");
-    blast_data = blast_file.readlines();
+    tmp = blast_file.readlines();
     blast_file.close();
+
+    blast_data = []
+    for i in tmp:
+        blast_data.append(i.strip())
+        
 
     # iterate over ion torrent reads
     for seq_record in SeqIO.parse(ion_chunk, "fastq"):
-        for line in blast_data:
-            #print len(blast_data);
-            orig_line = line;
-            line = line.strip();
-            line = line.split(",");
+        if len(blast_data) > 0:
+            #print "\n\nNew record--------------------"
+            #print "seq record id @%s" % seq_record.id
+            # avoid processing seq_records that are not in blast file
+            # first id in blast_data
+            #print blast_data
+            first_id_in_blast_data = blast_data[0].split(",")[0]
+            #print "fist id in blast_data %s" % first_id_in_blast_data
 
-            ion_id  = line[0];
-            gene_id = line[1];
-            aln_length = int(line[3]);
-            #print ion_id, gene_id, aln_length, min_aln_length
+            if int(seq_record.id) >= int(first_id_in_blast_data):
+                #if str(seq_record.id) == ion_id and aln_length > min_aln_length:
+                if str(seq_record.id) == first_id_in_blast_data:
+                    #print "prune"
+                    blast_data = prune(folder, blast_data, seq_record,
+                                first_id_in_blast_data, min_aln_length)
+                else:
+                    break
 
-            if str(seq_record.id) == ion_id and aln_length > min_aln_length:
-                blast_data.remove(orig_line);
-                
-                filename = os.path.join(folder, "gene_" + gene_id + ".fastq");
-                exon_out = open(filename, "a");
-                SeqIO.write(seq_record, exon_out, "fastq");
-                exon_out.close();
-                break;

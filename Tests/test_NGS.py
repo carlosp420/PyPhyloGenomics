@@ -27,7 +27,7 @@ class NGSTest(unittest.TestCase):
 
         for i in glob.glob(os.path.join("NGS", "gene*")):
             os.remove(i)
-        self.assertEqual(int(p.strip()), 20)
+        self.assertEqual(int(p.strip()), 23)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
