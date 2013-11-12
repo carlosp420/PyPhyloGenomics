@@ -1,3 +1,10 @@
+2013-11-12  Carlos Peña  <mycalesis@gmail.com>
+    v0.3.11
+    Parallel running of function filter_reads
+    of module NGS didn't work because the depending function ``prune`` was not
+    submitted to the parallel jobs.
+    Fixed by importing the function inside ``filter_reads``.
+
 2013-11-11  Carlos Peña  <mycalesis@gmail.com>
     v0.3.10
 
