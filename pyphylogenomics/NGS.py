@@ -586,6 +586,7 @@ def prune(folder, blast_data, seq_record, ion_id, min_aln_length):
 
 def filter_reads(ion_chunk, blast_chunk, folder):
     from Bio import SeqIO;
+    from pyphylogenomics.NGS import prune
     '''
     \* *Internal function* \*
 
