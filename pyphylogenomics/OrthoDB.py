@@ -29,20 +29,18 @@ def copies_per_gene(in_file):
     dictio = {}
 
     global genes, species
-    genes=set()
-    species=set()
 
     in_file = open(in_file, "rb");
     in_file.next() # skip header
     for line in in_file:
-        specie = line.strip().split('\t')[4]
-        gene = line.strip().split('\t')[3]
-        species.add(specie)
-        genes.add(gene)
-        if (specie,gene) not in dictio:
-            dictio[(specie,gene)] = 1
+        line = line.split('\t')
+        specie = line[4]
+        gene = line[3]
+        o_id = line[1]
+        if (specie,gene,o_id) not in dictio:
+            dictio[(specie,gene,o_id)] = 1
         else:
-            dictio[(specie,gene)] += 1
+            dictio[(specie,gene,o_id)] += 1
 
     in_file.close()
 
@@ -64,15 +62,24 @@ def single_copy_genes(in_file, species_name):
     
     dictio = copies_per_gene(in_file)
 
-    genes = list();
+    ids = dict()
     for key in dictio:
         if species_name in key and dictio[key] == 1:
-            gene = str(key[1]);
-            genes.append(gene);
-        
+            ortho_id = key[2]
+            gene = key[1]
+
+            if ortho_id not in ids:
+                ids[ ortho_id ] = [ gene ]
+            else:
+                ids[ ortho_id ].append(gene)
         else:
             pass
 
+    genes = list()
+    for k, v in ids.iteritems():
+        # we want only single copy genes
+        if len(v) < 2:
+            genes.append(v[0])
     print "Found " + str(len(genes)) + " genes.";
     return genes;
 
