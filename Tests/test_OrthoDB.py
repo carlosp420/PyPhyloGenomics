@@ -8,7 +8,7 @@ class OrthoDBTest(unittest.TestCase):
         """We are using only part of the original OrthoDB6 file"""
         result = OrthoDB.single_copy_genes("OrthoDB/OrthoDB6_Arthropoda_tabtext.csv", \
                     "Bombyx mori")
-        self.assertEqual(len(result), 446)
+        self.assertEqual(len(result), 326)
 
     def test_single_copy_in_species(self):
         result = \
