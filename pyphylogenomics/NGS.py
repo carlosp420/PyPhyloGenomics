@@ -500,18 +500,32 @@ def split_ionfile_by_results(ion_file, blast_chunk):
     of a BLAST results file in CSV format.
     '''
 
+    # is this file FASTA or FASTQ ?
+    with open(ion_file, "r") as f:
+        first_line = f.readline()
+    if first_line.startswith(">"):
+        fasta = True
+    else:
+        fastq = True
+
     # get first id from result chunk
     with open(blast_chunk) as myfile:
         head = myfile.readline();
         head = head.split(",");
-        first_id = "@" + head[0];
+        if fastq:
+            first_id = "@" + head[0];
+        else:
+            first_id = ">" + head[0];
     
     # get last id from result chunk
     number_of_lines_in_chunk = sum(1 for line in open(blast_chunk))
     fp = open(blast_chunk)
     for i, line in enumerate(fp):
         if i == number_of_lines_in_chunk - 1:
-            last_id = "@" + line.split(",")[0]
+            if fastq:
+                last_id = "@" + line.split(",")[0]
+            else:
+                last_id = ">" + line.split(",")[0]
     fp.close();
     
     # get line with first and last ids in ionfile
@@ -522,27 +536,40 @@ def split_ionfile_by_results(ion_file, blast_chunk):
         if line.strip() == first_id:
             first_line = i;
         if line.strip() == last_id:
-            # adding 3 lines due to this being FASTQ file
-            last_line = i + 3;
+            if fastq:
+                # adding 3 lines due to this being FASTQ file
+                last_line = i + 3;
+            else:
+                # adding 1 line due to this being FASTA file
+                last_line = i + 1;
     fp.close();
     
     # cut ionfile using first and last lines
     # _reaa.fastq
-    ion_chunk = open(blast_chunk[:-4] + ".fastq", "w");
+    if fastq:
+        ion_chunk = open(blast_chunk[:-4] + ".fastq", "w");
+    else:
+        ion_chunk = open(blast_chunk[:-4] + ".fasta", "w");
 
     fp = open(ion_file);
     for i, line in enumerate(fp):
         if i >= first_line:
             ion_chunk.write(line);
         if i > last_line - 1:
-            print "Splitting " + ion_file + " into chunk " + blast_chunk[:-4] + ".fastq"
+            if fastq:
+                print "Splitting " + ion_file + " into chunk " + blast_chunk[:-4] + ".fastq"
+            else:
+                print "Splitting " + ion_file + " into chunk " + blast_chunk[:-4] + ".fasta"
             break
     fp.close();
 
     ion_chunk.close();
 
     # return ion_chunk filename
-    return blast_chunk + ".fastq";
+    if fastq:
+        return blast_chunk + ".fastq";
+    else:
+        return blast_chunk + ".fasta";
 
 
     
