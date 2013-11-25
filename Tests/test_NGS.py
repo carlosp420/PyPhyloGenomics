@@ -5,6 +5,7 @@ from pyphylogenomics import NGS
 import subprocess
 import glob
 from Bio import SeqIO
+import shutil
 
 
 class NGSTest(unittest.TestCase):
@@ -30,13 +31,6 @@ class NGSTest(unittest.TestCase):
             os.remove(i)
         self.assertEqual(int(p.strip()), 23)
 
-
-    def test_split_ionfile_by_results(self):
-        ion_file = os.path.join("NGS", "ion_file.fastq")
-        blast_chunk = os.path.join("NGS", "_reaa.csv")
-        NGS.split_ionfile_by_results(ion_file, blast_chunk)
-
-
     def test_parse_blast_results(self):
         # It should work using fasta files
         blast_chunk = os.path.join("NGS", "blast_table.csv")
@@ -44,6 +38,19 @@ class NGSTest(unittest.TestCase):
 
         #GS.parse_blast_results(blast_chunk, ion_chunk)
 
+
+
+
+
+    def test_split_ionfile_by_results(self):
+        ion_file = "NGS/ion_file.fastq"
+        blast_chunk = "NGS/_reaa.csv"
+
+        NGS.split_ionfile_by_results(ion_file, blast_chunk)
+        cmd = "grep -c '^@' NGS/_reaa.fastq"
+        p = subprocess.check_output(cmd, shell=True)
+        self.assertEqual(p.strip(), '1001')
+        shutil.copyfile("NGS/_reaa.fastq.bak", "NGS/_reaa.fastq")
 
     def test_filter_reads(self):
         ion_chunk = "NGS/_reaa.fastq"
