@@ -586,7 +586,7 @@ def prune(folder, blast_data, seq_record, ion_id, min_aln_length):
 
 def filter_reads(ion_chunk, blast_chunk, folder):
     from Bio import SeqIO;
-    from pyphylogenomics.NGS import prune
+    from pyphylogenomics import NGS
     '''
     \* *Internal function* \*
 
@@ -619,7 +619,7 @@ def filter_reads(ion_chunk, blast_chunk, folder):
                 #if str(seq_record.id) == ion_id and aln_length > min_aln_length:
                 if str(seq_record.id) == first_id_in_blast_data:
                     #print "prune"
-                    blast_data = prune(folder, blast_data, seq_record,
+                    blast_data = NGS.prune(folder, blast_data, seq_record,
                                 first_id_in_blast_data, min_aln_length)
                 else:
                     break
