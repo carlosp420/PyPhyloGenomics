@@ -33,14 +33,13 @@ class NGSTest(unittest.TestCase):
 
     def test_parse_blast_results(self):
         # It should work using fasta files
-        blast_chunk = os.path.join("NGS", "blast_table.csv")
-        ion_chunk = os.path.join("NGS", "ion_file.fastq")
+        blast_table = os.path.join("NGS", "blast_table.csv")
+        ion_file = os.path.join("NGS", "ion_file.fastq")
 
-        #GS.parse_blast_results(blast_chunk, ion_chunk)
-
-
-
-
+        NGS.parse_blast_results(blast_table, ion_file)
+        result = glob.glob("output/gene*")
+        self.assertEqual(len(result), 21)
+        shutil.rmtree("output")
 
     def test_split_ionfile_by_results(self):
         ion_file = "NGS/ion_file.fastq"
