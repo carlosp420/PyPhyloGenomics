@@ -22,6 +22,10 @@ If it fails you can install the dependencies manually:
 
 ##Install dependencies:
 
+###Python development package:
+
+    sudo apt-get install python-dev
+
 ###requests:
 The package ``requests`` from [here](http://docs.python-requests.org/en/latest/user/install/). Or try:
 
