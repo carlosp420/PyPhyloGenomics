@@ -144,12 +144,22 @@ def parse_blast_results(blast_table, ion_file):
     sys.stdout.flush();
     sys.stdout.write("\b" * (progressbar_width + 1))
 
+
+    # is ion_chunk FASTQ or FASTA?
+    with open(ion_file, "r") as f:
+        first_line = f.readline()
+    if first_line.startswith(">"):
+        ion_format = "fasta"
+    else:
+        ion_format = "fastq"
+
+
     # now we need to iterate over each chunk of blast result and fastq file
     # and separate the reads into bins according to matching gene
     # filter_reads(ion_chunk, blast_chunk):
     # folder is the "output" folder that we are using to keep our result data
     jobs = []
-    for ion_chunk in glob.iglob(os.path.join("output", "_re*.fastq")):
+    for ion_chunk in glob.iglob(os.path.join("output", "_re*." + ion_format)):
         blast_chunk = ion_chunk[:-5] + "csv"
         jobs.append(job_server.submit(filter_reads, (ion_chunk, blast_chunk, folder),(),()))
 
@@ -500,6 +510,9 @@ def split_ionfile_by_results(ion_file, blast_chunk):
     of a BLAST results file in CSV format.
     '''
 
+    fasta = False
+    fastq = False
+
     # is this file FASTA or FASTQ ?
     with open(ion_file, "r") as f:
         first_line = f.readline()
@@ -512,10 +525,10 @@ def split_ionfile_by_results(ion_file, blast_chunk):
     with open(blast_chunk) as myfile:
         head = myfile.readline();
         head = head.split(",");
-        if fastq:
-            first_id = "@" + head[0];
-        else:
+        if fasta:
             first_id = ">" + head[0];
+        else:
+            first_id = "@" + head[0];
     
     # get last id from result chunk
     number_of_lines_in_chunk = sum(1 for line in open(blast_chunk))
@@ -579,7 +592,7 @@ def prune(folder, blast_data, seq_record, ion_id, min_aln_length):
 
     Takes a list of BLAST results and gets the gene_ids to save the current
     FASTQ seq_record into a file.
-    It alse removes from the list those results that have been saved to a file
+    It also removes from the list those results that have been saved to a file
     and returns the list.
     '''
     from Bio import SeqIO;
@@ -594,14 +607,27 @@ def prune(folder, blast_data, seq_record, ion_id, min_aln_length):
             dic['al_length'] = i[3]
             list.append(dic)
 
+    # is ion_chunk FASTQ or FASTA?
+    try:
+        ion_format = seq_record.letter_annotations
+    except:
+        ion_format = None
+        pass
+
+    if ion_format:
+        ion_format = "fastq"
+    else:
+        ion_format = "fasta"
+
     # avoid saving the same seq_record into the gene bin twice 
     last_saved = ""
     for i in list:
         if last_saved != i['gene_id']:
             if i['al_length'] > min_aln_length:
-                filename = os.path.join(folder, "gene_" + i['gene_id'] + ".fastq");
+                filename = os.path.join(folder, "gene_" + i['gene_id'] + "." +
+                                        str(ion_format));
                 exon_out = open(filename, "a");
-                SeqIO.write(seq_record, exon_out, "fastq");
+                SeqIO.write(seq_record, exon_out, ion_format);
                 exon_out.close();
                 last_saved = i['gene_id']
         blast_data.remove(i['line'])
@@ -631,8 +657,17 @@ def filter_reads(ion_chunk, blast_chunk, folder):
         blast_data.append(i.strip())
         
 
+    # is ion_chunk FASTQ or FASTA?
+    with open(ion_chunk, "r") as f:
+        first_line = f.readline()
+    if first_line.startswith(">"):
+        ion_format = "fasta"
+    else:
+        ion_format = "fastq"
+
+
     # iterate over ion torrent reads
-    for seq_record in SeqIO.parse(ion_chunk, "fastq"):
+    for seq_record in SeqIO.parse(ion_chunk, ion_format):
         if len(blast_data) > 0:
             #print "\n\nNew record--------------------"
             #print "seq record id @%s" % seq_record.id
