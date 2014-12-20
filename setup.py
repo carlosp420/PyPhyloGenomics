@@ -18,7 +18,7 @@ requirements = [
 
 test_requirements = [
     'requests',
-    'biopython'
+    'biopython',
     'coverage',
 ]
 
@@ -29,10 +29,10 @@ setup(
     long_description=readme + '\n\n' + history,
     author='Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat',
     author_email='mycalesis@gmail.com',
-		maintainer="Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat",
-		maintainer_email="mycalesis@gmail.com",
-		contact="Carlos Pena",
-		contact_email="mycalesis@gmail.com",
+    maintainer="Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat",
+    maintainer_email="mycalesis@gmail.com",
+    contact="Carlos Pena",
+    contact_email="mycalesis@gmail.com",
     url='https://github.com/carlosp420/PyPhyloGenomics',
     packages=[
         'pyphylogenomics',
@@ -45,13 +45,13 @@ setup(
     zip_safe=False,
     keywords='DNA, genomics, genomes, phylogenetics, genes',
     classifiers=[
-					"Programming Language :: Python",
-					("Topic :: Scientific/Engineering :: Bio-Informatics"),
-					("Intended Audience :: Science/Research"),
-					("License :: OSI Approved :: GNU General Public License v2 (GPLv2)"),
-					("Operating System :: OS Independent"),
-					("Environment :: Console"),
-					],
+        "Programming Language :: Python",
+        ("Topic :: Scientific/Engineering :: Bio-Informatics"),
+        ("Intended Audience :: Science/Research"),
+        ("License :: OSI Approved :: GNU General Public License v2 (GPLv2)"),
+        ("Operating System :: OS Independent"),
+        ("Environment :: Console"),
+    ],
     test_suite='tests',
     tests_require=test_requirements,
 )
