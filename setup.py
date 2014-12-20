@@ -13,9 +13,12 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 requirements = [
     'requests',
+    'biopython'
 ]
 
 test_requirements = [
+    'requests',
+    'biopython'
     'coverage',
 ]
 
@@ -50,5 +53,5 @@ setup(
 					("Environment :: Console"),
 					],
     test_suite='tests',
-    tests_require=test_requirements
+    tests_require=test_requirements,
 )
