@@ -1,11 +1,14 @@
-2013-11-14  Carlos Peña  <mycalesis@gmail.com>
-    v0.3.12
+.. :changelog:
 
-    Using Orthodb_ids for genes
-    In order to get only those genes with no paralogs. We want only single-copy
-    genes.
+History
+-------
 
-    Updated UnitTest for OrthoDB and BLAST
+0.3.12 (2013-11-14)
+-------------------
+* Using Orthodb_ids for genes
+* In order to get only those genes with no paralogs. We want only single-copy
+  genes.
+* Updated UnitTest for OrthoDB and BLAST
 
 2013-11-12  Carlos Peña  <mycalesis@gmail.com>
     v0.3.11
