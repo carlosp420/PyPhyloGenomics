@@ -1,5 +1,6 @@
 import unittest
 import os
+
 from pyphylogenomics import BLAST
 from pyphylogenomics import OrthoDB
 
@@ -7,8 +8,9 @@ from pyphylogenomics import OrthoDB
 class BLASTTest(unittest.TestCase):
 
     def setUp(self):
+        self.cwd = os.path.dirname(__file__)
         self.genes = OrthoDB.single_copy_genes(
-                "OrthoDB/OrthoDB6_Arthropoda_tabtext.csv", "Bombyx mori")
+                os.path.join(self.cwd, "OrthoDB", "OrthoDB6_Arthropoda_tabtext.csv"), "Bombyx mori")
         self.genome = "BLAST/silkcds.fa"
 
     def test_get_cds(self):
@@ -61,7 +63,8 @@ class BLASTTest(unittest.TestCase):
         self.assertEqual(result, 3)
 
     def test_wellSeparatedExons(self):
-        exons = BLAST.getLargestExon("BLAST/query_blastn_out.csv", 
+        exons = BLAST.getLargestExon(
+            os.path.join(self.cwd, "BLAST", os.path.join(self.cwd, "query_blastn_out.csv")),
                 E_value=0.001, ident=98, exon_len=300)
         exons = BLAST.eraseFalsePosi(exons)
         exons = BLAST.wellSeparatedExons(exons)
