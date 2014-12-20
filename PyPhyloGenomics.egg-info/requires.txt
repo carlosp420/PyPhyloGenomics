@@ -1,4 +1,0 @@
-biopython
-pp
-requests
-beautifulsoup4
