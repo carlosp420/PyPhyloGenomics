@@ -4,8 +4,11 @@
 *gz
 *csv
 *zip
-.idea
 
+.idea
+.coverage
+
+pyphylogenomics.egg-info
 *nal
 *nin
 *nhr
