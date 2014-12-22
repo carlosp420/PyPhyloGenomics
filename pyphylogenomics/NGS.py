@@ -25,7 +25,7 @@ import shutil;
 from Bio import SeqIO;
 import subprocess;
 import requests;
-import pp;
+import multiprocessing;
 
 
 def prepare_data(ionfile, index_length):
