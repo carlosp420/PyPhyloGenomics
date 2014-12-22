@@ -14,20 +14,20 @@ class NGSTest(unittest.TestCase):
         self.cwd = os.path.dirname(__file__)
 
     def test_filter_reads(self):
-        folder = "NGS"
+        folder = os.path.join(self.cwd, "NGS")
 
         for i in glob.glob(os.path.join("NGS", "gene*")):
             os.remove(i)
 
-        ion_chunk = os.path.join("NGS", "reaa.fastq")
-        blast_chunk = os.path.join("NGS", "reaa.csv")
+        ion_chunk = os.path.join(self.cwd, "NGS", "reaa.fastq")
+        blast_chunk = os.path.join(self.cwd, "NGS", "reaa.csv")
         NGS.filter_reads(ion_chunk, blast_chunk, folder)
 
-        cmd = "cat " + os.path.join("NGS", "gene*")
+        cmd = "cat " + os.path.join(self.cwd, "NGS", "gene*")
         cmd += " | grep -c '^@'"
         p = subprocess.check_output(cmd, shell=True)
 
-        for i in glob.glob(os.path.join("NGS", "gene*")):
+        for i in glob.glob(os.path.join(self.cwd, "NGS", "gene*")):
             os.remove(i)
         self.assertEqual(int(p.strip()), 23)
 
@@ -37,9 +37,9 @@ class NGSTest(unittest.TestCase):
         ion_file = os.path.join(self.cwd, "NGS", "ion_file.fastq")
 
         NGS.parse_blast_results(blast_table, ion_file)
-        result = glob.glob("output/gene*")
+        result = glob.glob(self.cwd + "/output/gene*")
         self.assertEqual(len(result), 21)
-        shutil.rmtree("output")
+        shutil.rmtree(self.cwd + "/output")
 
     def test_split_ionfile_by_results(self):
         ion_file = os.path.join(self.cwd, "NGS/ion_file.fastq")
@@ -49,19 +49,7 @@ class NGSTest(unittest.TestCase):
         cmd = "grep -c '^@' " + os.path.join(self.cwd, "NGS", "_reaa.fastq")
         p = subprocess.check_output(cmd, shell=True)
         self.assertEqual(p.strip(), '1001')
-        shutil.copyfile(os.path.join(self.cwd, "NGS", "_reaa.fastq.bak"),
-                        os.path.join(self.cwd, "NGS", "_reaa.fastq"))
-
-    def test_filter_reads(self):
-        ion_chunk = os.path.join(self.cwd, "NGS", "_reaa.fastq")
-        blast_chunk = os.path.join(self.cwd, "NGS", "_reaa.csv")
-        folder = os.path.join(self.cwd, "NGS")
-        NGS.filter_reads(ion_chunk, blast_chunk, folder)
-        # it should generate many gene_ files
-        result = glob.glob(os.path.join(self.cwd, "NGS", "gene*"))
-        self.assertEqual(len(result), 21)
-        for i in result:
-            os.remove(i)
+        os.remove(os.path.join(self.cwd, "NGS", "_reaa.fastq"))
 
     def test_prune(self):
         folder = os.path.join(self.cwd, "NGS")
@@ -79,12 +67,11 @@ class NGSTest(unittest.TestCase):
         min_aln_length = "40"
 
         result = NGS.prune(folder, blast_data, seq_record, ion_id,
-                            min_aln_length)
+                           min_aln_length)
         # It should drop on seq_record from the blast_data
         self.assertEqual(len(result), 998)
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-
