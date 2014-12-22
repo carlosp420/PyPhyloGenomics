@@ -135,6 +135,5 @@ the ``Makefile`` and type make ???
 .. |Build Status| image:: https://travis-ci.org/carlosp420/PyPhyloGenomics.png?branch=master
    :target: https://travis-ci.org/carlosp420/PyPhyloGenomics
 
-.. |Coveralls| image:: https://coveralls.io/repos/carlosp420/PyPhyloGenomics/badge.png
-  :target: https://coveralls.io/r/carlosp420/PyPhyloGenomics
-
+.. |Coveralls| image:: https://coveralls.io/repos/carlosp420/PyPhyloGenomics/badge.png?branch=master
+  :target: https://coveralls.io/r/carlosp420/PyPhyloGenomics?branch=master
