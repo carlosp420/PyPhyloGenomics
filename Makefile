@@ -35,16 +35,13 @@ lint:
 	flake8 pyphylogenomics tests
 
 test:
-	python setup.py test
+	nosetests --verbosity 2 --with-coverage tests --cover-package=pyphylogenomics
 
 test-all:
 	tox
 
 coverage:
-	python setup.py install
-	coverage run --source pyphylogenomics setup.py test
-	coverage report -m
-	coverage html
+	nosetests --verbosity 2 --cover-html --with-coverage tests --cover-package=pyphylogenomics
 
 docs:
 	rm -f docs/pyphylogenomics.rst

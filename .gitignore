@@ -8,6 +8,7 @@
 .idea
 .coverage
 htmlcov
+cover
 
 # BLAST files
 *asnb
