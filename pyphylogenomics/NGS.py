@@ -124,19 +124,16 @@ def parse_blast_results(blast_table, ion_file):
         dest = os.path.join("output", file); 
         os.rename(src, dest);
 
-    # ppservers list to auto-discovery
-    ppservers = ("*",)
-    job_server = pp.Server(ppservers=ppservers, secret="123")
     jobs = []
 
     # split fastq file into chunks
     for blast_chunk in glob.iglob(os.path.join("output", "_re*.csv")):
-        jobs.append(job_server.submit(split_ionfile_by_results, (ion_file, blast_chunk),(),()))
+        jobs.append(multiprocessing.Process(target=split_ionfile_by_results, args=(ion_file, blast_chunk)))
 
     for job in jobs:
-        job();
+        job.start()
+        job.join()
 
-    job_server.print_stats();
 
     # progressbar
     progressbar_width = 20;
@@ -151,15 +148,16 @@ def parse_blast_results(blast_table, ion_file):
     jobs = []
     for ion_chunk in glob.iglob(os.path.join("output", "_re*.fastq")):
         blast_chunk = ion_chunk[:-5] + "csv"
-        jobs.append(job_server.submit(filter_reads, (ion_chunk, blast_chunk, folder),(),()))
+        jobs.append(multiprocessing.Process(target=filter_reads, args=(ion_chunk, blast_chunk, folder)))
 
     for job in jobs:
         sys.stdout.write("#")
-        sys.stdout.flush();
-        job();
+        job.start()
+        job.join()
+        sys.stdout.flush()
 
     sys.stdout.write("\n")
-    job_server.print_stats();
+    
 
 
 
