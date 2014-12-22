@@ -120,7 +120,7 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
         command = ('blastn -query ' + f + ' -db ' + genome + ' -task blastn -db_soft_mask 11 ' if mask 
         else 'blastn -query ' + f + ' -db ' + genome + ' -task blastn ')
         command += '-evalue ' + str(e_value) + ' -out ' + f + "_out.csv" + ' -num_threads 1 -outfmt 10'
-        jobs.append(multiprocessing.Process(target=do_blast, args=(command,), modules=('subprocess',)))
+        jobs.append(multiprocessing.Process(target=do_blast, args=(command,)))
 
     print "\nBlasting sequences. This might take several minutes ...";
 
