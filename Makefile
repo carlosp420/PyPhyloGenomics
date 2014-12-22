@@ -45,7 +45,6 @@ coverage:
 	coverage run --source pyphylogenomics setup.py test
 	coverage report -m
 	coverage html
-	open htmlcov/index.html
 
 docs:
 	rm -f docs/pyphylogenomics.rst

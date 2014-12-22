@@ -7,6 +7,10 @@
 
 .idea
 .coverage
+htmlcov
+
+# BLAST files
+*asnb
 
 pyphylogenomics.egg-info
 *nal

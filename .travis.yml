@@ -17,4 +17,6 @@ before_install:
     - tar -zxvf ncbi-blast-2.2.26+-x64-linux.tar.gz | tail
     - export PATH="${TRAVIS_BUILD_DIR}/ncbi-blast-2.2.26+/bin:$PATH"
 
-script: python Tests/run_tests.py
+script: coverage run --source pyphylogenomics setup.py test
+
+after_success: coveralls
