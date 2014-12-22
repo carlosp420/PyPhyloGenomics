@@ -1,4 +1,7 @@
-|Build Status| #PyPhyloGenomics A package to work on Phylogenomics.
+|Build Status|
+
+PyPhyloGenomics A package to work on Phylogenomics
+==================================================
 
 Developers
 ----------
