@@ -37,9 +37,9 @@ class NGSTest(unittest.TestCase):
         ion_file = os.path.join(self.cwd, "NGS", "ion_file.fastq")
 
         NGS.parse_blast_results(blast_table, ion_file)
-        result = glob.glob(self.cwd + "/output/gene*")
+        result = glob.glob("output/gene*")
         self.assertEqual(len(result), 21)
-        shutil.rmtree(self.cwd + "/output")
+        shutil.rmtree("output")
 
     def test_split_ionfile_by_results(self):
         ion_file = os.path.join(self.cwd, "NGS/ion_file.fastq")
