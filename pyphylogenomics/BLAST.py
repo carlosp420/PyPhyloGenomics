@@ -133,12 +133,10 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
     # execute parallel jobs
     for job in jobs:
         job.start()
+        job.join()
         # update the bar
         sys.stdout.write("#")
         sys.stdout.flush()
-        
-    for job in jobs:
-        job.join() # waiting for all jobs to finish
 
     sys.stdout.write("\n");
     
@@ -158,7 +156,6 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
 
 
 def do_blast(command):
-    import subprocess
     subprocess.check_output(command, shell=True);
 
 
