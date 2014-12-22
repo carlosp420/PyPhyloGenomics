@@ -14,7 +14,7 @@ import subprocess;
 from Bio import SeqIO;
 from Bio.SeqRecord import SeqRecord;
 from operator import itemgetter;
-import pp;
+import multiprocessing;
 import shutil;
 import os;
 import time;
@@ -95,11 +95,6 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
     for seq_record in SeqIO.parse(query_seqs, "fasta"):
         nseqs +=1;
 
-    # ppservers list to auto-discovery
-    ppservers = ("*",);
-    job_server = pp.Server(ppservers=ppservers, secret="123");
-    jobs = [];
-
     # split fasta file for parallel blast
     files = [];
     divisor = 1;
@@ -120,12 +115,12 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
     else:
         files.append(query_seqs)
 
-
+    jobs = []
     for f in files:
         command = ('blastn -query ' + f + ' -db ' + genome + ' -task blastn -db_soft_mask 11 ' if mask 
         else 'blastn -query ' + f + ' -db ' + genome + ' -task blastn ')
         command += '-evalue ' + str(e_value) + ' -out ' + f + "_out.csv" + ' -num_threads 1 -outfmt 10'
-        jobs.append(job_server.submit(do_blast, (command,), modules=('subprocess',)))
+        jobs.append(multiprocessing.Process(target=do_blast, args=(command,), modules=('subprocess',)))
 
     print "\nBlasting sequences. This might take several minutes ...";
 
@@ -137,14 +132,16 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
 
     # execute parallel jobs
     for job in jobs:
-        job();
+        job.start()
         # update the bar
         sys.stdout.write("#")
         sys.stdout.flush()
+        
+    for job in jobs:
+        job.join() # waiting for all jobs to finish
 
     sys.stdout.write("\n");
     
-    job_server.print_stats();
     print "\nBLASTn finished!"
 
     # merging blast tables generated above
@@ -161,6 +158,7 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
 
 
 def do_blast(command):
+    import subprocess
     subprocess.check_output(command, shell=True);
 
 
