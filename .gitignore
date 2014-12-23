@@ -28,4 +28,4 @@ list
 build/*
 dist/*
 
-doc/_build
+docs/_build

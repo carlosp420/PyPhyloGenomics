@@ -1,7 +1,14 @@
 .. :changelog:
 
+=======
 History
--------
+=======
+
+0.3.13 (2014-12-23)
+-------------------
+* Move documentation to readthedocs.
+* Do some PEP8 fixes.
+* Replace library `pp` for `multiprocessing`.
 
 0.3.12 (2013-11-14)
 -------------------

@@ -3,12 +3,11 @@
 # as part of this package.
 """
 
-Python toolkit for developing phylogenomic markers in novel species for 
+Python toolkit for developing phylogenomic markers in novel species for
 Next Generation sequence data
 
 """
 
-#__docformat__ = "epytext en" #not just plaintext
+# __docformat__ = "epytext en"  # not just plaintext
 
-__version__ = "0.3.12"
-
+__version__ = "0.3.13"

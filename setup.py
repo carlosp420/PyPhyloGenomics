@@ -24,7 +24,7 @@ test_requirements = [
 
 setup(
     name='pyphylogenomics',
-    version='0.3.12',
+    version='0.3.13',
     description='Tools to work in phylogenomics, from NSG group http://nymphalidae.utu.fi',
     long_description=readme + '\n\n' + history,
     author='Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat',
