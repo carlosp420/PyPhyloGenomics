@@ -29,39 +29,12 @@ To install PyPhyloGenomics use ``setup.py``:
 
 If it fails you can install the dependencies manually:
 
-Install dependencies:
----------------------
-
-requests:
-~~~~~~~~~
-
-The package ``requests`` from
-`here <http://docs.python-requests.org/en/latest/user/install/>`__. Or
-try:
+Install dependencies
+--------------------
 
 ::
 
-    sudo apt-get install python-requests
-
-BioPython:
-~~~~~~~~~~
-
-Download and install from `here <http://biopython.org/wiki/Download>`__.
-Or:
-
-::
-
-    sudo apt-get install python-biopython
-
-BeatutifulSoup
-~~~~~~~~~~~~~~
-
-Download and install from
-`here <http://www.crummy.com/software/BeautifulSoup/>`__. Or:
-
-::
-
-    sudo apt-get install python-bs4
+    pip install -r requirements/dev.txt
 
 MUSCLE
 ~~~~~~
