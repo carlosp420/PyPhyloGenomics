@@ -43,6 +43,25 @@ class BLASTTest(unittest.TestCase):
                 result = "true"
         self.assertEqual(result, "true")
 
+    def test_do_blast(self):
+        f = os.path.join(self.cwd, 'BLAST', 'query.fas')
+        genome = os.path.join(self.cwd, 'BLAST', 'silkcds.fa')
+        BLAST.makeblastdb(genome)
+
+        command = 'blastn -query ' + f + ' -db ' + genome + ' -task blastn ' \
+                  + '-evalue 0.0001 ' + ' -out ' + f + '_out.csv' + ' -num_threads 1 ' \
+                  + ' -outfmt 10'
+        BLAST.do_blast(command)
+        output = open(os.path.join(self.cwd, 'BLAST', 'query.fas_out.csv'), "r")
+        for line in output:
+            self.assertTrue('BGIBMGA000001' in line)
+            break
+
+        for name in os.listdir(self.cwd + "/BLAST/"):
+            if name[:10] == "silkcds.fa" and len(name) > 10:
+                os.remove(self.cwd + "/BLAST/" + name)
+        os.remove(os.path.join(self.cwd, 'BLAST', 'query.fas_out.csv'))
+
     def test_blastn(self):
         BLAST.blastn(self.cwd + "/BLAST/query.fas", self.cwd + "/BLAST/silkcds.fa")
         file = open(self.cwd + "/BLAST/query_blastn_out.csv", "r")
