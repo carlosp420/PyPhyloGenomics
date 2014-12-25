@@ -51,6 +51,16 @@ class BLASTTest(unittest.TestCase):
                 os.remove(self.cwd + "/BLAST/" + name)
         self.assertEqual(result, "BGIBMGA000001-TA")
 
+    def test_blastn_big_query_file(self):
+        BLAST.blastn(self.cwd + "/BLAST/query_big.fas", self.cwd + "/BLAST/silkcds.fa")
+        file = open(self.cwd + "/BLAST/query_big_blastn_out.csv", "r").readlines()
+        result = file[0].split(",")[1]
+        for name in os.listdir(self.cwd + "/BLAST/"):
+            if name[:10] == "silkcds.fa" and len(name) > 10:
+                os.remove(self.cwd + "/BLAST/" + name)
+        self.assertEqual(result, "BGIBMGA000001-TA")
+        os.remove(os.path.join(self.cwd, "BLAST", "query_big_blastn_out.csv"))
+
     def test_getLargestExon(self):
         exons = BLAST.getLargestExon(
             self.cwd + "/BLAST/query_blastn_out.csv",
