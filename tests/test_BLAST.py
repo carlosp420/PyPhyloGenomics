@@ -1,3 +1,4 @@
+import subprocess
 import unittest
 import os
 
@@ -44,22 +45,38 @@ class BLASTTest(unittest.TestCase):
 
     def test_blastn(self):
         BLAST.blastn(self.cwd + "/BLAST/query.fas", self.cwd + "/BLAST/silkcds.fa")
-        file = open(self.cwd + "/BLAST/query_blastn_out.csv", "r").readlines()
-        result = file[0].split(",")[1]
+        file = open(self.cwd + "/BLAST/query_blastn_out.csv", "r")
+        for line in file:
+            result = line.split(",")[1]
+            break
         for name in os.listdir(self.cwd + "/BLAST/"):
             if name[:10] == "silkcds.fa" and len(name) > 10:
                 os.remove(self.cwd + "/BLAST/" + name)
         self.assertEqual(result, "BGIBMGA000001-TA")
 
     def test_blastn_big_query_file(self):
-        BLAST.blastn(self.cwd + "/BLAST/query_big.fas", self.cwd + "/BLAST/silkcds.fa")
-        file = open(self.cwd + "/BLAST/query_big_blastn_out.csv", "r").readlines()
-        result = file[0].split(",")[1]
-        for name in os.listdir(self.cwd + "/BLAST/"):
-            if name[:10] == "silkcds.fa" and len(name) > 10:
-                os.remove(self.cwd + "/BLAST/" + name)
-        self.assertEqual(result, "BGIBMGA000001-TA")
-        os.remove(os.path.join(self.cwd, "BLAST", "query_big_blastn_out.csv"))
+        query_file = os.path.join(self.cwd, "BLAST", "query_big.fas.gz")
+
+        cmd = "gunzip " + query_file
+        p = subprocess.check_call(cmd, shell=True)
+
+        if p == 0:
+            gunzipped_query_file = os.path.join(self.cwd, "BLAST", "query_big.fas")
+            BLAST.blastn(gunzipped_query_file, self.cwd + "/BLAST/silkcds.fa")
+            file = open(self.cwd + "/BLAST/query_big_blastn_out.csv", "r")
+            for line in file:
+                result = line.split(",")[1]
+                break
+            for name in os.listdir(self.cwd + "/BLAST/"):
+                if name[:10] == "silkcds.fa" and len(name) > 10:
+                    os.remove(self.cwd + "/BLAST/" + name)
+            self.assertEqual(result, "BGIBMGA000001-TA")
+
+            os.remove(os.path.join(self.cwd, "BLAST", "query_big_blastn_out.csv"))
+            cmd = "gzip " + gunzipped_query_file
+            p = subprocess.check_call(cmd, shell=True)
+        else:
+            raise Exception('test failed.')
 
     def test_getLargestExon(self):
         exons = BLAST.getLargestExon(
