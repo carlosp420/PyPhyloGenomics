@@ -99,7 +99,15 @@ class BLASTTest(unittest.TestCase):
 
     def test_getLargestExon(self):
         exons = BLAST.getLargestExon(
-            self.cwd + "/BLAST/query_blastn_out.csv",
+            self.cwd + "/BLAST/query_blastn_output1.csv",
+            E_value=0.001, ident=98, exon_len=300,
+        )
+        result = len(exons)
+        self.assertEqual(result, 38)
+
+    def test_getLargestExon_output_has_headers(self):
+        exons = BLAST.getLargestExon(
+            self.cwd + "/BLAST/query_blastn_output2.csv",
             E_value=0.001, ident=98, exon_len=300,
         )
         result = len(exons)
