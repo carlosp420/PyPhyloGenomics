@@ -234,6 +234,9 @@ def filterByMinDist(genes_loci, MinDist):
 
     The parameter genes_loci is a list of tuples, where each tuple
     consists of 3 items: a gene_id, start_position and end_position.
+
+    :returns: List of exons that are located too close to each other. Less than
+             the threshold set by MinDist.
     """
     genes_loci.sort(key=itemgetter(1, 2))
     genes = []

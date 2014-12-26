@@ -129,13 +129,20 @@ class BLASTTest(unittest.TestCase):
             ident=98,
             exon_len=300,
         )
-        exons = BLAST.eraseFalsePosi(exons)
         exons = BLAST.wellSeparatedExons(exons)
-        for i in exons:
-            print i
         result = len(exons)
         self.assertEqual(result, 3)
-        os.remove(os.path.join(self.cwd, "BLAST", "query_blastn_out.csv"))
+
+    def test_wellSeparatedExons_drop_one_exon(self):
+        exons = BLAST.getLargestExon(
+            os.path.join(self.cwd, "BLAST", "query_blastn_output4.csv"),
+            E_value=0.001,
+            ident=98,
+            exon_len=300,
+        )
+        exons = BLAST.wellSeparatedExons(exons)
+        result = len(exons)
+        self.assertEqual(result, 2)
 
     def test_filterByMinDist(self):
         # The gene2 is too close to other genes
