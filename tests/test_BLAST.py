@@ -222,6 +222,19 @@ class BLASTTest(unittest.TestCase):
             break
         os.remove(out_file)
 
+    def test_blastParser(self):
+        query = self.cwd + "/BLAST/queries_db1.fas"
+        blast_table = self.cwd + "/BLAST/queries_db1_blastn_out.csv"
+        sbj = self.cwd + "/BLAST/silkcds.fa"
+        out = self.cwd + "/BLAST/output.txt"
+        BLAST.blastn(query, sbj)
+        BLAST.blastParser(blast_table, sbj, out)
+        seqs = [i.id for i in SeqIO.parse(out, "fasta")]
+        self.assertEqual(2, len(seqs))
+
+        os.remove(out)
+        os.remove(blast_table)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
