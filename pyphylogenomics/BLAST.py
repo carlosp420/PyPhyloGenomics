@@ -12,7 +12,9 @@ import re
 import sys
 import subprocess
 from Bio import SeqIO
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.Alphabet import HasStopCodon
 from operator import itemgetter
 import multiprocessing
 import shutil
@@ -272,6 +274,22 @@ def wellSeparatedExons(exons_dict, MinDist=810000):
     return exons_dict
 
 
+def trim_seq(seq):
+    """
+    Trim nucleotides from the beginning until the sequence does not have any
+    stop codons when translated to protein. By doing this, we make sure that
+    the sequence is *in frame*. Recursive function.
+
+    :param seq: Seq object
+    :return:
+    """
+    translated = seq.translate().alphabet
+
+    if type(translated) == HasStopCodon:
+        seq = trim_seq(seq[1:])
+    return seq
+
+
 def storeExonsInFrame(exons_dict, queries_db, out_file):
     """
     Strips the exon's ends, so that it is in frame, and then stores the results in a file.
@@ -288,6 +306,7 @@ def storeExonsInFrame(exons_dict, queries_db, out_file):
             start = exon[6] - 1
             end = exon[7] - exon[7] % 3
             seq = queries_dict[exon[0]].seq[start:end]
+            seq = trim_seq(seq)
             ID = queries_dict[exon[0]].id + ':' + str(start + 1) + '-' + str(end)
             exons_in_frame.append(
                 SeqRecord(seq, id=ID))
@@ -296,6 +315,7 @@ def storeExonsInFrame(exons_dict, queries_db, out_file):
             start = exon[6] + (3 - exon[6] % 3) % 3
             end = exon[7] - exon[7] % 3
             seq = queries_dict[exon[0]].seq[start:end]
+            seq = trim_seq(seq)
             ID = queries_dict[exon[0]].id + ':' + str(start + 1) + '-' + str(end)
             exons_in_frame.append(
                 SeqRecord(seq, id=ID))

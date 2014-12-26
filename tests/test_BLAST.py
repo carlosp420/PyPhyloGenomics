@@ -2,6 +2,8 @@ import subprocess
 import unittest
 import os
 
+from Bio import SeqIO
+
 from pyphylogenomics import BLAST
 from pyphylogenomics import OrthoDB
 
@@ -141,8 +143,9 @@ class BLASTTest(unittest.TestCase):
             exon_len=300,
         )
         exons = BLAST.wellSeparatedExons(exons)
+        print(exons)
         result = len(exons)
-        self.assertEqual(result, 2)
+        self.assertEqual(result, 3)
 
     def test_filterByMinDist(self):
         # The gene2 is too close to other genes
@@ -170,7 +173,41 @@ class BLASTTest(unittest.TestCase):
         ]
         result = BLAST.filterByMinDist(genes_loci, 810000)
         self.assertEqual([], result)
-    # todo BLAST.storeExonsInFrame
+
+    def test_storeExonsInFrame(self):
+        # These seqs are in frame
+        exons_dict = {('BGIBMGA000001-TA', 'nscaf1070'): ['BGIBMGA000001-TA', 'nscaf1070', '100.00', 450, 0, 0, 1, 450, 1, 450, '0.0', ' 812', 1], ('BGIBMGA000002-TA', 'nscaf1071'): ['BGIBMGA000002-TA', 'nscaf1071', '100.00', 350, 0, 0, 1, 350, 1, 350, '0.0', ' 632', 1]}
+        queries_db = self.cwd + "/BLAST/queries_db1.fas"
+        out_file = self.cwd + "/BLAST/outfile_storeExonsInFrame.csv"
+
+        BLAST.storeExonsInFrame(exons_dict,
+                                queries_db,
+                                out_file,
+                                )
+        for i in SeqIO.parse(out_file, "fasta"):
+            translated_seq = i.seq.translate()[0:10]
+            self.assertEqual('MRRVVWFALV', translated_seq)
+
+        # This one is not
+        queries_db = self.cwd + "/BLAST/queries_db2.fas"
+        BLAST.storeExonsInFrame(exons_dict,
+                                queries_db,
+                                out_file,
+                                )
+        for i in SeqIO.parse(out_file, "fasta"):
+            translated_seq = i.seq.translate()[0:10]
+            self.assertEqual('MRRVVWFALV', translated_seq)
+
+        # This one is not either
+        queries_db = self.cwd + "/BLAST/queries_db3.fas"
+        BLAST.storeExonsInFrame(exons_dict,
+                                queries_db,
+                                out_file,
+                                )
+        for i in SeqIO.parse(out_file, "fasta"):
+            translated_seq = i.seq.translate()[0:10]
+            self.assertEqual('MRRVVWFALV', translated_seq)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
