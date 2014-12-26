@@ -207,7 +207,20 @@ class BLASTTest(unittest.TestCase):
         for i in SeqIO.parse(out_file, "fasta"):
             translated_seq = i.seq.translate()[0:10]
             self.assertEqual('MRRVVWFALV', translated_seq)
-        # os.remove(out_file)
+
+        # Length of seq is not multiple of 3
+        exons_dict = {('BGIBMGA000001-TA', 'nscaf1070'): ['BGIBMGA000001-TA', 'nscaf1070', '100.00', 449, 0, 0, 2, 451, 2, 451, '0.0', ' 812', 1], ('BGIBMGA000002-TA', 'nscaf1071'): ['BGIBMGA000002-TA', 'nscaf1071', '100.00', 350, 0, 0, 1, 350, 1, 350, '0.0', ' 632', 1]}
+        queries_db = self.cwd + "/BLAST/queries_db4.fas"
+
+        BLAST.storeExonsInFrame(exons_dict,
+                                queries_db,
+                                out_file,
+                                )
+        for i in SeqIO.parse(out_file, "fasta"):
+            translated_seq = i.seq.translate()[0:10]
+            self.assertEqual('RVVWFALVRL', translated_seq)
+            break
+        os.remove(out_file)
 
 
 if __name__ == "__main__":
