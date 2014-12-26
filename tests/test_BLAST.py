@@ -103,7 +103,7 @@ class BLASTTest(unittest.TestCase):
             E_value=0.001, ident=98, exon_len=300,
         )
         result = len(exons)
-        self.assertEqual(result, 38)
+        self.assertEqual(result, 36)
 
     def test_getLargestExon_output_has_headers(self):
         exons = BLAST.getLargestExon(
