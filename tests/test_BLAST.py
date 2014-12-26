@@ -145,7 +145,7 @@ class BLASTTest(unittest.TestCase):
         exons = BLAST.wellSeparatedExons(exons)
         print(exons)
         result = len(exons)
-        self.assertEqual(result, 3)
+        self.assertEqual(result, 2)
 
     def test_filterByMinDist(self):
         # The gene2 is too close to other genes
@@ -207,6 +207,7 @@ class BLASTTest(unittest.TestCase):
         for i in SeqIO.parse(out_file, "fasta"):
             translated_seq = i.seq.translate()[0:10]
             self.assertEqual('MRRVVWFALV', translated_seq)
+        # os.remove(out_file)
 
 
 if __name__ == "__main__":

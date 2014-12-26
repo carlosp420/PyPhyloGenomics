@@ -274,7 +274,7 @@ def wellSeparatedExons(exons_dict, MinDist=810000):
     return exons_dict
 
 
-def trim_seq(seq):
+def place_seq_in_frame(seq):
     """
     Trim nucleotides from the beginning until the sequence does not have any
     stop codons when translated to protein. By doing this, we make sure that
@@ -286,7 +286,22 @@ def trim_seq(seq):
     translated = seq.translate().alphabet
 
     if type(translated) == HasStopCodon:
-        seq = trim_seq(seq[1:])
+        seq = place_seq_in_frame(seq[1:])
+
+    return seq
+
+
+def trim_seq(seq):
+    """
+    Trims one or two nucleotides from the end of sequences so the length can be
+    multiple of 3.
+
+    :param seq: Seq object
+    :return:
+    """
+    if len(seq) % 3 != 0:
+        num_bp_to_remove = len(seq) % 3
+        seq = seq[:-num_bp_to_remove]
     return seq
 
 
@@ -306,6 +321,7 @@ def storeExonsInFrame(exons_dict, queries_db, out_file):
             start = exon[6] - 1
             end = exon[7] - exon[7] % 3
             seq = queries_dict[exon[0]].seq[start:end]
+            seq = place_seq_in_frame(seq)
             seq = trim_seq(seq)
             ID = queries_dict[exon[0]].id + ':' + str(start + 1) + '-' + str(end)
             exons_in_frame.append(
@@ -315,6 +331,7 @@ def storeExonsInFrame(exons_dict, queries_db, out_file):
             start = exon[6] + (3 - exon[6] % 3) % 3
             end = exon[7] - exon[7] % 3
             seq = queries_dict[exon[0]].seq[start:end]
+            seq = place_seq_in_frame(seq)
             seq = trim_seq(seq)
             ID = queries_dict[exon[0]].id + ':' + str(start + 1) + '-' + str(end)
             exons_in_frame.append(
