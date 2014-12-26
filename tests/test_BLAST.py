@@ -124,17 +124,45 @@ class BLASTTest(unittest.TestCase):
 
     def test_wellSeparatedExons(self):
         exons = BLAST.getLargestExon(
-            os.path.join(self.cwd, "BLAST", "query_blastn_out.csv"),
+            os.path.join(self.cwd, "BLAST", "query_blastn_output3.csv"),
             E_value=0.001,
             ident=98,
             exon_len=300,
         )
         exons = BLAST.eraseFalsePosi(exons)
         exons = BLAST.wellSeparatedExons(exons)
+        for i in exons:
+            print i
         result = len(exons)
         self.assertEqual(result, 3)
         os.remove(os.path.join(self.cwd, "BLAST", "query_blastn_out.csv"))
 
+    def test_filterByMinDist(self):
+        # The gene2 is too close to other genes
+        genes_loci = [
+            ('gene1', 1, 350),
+            ('gene2', 360, 670),
+            ('gene3', 821001, 821351),
+        ]
+        result = BLAST.filterByMinDist(genes_loci, 810000)
+        self.assertEqual(['gene2'], result)
+
+        # The function is not affected by order of genes
+        genes_loci = [
+            ('gene3', 821001, 821351),
+            ('gene1', 1, 350),
+            ('gene2', 360, 670),
+        ]
+        result = BLAST.filterByMinDist(genes_loci, 810000)
+        self.assertEqual(['gene2'], result)
+
+        # These genes are well separated already
+        genes_loci = [
+            ('gene1', 1, 350),
+            ('gene3', 821001, 821351),
+        ]
+        result = BLAST.filterByMinDist(genes_loci, 810000)
+        self.assertEqual([], result)
     # todo BLAST.storeExonsInFrame
 
 if __name__ == "__main__":
