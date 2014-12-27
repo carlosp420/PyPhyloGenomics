@@ -231,9 +231,19 @@ class BLASTTest(unittest.TestCase):
         BLAST.blastParser(blast_table, sbj, out)
         seqs = [i.id for i in SeqIO.parse(out, "fasta")]
         self.assertEqual(2, len(seqs))
-
-        os.remove(out)
         os.remove(blast_table)
+        os.remove(out)
+
+        # with header row
+        query = self.cwd + "/BLAST/queries_db1.fas"
+        blast_table = self.cwd + "/BLAST/queries_db2_blastn_out.csv"
+        sbj = self.cwd + "/BLAST/silkcds.fa"
+        out = self.cwd + "/BLAST/output.txt"
+        BLAST.blastn(query, sbj)
+        BLAST.blastParser(blast_table, sbj, out)
+        seqs = [i.id for i in SeqIO.parse(out, "fasta")]
+        self.assertEqual(2, len(seqs))
+        os.remove(out)
 
 
 if __name__ == "__main__":
