@@ -33,10 +33,10 @@ pyphylogenomics Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`OrthoDB` Module
----------------------
+:mod:`_orthodb` Module
+----------------------
 
-.. automodule:: pyphylogenomics.OrthoDB
+.. automodule:: pyphylogenomics._orthodb
     :members:
     :undoc-members:
     :show-inheritance:

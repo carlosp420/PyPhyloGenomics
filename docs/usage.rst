@@ -54,29 +54,26 @@ To see the full documentation you can use:
 
 This also works:
 
+    >>> from pyphylogenomics import OrthoDB
     >>> help(OrthoDB) # shows help for a specific module and its functions
 
-We will find all single-copy genes for the silk moth *Bombyx mori* using the table from OrthoDB_ as input file:
+We will find all single-copy genes for the silk moth *Bombyx mori* using the
+table from OrthoDB_ as input file:
 
     >>> in_file = 'OrthoDB6_Arthropoda_tabtext'
-    >>> genes = OrthoDB.single_copy_genes(in_file, 'Bombyx mori')
-    ...
-    Found gene: BGIBMGA011628
-    Found gene: BGIBMGA002142
-    Found gene: BGIBMGA014116
-    Found 12167 genes.
+    >>> my_orthodb = OrthoDB(in_file, 'Bombyx mori')
+    >>> genes = my_orthodb.single_copy_genes
 
-The variable ``genes`` is a list of IDs for single-copy genes extracted from the OrthoDB table:
+The variable ``genes`` is a list of IDs for single-copy genes extracted from
+the OrthoDB table:
 
-    >>> genes;
-    ...
-    'BGIBMGA012533', 'BGIBMGA014144', 'BGIBMGA011628', 'BGIBMGA002142', 'BGIBMGA014116',
-    'BGIBMGA000220', 'BGIBMGA007580', 'BGIBMGA013398', 'BGIBMGA011517', 'BGIBMGA011820',
-    'BGIBMGA014318', 'BGIBMGA013470', 'BGIBMGA011304', 'BGIBMGA005643', 'BGIBMGA002698']
-    >>> len(genes);
-    12167
+    >>> genes[0:3]
+    ['BGIBMGA001335', 'BGIBMGA000535', 'BGIBMGA003429']
+    >>> len(genes)
+    325
 
-We will use these gene IDs to obtain the gene sequences from the *Bombyx mori* genome. The genome can be downloaded from silkdb.org_.
+We will use these gene IDs to obtain the gene sequences from the *Bombyx mori*
+genome. The genome can be downloaded from silkdb.org_.
 We will download the **Consensus gene set by merging all the gene sets using GLEAN: Fasta** file ``silkworm_glean_cds.fa.tar.gz``.
 
 Untar the gzipped file and you will get the FASTA formatted file ``silkcds.fa`` containing gene IDs and sequences for *Bombyx mori*.
@@ -331,6 +328,7 @@ the protocol in Meyer & Kircher (2010) [1]_.
 We assume that your sequencing round was successful and you have data to analyze. In this tutorial,
 we will show how we analyzed our IonTorrent sequence data using PyPhyloGenomics.
 
+--------------------
 Prepare raw NGS data
 --------------------
 The function ``prepare_data()`` in the module ``NGS`` will make a copy of your NGS data (which should be in
@@ -357,6 +355,7 @@ FASTQ format) into a new file and do the following:
     Your sequence IDs have been changed to numbers.
     The FASTA format file data/modified/wrk_ionfile.fasta has been created.
 
+--------------------------------
 Find reads matching target genes
 --------------------------------
 We can separate the sequenced reads that match the expected genes by using BLAST. For this,
@@ -386,7 +385,7 @@ It will take a while to parse the results. The output will be several FASTQ file
 per target gene) containing our matching IonTorrent reads. The files will have the
 prefix **gene_**.
 
-
+-----------------------------------------------------
 Separate gene bins according to indexes (or barcodes)
 -----------------------------------------------------
 Then we need to separate the files prefixed by **gene_** according to the indexes
@@ -422,7 +421,7 @@ For example, one of our files was written as **index_IonADA_2_gene_rps5.fastq**.
 
 Depending on the amount of your data, this process can take several hours.
 
-
+------------------------------------------
 Assembly of reads into consensus sequences
 ------------------------------------------
 Once we have one FASTQ file for each gene and for each specimen or barcode, we can

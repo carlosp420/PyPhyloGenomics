@@ -12,10 +12,10 @@ class BLASTTest(unittest.TestCase):
 
     def setUp(self):
         self.cwd = os.path.dirname(__file__)
-        self.genes = OrthoDB.single_copy_genes(
-            os.path.join(self.cwd, "OrthoDB", "OrthoDB6_Arthropoda_tabtext.csv"),
-            "Bombyx mori"
-        )
+        my_orthodb = OrthoDB(os.path.join(self.cwd, "OrthoDB", "OrthoDB6_Arthropoda_tabtext.csv"),
+                             "Bombyx mori",
+                             )
+        self.genes = my_orthodb.single_copy_genes
         self.genome = os.path.join(self.cwd, "BLAST", "silkcds.fa")
 
     def test_get_cds(self):
