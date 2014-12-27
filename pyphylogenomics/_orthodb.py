@@ -14,6 +14,12 @@ described below.
 import argparse
 
 
+class OrthoDB:
+    def __init__(self):
+        pass
+
+    def single_copy_genes(self):
+
 def copies_per_gene(in_file):
     '''
     \* *Internal function* \*
