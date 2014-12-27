@@ -24,7 +24,7 @@ class BLASTTest(unittest.TestCase):
         f = open("pulled_seqs.fasta", "r")
         result = len(f.read())
         f.close()
-        self.assertEqual(result, 59409)
+        self.assertEqual(result, 54397)
         os.remove("pulled_seqs.fasta")
 
     def test_makeblastdb_true(self):
