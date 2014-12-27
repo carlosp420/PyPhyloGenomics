@@ -7,6 +7,7 @@ History
 0.3.1x (201x-xx-xx)
 -------------------
 * Do some PEP8 fixes.
+* Refactor orthodb module.
 
 0.3.13 (2014-12-23)
 -------------------
