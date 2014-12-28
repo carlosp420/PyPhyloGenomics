@@ -13,6 +13,17 @@ class NGSTest(unittest.TestCase):
     def setUp(self):
         self.cwd = os.path.dirname(__file__)
 
+    def test_prepare_data(self):
+        ionfile = os.path.join(self.cwd, "NGS", "ion_file.fastq")
+        NGS.prepare_data(ionfile, 8)
+
+        expected_file1 = os.path.join("data", "modified", "wrk_ionfile.fasta")
+        expected_file2 = os.path.join("data", "modified", "wrk_ionfile.fastq")
+        self.assertTrue(os.path.isfile(expected_file1))
+        self.assertTrue(os.path.isfile(expected_file2))
+        os.remove(expected_file1)
+        os.remove(expected_file2)
+
     def test_filter_reads(self):
         folder = os.path.join(self.cwd, "NGS")
 

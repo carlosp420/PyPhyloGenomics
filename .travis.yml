@@ -9,6 +9,10 @@ before_install:
     - wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.2.26/ncbi-blast-2.2.26+-x64-linux.tar.gz
     - tar -zxvf ncbi-blast-2.2.26+-x64-linux.tar.gz | tail
     - export PATH="${TRAVIS_BUILD_DIR}/ncbi-blast-2.2.26+/bin:$PATH"
+    - echo "Fetching and installing fastx-toolkit"
+    - wget http://hannonlab.cshl.edu/fastx_toolkit/fastx_toolkit_0.0.13_binaries_Linux_2.6_amd64.tar.bz2
+    - tar -jxf fastx_toolkit_0.0.13_binaries_Linux_2.6_amd64.tar.bz2
+    - export PATH="${TRAVIS_BUILD_DIR}/bin:$PATH"
 
 script:  nosetests --verbosity 2 --cover-html --with-coverage tests --cover-package=pyphylogenomics
 
