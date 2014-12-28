@@ -25,10 +25,6 @@ class OrthoDBTest(unittest.TestCase):
         result = self.my_orthodb._single_copy_in_species("Znev_18776")
         self.assertEqual(result[0], "Zootermopsis nevadensis")
 
-    def test_single_copy_in_species_returns_empty(self):
-        result = self.my_orthodb._single_copy_in_species("Znev_18776aaaaaaa")
-        self.assertEqual(result, [])
-
     def test_copies_per_gene_table(self):
         self.my_orthodb._single_copy_in_species("Znev_18776")
         self.my_orthodb._copies_per_gene_table(self.outfile)
@@ -36,7 +32,8 @@ class OrthoDBTest(unittest.TestCase):
             self.assertTrue(handle.read().startswith('Genes\tZootermopsis nevadensis'))
 
     def tearDown(self):
-        os.remove(self.outfile)
+        if os.path.isfile(self.outfile):
+            os.remove(self.outfile)
 
 
 if __name__ == "__main__":
