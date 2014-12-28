@@ -349,6 +349,7 @@ def blastParser(blast_table, sbj_db, out_file, sp_name='homologous', E_value=0.0
 
     Example:
 
+    >>> from pyphylogenomics import BLAST
     >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fasta", sp_name="Danaus");
     Reading files ...
     Parsing BLAST table ...
