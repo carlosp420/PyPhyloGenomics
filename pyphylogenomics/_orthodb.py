@@ -44,11 +44,11 @@ class OrthoDB:
                 pass
 
         genes = list()
-        for k, v in ids.iteritems():
+        for k, v in ids.items(): # for k, v in ids.iteritems()
             # we want only single copy genes
             if len(v) < 2:
                 genes.append(v[0])
-        return genes
+        return(genes)
 
     def _copies_per_gene(self):
         '''
@@ -75,7 +75,7 @@ class OrthoDB:
                 dictio[(specie, gene, o_id)] += 1
 
         handle.close()
-        return dictio
+        return(dictio)
 
     def _single_copy_in_species(self, gene_name):
         '''
@@ -84,21 +84,21 @@ class OrthoDB:
         The gene name should be in the same format as stated in the input file
         *in_file*.
         '''
-        print "\nLooking for species with single-copy gene: " + str(gene_name)
+        print("\nLooking for species with single-copy gene: " + str(gene_name))
 
         dictio = self._copies_per_gene()
 
         species = list()
         for key in dictio:
             if gene_name in key and dictio[key] == 1:
-                print "Found species: " + str(key[0])
+                print("Found species: " + str(key[0]))
                 species.append(str(key[0]))
             else:
                 pass
 
-        print "Found " + str(len(species)) + " species."
+        print("Found " + str(len(species)) + " species.")
         self.species = species
-        return species
+        return(species)
 
     def _copies_per_gene_table(self, out_file):
         '''
@@ -109,7 +109,7 @@ class OrthoDB:
         Note: the first row in the otput table is the number of single-copy
         genes in a given species.
         '''
-        print "Parsing input file..."
+        print("Parsing input file...")
 
         dictio = self._copies_per_gene()
 
@@ -146,4 +146,4 @@ class OrthoDB:
 
         out_file_handle.close()
 
-        print "\nOUTPUT FILE WAS GENERATED!"
+        print("\nOUTPUT FILE WAS GENERATED!")
