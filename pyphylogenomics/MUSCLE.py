@@ -48,15 +48,15 @@ def batchAlignment(files):
         exec("handle%d = %s" % (idx + 1, "SeqIO.index(f, 'fasta')"))
 
     count = 0  # To count the number of homologous groups.
-    print "If you are using Windows..."
+    print("If you are using Windows...")
     time.sleep(1)
-    print "many command line shells might pop up now."
+    print("many command line shells might pop up now.")
     time.sleep(3)
 
     for ID1 in handle1:  # Parsing the master file.
         seqs_list = []
         seqs_list.append(SeqRecord(handle1[ID1].seq, id=ID1))
-        print "Pooling gene %s" % ID1
+        print("Pooling gene %s" % ID1)
 
         idx = len(files)
         while idx > 1:  # Parsing the other files.
@@ -85,7 +85,7 @@ def batchAlignment(files):
 
             time.sleep(3)  # Wait 3 seconds to not fill off the screen with CMDs.
 
-    print "%d alignments have been saved in the folder \"%s\"" % (count, folder)
+    print("%d alignments have been saved in the folder \"%s\"" % (count, folder))
 
 
 def bluntSplicer(folder_path, window=20):
@@ -110,7 +110,7 @@ def bluntSplicer(folder_path, window=20):
     # MUSCLE.batchAlignment.py created a alignments folder_path.
     for path in glob.glob(os.path.join(folder_path, "*.fasta")):
         alignment = AlignIO.read(path, "fasta")
-        print "\nSplicing %s file" % path.split("\\")[-1]
+        print("\nSplicing %s file" % path.split("\\")[-1])
         for i in range(0, alignment.get_alignment_length()):  # For checking gaps on the left flank.
             gap = False
             for record in alignment[:, i:i + window]:
@@ -230,7 +230,7 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
             for aln in alns:
                 # match only files ending in .FAS[TA]
                 if re.search("fas[ta]*$", aln, re.I):
-                    print "\nProcessing file \"%s\"" % aln
+                    print("\nProcessing file \"%s\"" % aln)
                     files = {'sequencefile': open(aln, 'rb')}
                     r = requests.post(url, files=files, data=params)
 
@@ -240,7 +240,7 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
                     # Save result to file
                     to_print = "Writing detailed results as file \""
                     to_print += str(aln) + ".html\""
-                    print to_print
+                    print(to_print)
 
                     f = open(str(aln) + ".html", "w")
                     f.write(r.text)
@@ -271,10 +271,10 @@ def designPrimers(folder, tm="55", min_amplength="100", max_amplength="500", gen
 
             # Write primers to alignment file
             SeqIO.write(primers, "primers.fasta", "fasta")
-            print "\nDone.\nAll primers have been saved in the file \"primers.fasta\""
+            print("\nDone.\nAll primers have been saved in the file \"primers.fasta\"")
 
         else:
-            print "\nError! the folder \"%s\" is empty.\n" % folder
+            print("\nError! the folder \"%s\" is empty.\n" % folder)
 
     else:
-        print "\nError! the folder \"%s\" does not exists.\n" % folder
+        print("\nError! the folder \"%s\" does not exists.\n" % folder)
