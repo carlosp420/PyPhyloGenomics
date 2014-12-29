@@ -60,15 +60,15 @@ def prepare_data(ionfile, index_length):
     # write file to work on
     wrkfile = os.path.join(folder, "wrk_ionfile.fastq")
     SeqIO.convert(ionfile, "fastq", wrkfile, "fastq-solexa")
-    print "Your file has been saved using Solexa quality format as " + wrkfile
+    print("Your file has been saved using Solexa quality format as " + wrkfile)
 
     # change sequences id to incremental numbers
     command = "fastx_renamer -n COUNT -i " + wrkfile + " -o tmp.fastq"
     p = subprocess.check_call(command, shell=True)
     if p != 0:
-        print "\nError, couldn't execute " + command
+        print("\nError, couldn't execute " + command)
         sys.exit()
-    print "Your sequence IDs have been changed to numbers."
+    print("Your sequence IDs have been changed to numbers.")
 
     # replace working file with temporal file
     os.rename("tmp.fastq", wrkfile)
@@ -86,8 +86,8 @@ def prepare_data(ionfile, index_length):
     if os.path.isfile("tmp.fasta"):
         os.remove("tmp.fasta")
 
-    print "The FASTA format file " + os.path.join(folder, "wrk_ionfile.fasta") \
-          + " has been created."
+    print("The FASTA format file " + os.path.join(folder, "wrk_ionfile.fasta") \
+          + " has been created.")
 
 
 def parse_blast_results(blast_table, ion_file):
@@ -114,7 +114,7 @@ def parse_blast_results(blast_table, ion_file):
     # split results file into chunks
     p = split_results_file(blast_table)
     if p != 0:
-        print "\nError, couldn't execute parse_blast_results"
+        print("\nError, couldn't execute parse_blast_results")
         sys.exit()
 
     # move splitted blast results to output/
@@ -194,11 +194,11 @@ def separate_by_index(fastq_file, index_list, folder="", levenshtein_distance=1)
     >>> for file in glob.glob("output/gene*.fastq"):
     ...     NGS.separate_by_index(file, index_list, folder)
     '''
-    print "Processing file " + fastq_file
+    print("Processing file " + fastq_file)
     if folder != "":
         folder = re.sub("/$", "", folder)
         folder = os.path.abspath(folder)
-        print "Output files will be written into " + folder
+        print("Output files will be written into " + folder)
 
     for seq_record in SeqIO.parse(index_list, "fasta"):
         for fastq_record in SeqIO.parse(fastq_file, "fastq"):
@@ -267,12 +267,12 @@ def assembly(fastq_file, index_length, min_quality=20, percentage=70, min_length
 
         if assembly == 0:
             if count_reads("test/contigs.fa", "fasta") > 0:
-                print "The assembly produced " + str(count_reads("test/contigs.fa", "fasta")) + " potential contigs"
+                print("The assembly produced " + str(count_reads("test/contigs.fa", "fasta")) + " potential contigs")
                 filename = re.sub(".fastq$", "", fastq_file) + "_assembled.fasta"
                 os.rename("test/contigs.fa", filename)
-                print "Assembled sequence has been saved as file " + filename
+                print("Assembled sequence has been saved as file " + filename)
     else:
-        print "Couldn't process file " + fastq_file
+        print("Couldn't process file " + fastq_file)
 
 
 def count_reads(fastqFile, file_format):
@@ -282,7 +282,7 @@ def count_reads(fastqFile, file_format):
     count = 0
     for seq_record in SeqIO.parse(fastqFile, file_format):
         count = count + 1
-    return count
+    return(count)
 
 
 # ----------------------------------------------------------------------------
@@ -316,7 +316,7 @@ def get_velvet_params(output):
 
             mydict[kmer] = lista
             kmer = kmer - 2
-    return mydict
+    return(mydict)
 
 
 # ----------------------------------------------------------------------------
@@ -338,7 +338,7 @@ def guess_best_kmer(filter3_params):
 
     for i in filter3_params:
         if filter3_params[i]['n50'] == str(filter3_n50):
-            return ["filter3", i]
+            return(["filter3", i])
 
 
 # ----------------------------------------------------------------------------
@@ -372,7 +372,7 @@ def get_velvet_params(output):
 
             mydict[kmer] = lista
             kmer = kmer - 2
-    return mydict
+    return(mydict)
 
 
 def quality_control(fastq_file, index_length, min_quality=20, percentage=70, min_length=50):
@@ -385,20 +385,20 @@ def quality_control(fastq_file, index_length, min_quality=20, percentage=70, min
     command = "fastq_quality_filter -q " + str(min_quality) + " -p " + str(percentage)
     command += " -i " + fastq_file + " -o filter1.fastq"
     p = subprocess.check_call(command, shell=True)
-    print "Processing file " + fastq_file
+    print("Processing file " + fastq_file)
 
     index_length = index_length + 1
     command = "fastx_trimmer -f " + str(index_length) + " -i filter1.fastq -o filter2.fastq"
     p = subprocess.check_call(command, shell=True)
-    print "Removing indexes"
+    print("Removing indexes")
 
     command = "fastq_quality_trimmer -t " + str(min_quality) + " -l "
     command += str(min_length) + " -i filter2.fastq -o filter3.fastq"
     p = subprocess.check_call(command, shell=True)
-    print "Trimming low quality end"
+    print("Trimming low quality end")
 
     if p == 0:
-        return "ok"
+        return("ok")
 
 
 def find_index_in_seq(barcode, seq, levenshtein_distance):
@@ -425,7 +425,7 @@ def find_index_in_seq(barcode, seq, levenshtein_distance):
 
             # if str(seq.id) not in fastq_id_list:
             #     fastq_id_list.append(str(seq.id))
-            return "TRUE"
+            return("TRUE")
         else:
             # reversecomplement
             barcode_seq = str(barcode.seq.reverse_complement())
@@ -440,9 +440,9 @@ def find_index_in_seq(barcode, seq, levenshtein_distance):
 
                 # if str(seq.id) not in fastq_id_list:
                 #     fastq_id_list.append(str(seq.id))
-                return "TRUE"
+                return("TRUE")
 
-        return "FALSE"
+        return("FALSE")
 
 
 def levenshtein(a, b):
@@ -467,7 +467,7 @@ def levenshtein(a, b):
                 change = change + 1
             current[j] = min(add, delete, change)
 
-    return current[n]
+    return(current[n])
 
 
 def split_results_file(blast_table):
@@ -479,7 +479,7 @@ def split_results_file(blast_table):
     # build an slicer for Python
     command = "split -l 10000 " + blast_table + " _re"
     p = subprocess.check_call(command, shell=True)
-    return p
+    return(p)
 
 
 def split_ionfile_by_results(ion_file, blast_chunk):
@@ -525,14 +525,14 @@ def split_ionfile_by_results(ion_file, blast_chunk):
         if i >= first_line:
             ion_chunk.write(line)
         if i > last_line - 1:
-            print "Splitting " + ion_file + " into chunk " + blast_chunk[:-4] + ".fastq"
+            print("Splitting " + ion_file + " into chunk " + blast_chunk[:-4] + ".fastq")
             break
     fp.close()
 
     ion_chunk.close()
 
     # return ion_chunk filename
-    return blast_chunk + ".fastq"
+    return(blast_chunk + ".fastq")
 
 
 def prune(folder, blast_data, seq_record, ion_id, min_aln_length):
@@ -568,7 +568,7 @@ def prune(folder, blast_data, seq_record, ion_id, min_aln_length):
                 last_saved = i['gene_id']
         blast_data.remove(i['line'])
 
-    return blast_data
+    return(blast_data)
 
 
 def filter_reads(ion_chunk, blast_chunk, folder):
