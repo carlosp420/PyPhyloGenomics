@@ -37,7 +37,7 @@ def get_cds(genes, cds_file):
             records.append(SeqRecord(seq_record.seq, id=this_id))
 
     SeqIO.write(records, open("pulled_seqs.fasta", "w"), "fasta")
-    print len(records), " sequences were written to file pulled_seqs.fasta in the current working directory."
+    print(len(records), " sequences were written to file pulled_seqs.fasta in the current working directory.")
 
 
 def makeblastdb(genome, mask=False):
@@ -51,25 +51,25 @@ def makeblastdb(genome, mask=False):
         command += '-outfmt maskinfo_asn1_bin -out ' + genome + '_dust.asnb'
         try:
             with open(genome + "_dust.asnb"):
-                print "Using existing ``" + genome + "_dust.asnb`` database"
+                print("Using existing ``" + genome + "_dust.asnb`` database")
         except IOError:
-            print "masking low_complexity regions..."
+            print("masking low_complexity regions...")
             p = subprocess.check_output(command, shell=True)  # identifying low-complexity regions.
-            print p
+            print(p)
 
             command = 'makeblastdb -in ' + genome + ' -input_type fasta -dbtype nucl '
             command += '-mask_data ' + genome + '_dust.asnb '
             command += '-out ' + genome + ' -title "Whole Genome without low-complexity regions"'
-            print "creating database..."
+            print("creating database...")
             p = subprocess.check_output(command, shell=True)  # Overwriting the genome file.
-            print p
+            print(p)
 
     else:
         command = 'makeblastdb -in ' + genome + ' -input_type fasta -dbtype nucl '
         command += '-out ' + genome + ' -title "Whole Genome unmasked"'
-        print "creating database..."
+        print("creating database...")
         p = subprocess.check_output(command, shell=True)
-        print p
+        print(p)
 
 
 def blastn(query_seqs, genome, e_value=0.00001, mask=True):
@@ -87,7 +87,7 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
 
     output = "blasting: " + query_seqs.split("\\")[-1] + " "
     output += "against db = " + genome.split("\\")[-1]
-    print output
+    print(output)
 
     # how many sequences in input file?
     nseqs = 0
@@ -98,14 +98,14 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
     files = []
     divisor = 1
     if nseqs > 399:
-        while nseqs / divisor > 200:
+        while nseqs // divisor > 200:
             divisor += 1
             if divisor > 400:
                 break
 
         record_iter = SeqIO.parse(open(query_seqs), "fasta")
 
-        for i, batch in enumerate(batch_iterator(record_iter, nseqs / divisor)):
+        for i, batch in enumerate(batch_iterator(record_iter, nseqs // divisor)):
             filename = "group_%i.fasta" % (i + 1)
             files.append(filename)
             handle = open(filename, "w")
@@ -121,7 +121,7 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
         command += '-evalue ' + str(e_value) + ' -out ' + f + "_out.csv" + ' -num_threads 1 -outfmt 10'
         jobs.append(multiprocessing.Process(target=do_blast, args=(command,)))
 
-    print "\nBlasting sequences. This might take several minutes ..."
+    print("\nBlasting sequences. This might take several minutes ...")
 
     # progressbar
     progressbar_width = int(divisor) + 2
@@ -139,7 +139,7 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
 
     sys.stdout.write("\n")
 
-    print "\nBLASTn finished!"
+    print("\nBLASTn finished!")
 
     # merging blast tables generated above
     destination = open(blast_out, 'wb')
@@ -150,7 +150,7 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
             os.remove(f)
 
     destination.close()
-    print "The BLAST results were written into the file ", blast_out
+    print("The BLAST results were written into the file ", blast_out)
 
 
 def do_blast(command):
@@ -167,7 +167,7 @@ def getLargestExon(blast_table, E_value=0.001, ident=98, exon_len=300):
     # alignments between query and sbj.
     exons = {}
 
-    print "Parsing BLAST table ..."
+    print("Parsing BLAST table ...")
     for alignment in table:
         if 'Query' in alignment:
             continue  # in case the input table has header.
@@ -185,15 +185,15 @@ def getLargestExon(blast_table, E_value=0.001, ident=98, exon_len=300):
                 exons[(align_vars[0], align_vars[1])] = align_vars[:] + [1]  # The 1st alignment with that sbj.
 
     bad = []
-    print "Deleting exons below %d nucleotides ..." % exon_len
+    print("Deleting exons below %d nucleotides ..." % exon_len)
     for key in exons:  # For deleting (query, sbj) alignments whose largest exon is below exon_len threshold.
         if exons[key][3] < exon_len:
             bad.append(key)
     for key in bad:
         del(exons[key])
 
-    print "There are %s exons" % len(exons)
-    return exons
+    print("There are %s exons" % len(exons))
+    return(exons)
 
 
 def eraseFalsePosi(exons_dict):
@@ -205,7 +205,7 @@ def eraseFalsePosi(exons_dict):
     match with the longest alignment.
     """
 
-    print "Erasing False Positives ..."
+    print("Erasing False Positives ...")
     new_exons_dict = {}
 
     # First sorts alphabetically by query_name and then by the total number of
@@ -225,8 +225,8 @@ def eraseFalsePosi(exons_dict):
                 break  # That's why we use inmediately break.
         continue
 
-    print "There are %s exons" % len(new_exons_dict)
-    return new_exons_dict
+    print("There are %s exons" % len(new_exons_dict))
+    return(new_exons_dict)
 
 
 def filterByMinDist(genes_loci, MinDist):
@@ -248,7 +248,7 @@ def filterByMinDist(genes_loci, MinDist):
             genes.append(loci[0])
             last_end = loci[2]
 
-    return genes  # This set will be filtered out in the next function.
+    return(genes)  # This set will be filtered out in the next function.
 
 
 def wellSeparatedExons(exons_dict, MinDist=810000):
@@ -259,7 +259,7 @@ def wellSeparatedExons(exons_dict, MinDist=810000):
     query-sbj matches shared the same sbj, wellSeparatedExons keeps the query-sbj
     match whose distance to the following query-sbj match is greater than MinDist.
     """
-    print "Identifying exons separated by %d bases ..." % MinDist
+    print("Identifying exons separated by %d bases ..." % MinDist)
     scaffolds = list(set([i[1] for i in exons_dict.keys()]))
     for scaff in scaffolds:
         genes_in_scaff = []
@@ -270,8 +270,8 @@ def wellSeparatedExons(exons_dict, MinDist=810000):
         for gene in filterByMinDist(genes_in_scaff, MinDist):  # Use the function above to identify those exons which don't pass the MinDist threshold.
             del(exons_dict[(gene, scaff)])  # And filter them out!
 
-    print "There are %s exons" % len(exons_dict)
-    return exons_dict
+    print("There are %s exons" % len(exons_dict))
+    return(exons_dict)
 
 
 def place_seq_in_frame(seq):
@@ -288,7 +288,7 @@ def place_seq_in_frame(seq):
     if type(translated) == HasStopCodon:
         seq = place_seq_in_frame(seq[1:])
 
-    return seq
+    return(seq)
 
 
 def trim_seq(seq):
@@ -302,7 +302,7 @@ def trim_seq(seq):
     if len(seq) % 3 != 0:
         num_bp_to_remove = len(seq) % 3
         seq = seq[:-num_bp_to_remove]
-    return seq
+    return(seq)
 
 
 def storeExonsInFrame(exons_dict, queries_db, out_file):
@@ -314,7 +314,7 @@ def storeExonsInFrame(exons_dict, queries_db, out_file):
     """
     queries_dict = SeqIO.index(queries_db, "fasta")
 
-    print "Storing exons ..."
+    print("Storing exons ...")
     exons_in_frame = []
     for exon in exons_dict.values():
         if exon[6] % 3 == 1:
@@ -338,8 +338,8 @@ def storeExonsInFrame(exons_dict, queries_db, out_file):
                 SeqRecord(seq, id=ID))
 
     SeqIO.write(exons_in_frame, open(out_file, "w"), "fasta")
-    print "A total of %s exons are kept" % len(exons_in_frame)
-    print "These exons have been stored in the file: " + out_file
+    print("A total of %s exons are kept" % len(exons_in_frame))
+    print("These exons have been stored in the file: " + out_file)
 
 
 def blastParser(blast_table, sbj_db, out_file, sp_name='homologous', E_value=0.01, ident=75, exon_len=300):
@@ -359,13 +359,13 @@ def blastParser(blast_table, sbj_db, out_file, sp_name='homologous', E_value=0.0
     The parameter ``sp_name`` is important as it will be used as part of the exons IDs.
     """
 
-    print "Reading files ..."
+    print("Reading files ...")
 
     table = open(blast_table, "r")
     sbj_dict = SeqIO.index(sbj_db, "fasta")
     seqs = {}
 
-    print "Parsing BLAST table ..."
+    print("Parsing BLAST table ...")
     for alignment in table:
         if alignment.startswith('Query'):
             continue  # in case the input table has header.
@@ -391,8 +391,8 @@ def blastParser(blast_table, sbj_db, out_file, sp_name='homologous', E_value=0.0
                 seqs[ID] = SeqRecord(seq, id=ID, description=DE)
 
     SeqIO.write(seqs.values(), open(out_file, "w"), "fasta")
-    print "A total of %s sequences passed the thresholds." % len(seqs)
-    print "They have been stored in the file: " + out_file
+    print("A total of %s sequences passed the thresholds." % len(seqs))
+    print("They have been stored in the file: " + out_file)
 
 
 def batch_iterator(iterator, batch_size):
@@ -414,7 +414,7 @@ def batch_iterator(iterator, batch_size):
         batch = []
         while len(batch) < batch_size:
             try:
-                entry = iterator.next()
+                entry = next(iterator) #entry = iterator.next()
             except StopIteration:
                 entry = None
             if entry is None:
