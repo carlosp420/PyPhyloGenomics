@@ -35,12 +35,12 @@ class NGSTest(unittest.TestCase):
         NGS.filter_reads(ion_chunk, blast_chunk, folder)
 
         cmd = "cat " + os.path.join(self.cwd, "NGS", "gene*")
-        cmd += " | grep -c '^@'"
+        cmd += " | grep -c '^@[0-9]\+'"
         p = subprocess.check_output(cmd, shell=True)
 
         for i in glob.glob(os.path.join(self.cwd, "NGS", "gene*")):
             os.remove(i)
-        self.assertEqual(int(p.strip()), 24)
+        self.assertEqual(int(p.strip()), 23)
 
     def test_parse_blast_results(self):
         # It should work using fasta files
