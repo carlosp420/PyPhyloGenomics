@@ -243,7 +243,7 @@ def assembly(fastq_file, index_length, min_quality=20, percentage=70, min_length
     try:
         with open('assembly_velvet.sh'):
             pass
-    except:
+    except IOError:
         # downloading scripts to local folder
         r = requests.get("https://raw.github.com/carlosp420/PyPhyloGenomics/master/assembly_velvet.sh")
         f = open("assembly_velvet.sh", "w")
