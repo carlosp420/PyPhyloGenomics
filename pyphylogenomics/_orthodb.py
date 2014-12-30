@@ -44,7 +44,7 @@ class OrthoDB:
                 pass
 
         genes = list()
-        for k, v in ids.items(): # for k, v in ids.iteritems()
+        for k, v in ids.items():  # for k, v in ids.iteritems()
             # we want only single copy genes
             if len(v) < 2:
                 genes.append(v[0])
@@ -62,9 +62,10 @@ class OrthoDB:
         '''
         dictio = {}
 
-        handle = open(self.in_file, "rb")
-        handle.next()  # skip header
+        handle = open(self.in_file, "r")
+        handle.readline()  # skip header
         for line in handle:
+            print(line)
             line = line.split('\t')
             specie = line[4]
             gene = line[3]
