@@ -40,7 +40,7 @@ class NGSTest(unittest.TestCase):
 
         for i in glob.glob(os.path.join(self.cwd, "NGS", "gene*")):
             os.remove(i)
-        self.assertEqual(int(p.strip()), 23)
+        self.assertEqual(int(p.strip()), 24)
 
     def test_parse_blast_results(self):
         # It should work using fasta files
@@ -59,7 +59,7 @@ class NGSTest(unittest.TestCase):
         NGS.split_ionfile_by_results(ion_file, blast_chunk)
         cmd = "grep -c '^@' " + os.path.join(self.cwd, "NGS", "_reaa.fastq")
         p = subprocess.check_output(cmd, shell=True)
-        self.assertEqual(p.strip(), '1001')
+        self.assertEqual(int(p.strip()), 1001)
         os.remove(os.path.join(self.cwd, "NGS", "_reaa.fastq"))
 
     def test_prune(self):

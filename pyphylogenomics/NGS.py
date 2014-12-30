@@ -86,7 +86,7 @@ def prepare_data(ionfile, index_length):
     if os.path.isfile("tmp.fasta"):
         os.remove("tmp.fasta")
 
-    print("The FASTA format file " + os.path.join(folder, "wrk_ionfile.fasta") \
+    print("The FASTA format file " + os.path.join(folder, "wrk_ionfile.fasta")
           + " has been created.")
 
 
@@ -560,7 +560,7 @@ def prune(folder, blast_data, seq_record, ion_id, min_aln_length):
     last_saved = ""
     for i in list:
         if last_saved != i['gene_id']:
-            if i['al_length'] > min_aln_length:
+            if int(i['al_length']) > int(min_aln_length):
                 filename = os.path.join(folder, "gene_" + i['gene_id'] + ".fastq")
                 exon_out = open(filename, "a")
                 SeqIO.write(seq_record, exon_out, "fastq")
