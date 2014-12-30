@@ -4,10 +4,11 @@
 History
 =======
 
-0.3.1x (201x-xx-xx)
--------------------
+0.4.x (201x-xx-xx)
+------------------
 * Do some PEP8 fixes.
 * Refactor orthodb module.
+* Port code and tests to py33.
 
 0.3.13 (2014-12-23)
 -------------------

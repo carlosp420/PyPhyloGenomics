@@ -87,7 +87,6 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
 
     output = "blasting: " + query_seqs.split("\\")[-1] + " "
     output += "against db = " + genome.split("\\")[-1]
-    print(output)
 
     # how many sequences in input file?
     nseqs = 0
@@ -414,7 +413,7 @@ def batch_iterator(iterator, batch_size):
         batch = []
         while len(batch) < batch_size:
             try:
-                entry = next(iterator) #entry = iterator.next()
+                entry = next(iterator)  # entry = iterator.next()
             except StopIteration:
                 entry = None
             if entry is None:

@@ -65,7 +65,6 @@ class OrthoDB:
         handle = open(self.in_file, "r")
         handle.readline()  # skip header
         for line in handle:
-            print(line)
             line = line.split('\t')
             specie = line[4]
             gene = line[3]

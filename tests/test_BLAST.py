@@ -219,7 +219,8 @@ class BLASTTest(unittest.TestCase):
 
     def test_storeExonsInFrame_not_in_frame3(self):
         # Length of seq is not multiple of 3
-        exons_dict = {('BGIBMGA000001-TA', 'nscaf1070'): ['BGIBMGA000001-TA', 'nscaf1070', '100.00', 449, 0, 0, 2, 451, 2, 451, '0.0', ' 812', 1], ('BGIBMGA000002-TA', 'nscaf1071'): ['BGIBMGA000002-TA', 'nscaf1071', '100.00', 350, 0, 0, 1, 350, 1, 350, '0.0', ' 632', 1]}
+        exons_dict = {('BGIBMGA000001-TA', 'nscaf1070'): ['BGIBMGA000001-TA', 'nscaf1070', '100.00', 449, 0, 0, 2, 451, 2, 451, '0.0', ' 812', 1],
+                      ('BGIBMGA000002-TA', 'nscaf1071'): ['BGIBMGA000002-TA', 'nscaf1071', '100.00', 449, 0, 0, 2, 451, 2, 451, '0.0', ' 832', 1]}
         queries_db = self.cwd + "/BLAST/queries_db4.fas"
         out_file = self.cwd + "/BLAST/outfile_storeExonsInFrame.csv"
 
@@ -230,7 +231,6 @@ class BLASTTest(unittest.TestCase):
         for i in SeqIO.parse(out_file, "fasta"):
             translated_seq = i.seq.translate()[0:10]
             self.assertEqual('RVVWFALVRL', translated_seq)
-            break
         os.remove(out_file)
 
     def test_blastParser(self):
@@ -242,7 +242,6 @@ class BLASTTest(unittest.TestCase):
         BLAST.blastParser(blast_table, sbj, out)
         seqs = [i.id for i in SeqIO.parse(out, "fasta")]
         self.assertEqual(2, len(seqs))
-        os.remove(blast_table)
         os.remove(out)
 
         # with header row
