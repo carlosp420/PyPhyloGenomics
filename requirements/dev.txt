@@ -1,4 +1,4 @@
-requests==2.5.0
+requests==2.31.0
 biopython==1.65
 coverage==3.7.1
 coveralls==0.5
