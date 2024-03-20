@@ -14,7 +14,7 @@ Developers
 Installing PyPhyloGenomics
 --------------------------
 
-PyPhyloGenomics has been developed in Python v2.7. The installer of
+PyPhyloGenomics officially supports Python 2.7 and 3.11. The installer of
 PyPhyloGenomics will try to download and install all its dependencies as
 well.
 Download the latest version from here:
@@ -74,7 +74,7 @@ Reading PyPhyloGenomics' documentation:
 Read the online documentation here:
 http://pyphylogenomics.readthedocs.org/
 
-Or, after installling do the following:
+Or, after installing do the following:
 
 ::
 

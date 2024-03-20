@@ -1,4 +1,4 @@
-'''
+"""
 =====
 BLAST
 =====
@@ -6,29 +6,27 @@ BLAST
 Prepares data and executes BLAST commands to create BLAST database.
 Performs blastn of user sequences against genomic sequences.
 Provides functions to parse the generated BLAST tables and extract exons.
-'''
+"""
 
 import re
 import sys
-import subprocess
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import HasStopCodon
 from operator import itemgetter
-import multiprocessing
+import subprocess
 import shutil
 import os
+import multiprocessing
+
+from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
 
 
 def get_cds(genes, cds_file):
-    '''
+    """
     Writes a FASTA file containing CDS sequences: ``pulled_seqs.fasta``
 
     ``genes`` argument is a list of gene IDs.
     ``cds_file`` is the file name of predicted CDS for a species in FASTA format.
-
-    '''
+    """
 
     records = []  # To store the sequences that matched.
     for seq_record in SeqIO.parse(cds_file, "fasta"):
@@ -41,10 +39,10 @@ def get_cds(genes, cds_file):
 
 
 def makeblastdb(genome, mask=False):
-    '''
+    """
     Creates a BLAST database from a genome in FASTA format and
     optionally eliminates low-complexity regions from the sequences.
-    '''
+    """
 
     if mask is True:
         command = 'dustmasker -in ' + genome + ' -infmt fasta '
@@ -73,13 +71,13 @@ def makeblastdb(genome, mask=False):
 
 
 def blastn(query_seqs, genome, e_value=0.00001, mask=True):
-    '''
+    """
     Performs a BLASTn of user's sequences against a genome. It will create a
     BLAST database from the genome file first.
 
     ``query_seqs`` argument is a FASTA file of users sequences.
     ``genome`` argument is a FASTA file of a species genome.
-    '''
+    """
 
     # do a BLAST database first
     makeblastdb(genome, mask=mask)
@@ -90,7 +88,7 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
 
     # how many sequences in input file?
     nseqs = 0
-    for seq_record in SeqIO.parse(query_seqs, "fasta"):
+    for _ in SeqIO.parse(query_seqs, "fasta"):
         nseqs += 1
 
     # split fasta file for parallel blast
@@ -108,7 +106,7 @@ def blastn(query_seqs, genome, e_value=0.00001, mask=True):
             filename = "group_%i.fasta" % (i + 1)
             files.append(filename)
             handle = open(filename, "w")
-            count = SeqIO.write(batch, handle, "fasta")
+            SeqIO.write(batch, handle, "fasta")
             handle.close()
     else:
         files.append(query_seqs)
@@ -192,7 +190,7 @@ def getLargestExon(blast_table, E_value=0.001, ident=98, exon_len=300):
         del(exons[key])
 
     print("There are %s exons" % len(exons))
-    return(exons)
+    return exons
 
 
 def eraseFalsePosi(exons_dict):
@@ -225,7 +223,7 @@ def eraseFalsePosi(exons_dict):
         continue
 
     print("There are %s exons" % len(new_exons_dict))
-    return(new_exons_dict)
+    return new_exons_dict
 
 
 def filterByMinDist(genes_loci, MinDist):
@@ -247,7 +245,7 @@ def filterByMinDist(genes_loci, MinDist):
             genes.append(loci[0])
             last_end = loci[2]
 
-    return(genes)  # This set will be filtered out in the next function.
+    return genes  # This set will be filtered out in the next function.
 
 
 def wellSeparatedExons(exons_dict, MinDist=810000):
@@ -266,11 +264,13 @@ def wellSeparatedExons(exons_dict, MinDist=810000):
             if key[1] == scaff:
                 gene_loci = (key[0],) + tuple(sorted(exons_dict[key][8:10]))
                 genes_in_scaff.append(gene_loci)
-        for gene in filterByMinDist(genes_in_scaff, MinDist):  # Use the function above to identify those exons which don't pass the MinDist threshold.
-            del(exons_dict[(gene, scaff)])  # And filter them out!
+
+        # Use the function above to identify those exons which don't pass the MinDist threshold.
+        for gene in filterByMinDist(genes_in_scaff, MinDist):
+            del (exons_dict[(gene, scaff)])  # And filter them out!
 
     print("There are %s exons" % len(exons_dict))
-    return(exons_dict)
+    return exons_dict
 
 
 def place_seq_in_frame(seq):
@@ -282,12 +282,13 @@ def place_seq_in_frame(seq):
     :param seq: Seq object
     :return:
     """
-    translated = seq.translate().alphabet
+    translated = seq.translate()
 
-    if type(translated) == HasStopCodon:
+    if "*" in translated:
+        # translated sequence has stop codons
         seq = place_seq_in_frame(seq[1:])
 
-    return(seq)
+    return seq
 
 
 def trim_seq(seq):
@@ -301,7 +302,7 @@ def trim_seq(seq):
     if len(seq) % 3 != 0:
         num_bp_to_remove = len(seq) % 3
         seq = seq[:-num_bp_to_remove]
-    return(seq)
+    return seq
 
 
 def storeExonsInFrame(exons_dict, queries_db, out_file):
@@ -341,7 +342,9 @@ def storeExonsInFrame(exons_dict, queries_db, out_file):
     print("These exons have been stored in the file: " + out_file)
 
 
-def blastParser(blast_table, sbj_db, out_file, sp_name='homologous', E_value=0.01, ident=75, exon_len=300):
+def blastParser(
+    blast_table, sbj_db, out_file, sp_name='homologous', E_value=0.01, ident=75, exon_len=300
+):
     """
     Returns the subjects' sequences aligned with the queries as long as they pass
     the thresholds given on the parameters.
@@ -349,7 +352,7 @@ def blastParser(blast_table, sbj_db, out_file, sp_name='homologous', E_value=0.0
     Example:
 
     >>> from pyphylogenomics import BLAST
-    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fasta", sp_name="Danaus");
+    >>> BLAST.blastParser("LongExons_out_blastn_out.csv", "Dp_genome_v2.fasta", "Danaus_exons.fasta", sp_name="Danaus")
     Reading files ...
     Parsing BLAST table ...
     A total of 158 sequences passed the thresholds.

@@ -13,19 +13,19 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 requirements = [
     'requests',
-    'biopython'
+    'biopython==1.83',
 ]
 
 test_requirements = [
     'requests',
-    'biopython',
+    'biopython==1.83',
     'coverage',
 ]
 
 setup(
     name='pyphylogenomics',
     version='0.3.13',
-    description='Tools to work in phylogenomics, from NSG group http://nymphalidae.utu.fi',
+    description='Tools to work in phylogenomics, from NSG group http://www.nymphalidae.net/',
     long_description=readme + '\n\n' + history,
     author='Carlos Pena, Victor Solis, Pavel Matos, Chris Wheat',
     author_email='mycalesis@gmail.com',
